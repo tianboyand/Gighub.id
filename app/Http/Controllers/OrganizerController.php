@@ -237,9 +237,8 @@ class OrganizerController extends Controller
                 $sewa->review = $cek;
 	    	}
 
-            
-
 	    	return view('organizer.listsewa-band')->with('sewa', $reqband);
+            
     	}else{
 	    	return redirect()->back();
 	    }
@@ -303,7 +302,26 @@ class OrganizerController extends Controller
         }
         KonfirmasiPembayaran::create($input);
 
-        //dd($input);
+
+        if($sewa->type_sewa == 'hireband' || $sewa->type_sewa == 'hiremusisi'){
+            $notif = New Notif;
+            $notif->object_id = $sewa->gig_id;
+            $notif->subject_id = $sewa->subject_id;
+            $notif->user_id = 0;
+            $notif->type_subject = 'organizer';
+            $notif->type_user = 'admin';
+            $notif->type_notif = 'konfirmasipembayaran';
+            $notif->save();
+        }else{
+            $notif = New Notif;
+            $notif->object_id = $sewa->gig_id;
+            $notif->subject_id = $sewa->object_id;
+            $notif->user_id = 0;
+            $notif->type_subject = 'organizer';
+            $notif->type_user = 'admin';
+            $notif->type_notif = 'konfirmasipembayaran';
+            $notif->save();
+        }
 
         return redirect()->action('OrganizerController@listSewa');
         

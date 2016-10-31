@@ -89,6 +89,9 @@ class HomeController extends Controller
                 return redirect()->action('MusicianController@saldoBand', $band->slug);
             }
         }
+        else if($notif->type_notif == 'konfirmasipembayaran'){
+            return redirect('admin/listorder');
+        }
     }
 
 

@@ -103,6 +103,13 @@
                                             ?>
                                             <li><a href={{url('notif/'.$notif->id)}}>@if($notif->type_subject == 'musisi'){{$org->name}}@elseif($notif->type_subject == 'band'){{$org->nama_grupband}}@endif melakukan withdraw</a>
                                             <li>
+                                        @elseif($notif->type_notif == 'konfirmasipembayaran')
+                                            <?php
+                                                $org = App\User::where('id', $notif->subject_id)->first();
+                                                $gig = App\Gig::where('id', $notif->object_id)->first();
+                                            ?>
+                                            <li><a href={{url('notif/'.$notif->id)}}>{{$org->first_name}} telah melakukan konfirmasi pembayaran Gig {{$gig->nama_gig}}</a>
+                                            <li>
                                         @endif
                                     @endforeach
                                 @endif

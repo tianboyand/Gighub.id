@@ -46,9 +46,9 @@
 									<p>LUNAS!</p>
 								@elseif($_sewa->status == 3)
 									<p>Selesai!</p>									
-									@if($_sewa->status_request == 1 && $_sewa->review == null)
+									@if($_sewa->review->isEmpty())
 										<p><a href={!! url('add-review/'.$_sewa->id) !!}>Berikan Review</a></p>
-									@elseif($_sewa->status_request == 1 && $_sewa->review != null)
+									@else
 										<?php 
 											for($i=0;$i<$_sewa->review[0]->nilai;$i++){
 												echo "<i class='fa fa-star'></i>";
@@ -57,13 +57,14 @@
 									@endif
 								@elseif($_sewa->status == 4)
 									<p>SELESAI! Dana telah di transfer ke <a href={{ url('/band/'.$_sewa->band->slug) }}>{{$_sewa->band->nama_grupband}}</a></p>
-									@if($_sewa->status_request == 1 && $_sewa->review == null)
+									@if($_sewa->review->isEmpty())
 										<p><a href={!! url('add-review/'.$_sewa->id) !!}>Berikan Review</a></p>
-									@elseif($_sewa->status_request == 1 && $_sewa->review != null)
+									@else
 										<?php 
 											for($i=0;$i<$_sewa->review[0]->nilai;$i++){
 												echo "<i class='fa fa-star'></i>";
 											}
+
 										?>
 									@endif
 								@else

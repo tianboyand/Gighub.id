@@ -5,9 +5,7 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
          <ul class="nav nav-tabs">
-            <li><a href={{url('listsewa/band/'.$bands->slug)}}>Request </a></li>
-            <li><a href={{url('listsewa/band/approve/'.$bands->slug)}}>Approve </a></li>
-            <li class="active"><a href={{url('listsewa/band/selesai/'.$bands->slug)}}>Selesai </a></li>
+            
         </ul>
 
 		@if(!$sewaband->isEmpty())
@@ -42,10 +40,22 @@
 								<p>Status Booking : <b>LUNAS!</b></p>
 							@elseif($_sewaband->status == 3)
 								<p>Status Booking : <b>SELESAI!</b></p>
-								<p><a href="">Berikan Review</a></p>
+								@if(!$_sewaband->review->isEmpty())
+									<?php 
+										for($i=0;$i<$_sewaband->review[0]->nilai;$i++){
+											echo "<i class='fa fa-star'></i>";
+										}
+									?>
+								@endif
 							@elseif($_sewaband->status == 4)
 								<p>Status Booking : <b>SELESAI! Dana telah di transfer ke <a href={{ url('/musician/'.Auth::guard('musician')->user()->slug) }}>{{Auth::guard('musician')->user()->name}}</a></b></p>
-								<p><a href="">Berikan Review</a></p>
+								@if(!$_sewaband->review->isEmpty())
+									<?php 
+										for($i=0;$i<$_sewaband->review[0]->nilai;$i++){
+											echo "<i class='fa fa-star'></i>";
+										}
+									?>
+								@endif
 							@else
 								<p>Status Booking : <b>BATAL!</b></p>
 							@endif

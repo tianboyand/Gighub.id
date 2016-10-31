@@ -574,17 +574,23 @@ class MusicianController extends Controller
                                 ->where('type_sewa', '=', 'hireband')
                                 ->where('status_request', '1')
                                 ->where('status', '=', '3')
-                                ->orWhere('status', '=', '4')
+                                ->orWhere('object_id', $band->id)
+                                ->where('type_sewa', '=', 'hireband')
+                                ->where('status_request', '1')
+                                ->where('status', '=', '4')
                                 ->get();
 
                 foreach ($reqband as $sewaband) {
                     $organizer = User::where('id', $sewaband->subject_id)->first();
                     $gig = Gig::where('id', $sewaband->gig_id)->first();
+                    $cek = Review::where('sewa_id', $sewaband->id)->get();
+
                     $sewaband->organizer = $organizer;
-                    $sewaband->gig = $gig;
+                    $sewaband->gig = $gig;      
+                    $sewaband->review = $cek;      
                 }
 
-                return view('musician.bookinglist-band-selesai')->with('sewaband', $reqband)->with('bands',$band);
+               return view('musician.bookinglist-band-selesai')->with('sewaband', $reqband)->with('bands',$band);
             }else{
                 return redirect()->back();
             }

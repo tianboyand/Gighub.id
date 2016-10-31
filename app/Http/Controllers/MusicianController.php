@@ -411,7 +411,6 @@ class MusicianController extends Controller
             $reqmusisi = Sewa::where('object_id', Auth::guard('musician')->user()->id)
                             ->where('type_sewa', '=', 'hiremusisi')
                             ->where('status_request', '1')
-                            ->where('status', '!=', '2')
                             ->where('status', '!=', '3')
                             ->where('status', '!=', '4')
                             ->get();

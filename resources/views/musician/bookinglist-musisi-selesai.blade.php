@@ -44,7 +44,7 @@
 								<p>Status Booking : <b>SELESAI!</b></p>
 								<p><a href="">Berikan Review</a></p>
 							@elseif($_sewamusisi->status == 4)
-								<p>Status Booking : <b>SELESAI! Dana telah di transfer ke <a href={{ url('/user/'.$_sewamusisi->organizer->slug) }}>{{$_sewamusisi->organizer->first_name}}</a></b></p>
+								<p>Status Booking : <b>SELESAI! Saldo telah di tambahkan ke akun <a href={{ url('musician/saldo/'.Auth::guard('musician')->user()->slug) }}> kamu</a></b></p>
 								<p><a href="">Berikan Review</a></p>
 							@else
 								<p>Status Booking : <b>BATAL!</b></p>

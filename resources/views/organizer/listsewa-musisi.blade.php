@@ -47,9 +47,9 @@
 									<p>LUNAS!</p>
 								@elseif($_sewamusisi->status == 3)
 									<p>SELESAI!</p>
-								@if($_sewamusisi->status_request == 1 && $_sewamusisi->review == null)
-									<p><a href={!! url('add-review/'.$_sewamusisi->id) !!}>Berikan Review</a></p>
-									@elseif($_sewamusisi->status_request == 1 && $_sewamusisi->review != null)
+									@if($_sewamusisi->review->isEmpty())
+										<p><a href={!! url('add-review/'.$_sewamusisi->id) !!}>Berikan Review</a></p>
+									@else
 										<?php 
 											for($i=0;$i<$_sewamusisi->review[0]->nilai;$i++){
 												echo "<i class='fa fa-star'></i>";
@@ -58,9 +58,9 @@
 									@endif
 								@elseif($_sewamusisi->status == 4)
 									<p>SELESAI! Dana telah di transfer ke <a href={{ url('/musician/'.$_sewamusisi->musisi->slug) }}>{{$_sewamusisi->musisi->name}}</a></p>
-									@if($_sewamusisi->status_request == 1 && $_sewamusisi->review == null)
-									<p><a href={!! url('add-review/'.$_sewamusisi->id) !!}>Berikan Review</a></p>
-									@elseif($_sewamusisi->status_request == 1 && $_sewamusisi->review != null)
+									@if($_sewamusisi->review->isEmpty())
+										<p><a href={!! url('add-review/'.$_sewamusisi->id) !!}>Berikan Review</a></p>
+									@else
 										<?php 
 											for($i=0;$i<$_sewamusisi->review[0]->nilai;$i++){
 												echo "<i class='fa fa-star'></i>";

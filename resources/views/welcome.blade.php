@@ -214,7 +214,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label" for="password-input">Budget </label>
-                                        <input class="form-control" type="number" name="budget" placeholder="Rp. 0" step="100" required>
+                                        <input class="form-control" type="number" name="budget" placeholder="Rp. 0" step="100">
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label" for="email-input">Tipe Musisi</label>
@@ -274,8 +274,16 @@
                                     <input class="form-control" type="text" name="tanggal" id="mulai">                            
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label" for="password-input">Budget </label>
-                                    <input class="form-control" type="number" name="budget" placeholder="Rp. 0" step="100" required>
+                                    <?php
+                                        $kota = App\Grupband::groupBy('kota')->get(['kota']);
+                                    ?>
+                                    <label class="control-label" for="email-input">Kota</label>
+                                    <select class="form-control" name="kota">
+                                        <option value="">Pilih Kota (Opsional)</option>
+                                    @foreach($kota as $_kota)
+                                        <option value="{{$_kota->kota}}">{{$_kota->kota}}</option>
+                                    @endforeach
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label" for="email-input">Tipe Musisi</label>

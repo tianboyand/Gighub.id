@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\GenreMusisi;
+use App\GenreBand;
 use App\Grupband;
 use App\Genre;
 use App\Musician;
@@ -18,102 +19,199 @@ class CariController extends Controller
     public function pencarian(Request $request){
         $input = $request->all();
 
+        //Kalau pilih grupband
         if($input['tipe'] == 0){
-        	if($request->checkbox == null){
-        		$ceksewa = Sewa::where('type_sewa', '=', 'hireband')->orwhere('type_sewa', '=', 'bandhire')->get();
-
-        		if(!$ceksewa->isEmpty()){
-                    foreach ($ceksewa as $sewa) {
-                        if($sewa->type_sewa == 'hireband'){
-                            $join = Grupband::join('sewas', 'grupbands.id', '=', 'sewas.object_id')
-                                ->join('gigs', 'sewas.gig_id', '=', 'gigs.id')
-                                -> where('type_sewa', '=', 'hireband')
-                                ->where('grupbands.harga', '=', $input['budget'])
-                                ->whereRaw('? NOT between tanggal_mulai and tanggal_selesai', [$input['tanggal']])
-                                ->get(['grupbands.*']);
+            //Kalau Kota gak dipilih
+            if($input['kota'] == null){
+                //KALAU genre gak dipilih
+            	if($request->checkbox == null){
+            		$ceksewa = Sewa::where('type_sewa', '=', 'hireband')
+                                ->where('status_request', '!=', '1')
+                                ->orwhere('type_sewa', '=', 'bandhire')
+                                ->where('status_request', '!=', '1')
+                                ->get();
+                    //Kalau di cek ada grupband di tabel Sewa
+            		if(!$ceksewa->isEmpty()){
+                        foreach ($ceksewa as $sewa) {
+                            if($sewa->type_sewa == 'hireband'){
+                                $join = Grupband::join('sewas', 'grupbands.id', '=', 'sewas.object_id')
+                                    ->join('gigs', 'sewas.gig_id', '=', 'gigs.id')
+                                    //->where('grupbands.harga', '=', $input['budget'])
+                                    ->whereRaw('? NOT between gigs.tanggal_mulai and gigs.tanggal_selesai', [$input['tanggal']])
+                                    ->where('sewas.object_id', '!=', 'grupbands.id')
+                                    ->groupBy('grupbands.id')
+                                    ->get(['grupbands.*']);
+                            }
+                            else
+                                $join = Grupband::join('sewas', 'grupbands.id', '=', 'sewas.subject_id')
+                                    ->join('gigs', 'sewas.gig_id', '=', 'gigs.id')
+                                    //->where('grupbands.harga', '=', $input['budget'])
+                                    ->whereRaw('? NOT between gigs.tanggal_mulai and gigs.tanggal_selesai', [$input['tanggal']])
+                                    ->where('sewas.subject_id', '!=', 'grupbands.id')
+                                    ->groupBy('grupbands.id')
+                                    ->get(['grupbands.*']);
                         }
-                        else
-                            $join = Grupband::join('sewas', 'grupbands.id', '=', 'sewas.object_id')
-                                ->join('gigs', 'sewas.gig_id', '=', 'gigs.id')
-                                ->where('type_sewa', '=', 'bandhire')
-                                ->where('grupbands.harga', '=', $input['budget'])
-                                ->whereRaw('? NOT between tanggal_mulai and tanggal_selesai', [$input['tanggal']])
-                                ->get(['grupbands.*']);
+            			
+            		}
+                    //Kalau di cek gak ada grupband di tabel Sewa
+            		else{
+            			$join = Grupband::all();
+            		}
+
+            		return view('hasilcari')->with('listband',$join);
+                //END gak pilih genre
+            	}
+                //Kalau Pake Genre
+            	else{
+                    $ceksewa = Sewa::where('type_sewa', '=', 'hireband')
+                                ->where('status_request', '!=', '1')
+                                ->orwhere('type_sewa', '=', 'bandhire')
+                                ->where('status_request', '!=', '1')
+                                ->get();
+                    //Kalau di cek ada grupband di tabel Sewa
+                    if(!$ceksewa->isEmpty()){
+                        foreach ($ceksewa as $sewa) {
+                            if($sewa->type_sewa == 'hireband'){
+                                $join = Grupband::join('sewas', 'grupbands.id', '=', 'sewas.object_id')
+                                    ->join('gigs', 'sewas.gig_id', '=', 'gigs.id')
+                                    //->where('grupbands.harga', '=', $input['budget'])
+                                    ->whereRaw('? NOT between gigs.tanggal_mulai and gigs.tanggal_selesai', [$input['tanggal']])
+                                    ->where('sewas.object_id', '!=', 'grupbands.id')
+                                    ->groupBy('grupbands.id')
+                                    ->get(['grupbands.id']);
+                            }
+                            else
+                                $join = Grupband::join('sewas', 'grupbands.id', '=', 'sewas.subject_id')
+                                    ->join('gigs', 'sewas.gig_id', '=', 'gigs.id')
+                                    //->where('grupbands.harga', '=', $input['budget'])
+                                    ->whereRaw('? NOT between gigs.tanggal_mulai and gigs.tanggal_selesai', [$input['tanggal']])
+                                    ->where('sewas.subject_id', '!=', 'grupbands.id')
+                                    ->groupBy('grupbands.id')
+                                    ->get(['grupbands.id']);
+                        }
+
+                        foreach ($join as $_join) {
+                            $cekgenre = GenreBand::where('band_id', $_join->id)->get(['genre_id']);
+
+                            foreach ($cekgenre as $_cekgenre) {
+                                $arrgen[] = $_cekgenre->genre_id;
+                            }
+                            //$arrgen[] = $cekgenre->genre;
+                             //$result=array_intersect($request->checkbox, $arrgen);
+
+                             // /$_join->genre = $arrgen;
+                             $_join->genre = $arrgen;
+                            
+                        }
+
+
+                        
+                    }
+                    //Kalau di cek gak ada grupband di tabel Sewa
+                    else{
+                        $join = Grupband::all();
                     }
 
-                   // $cek = "SELECT * FROM grupbands INNER JOIN gigs ON sewas.gig_id = gigs.id WHERE sewas.type_sewa = 'hireband' AND gigs."; 
+                    // foreach ($join as $joinlagi) {
+                    //     // /$genres[] = $joinlagi->genre->['id'];
+                    //     // foreach ($joinlagi->genre as $gens) {
+                    //     //     $gen[] = $gens;
+                    //     // }
+                        
+                    //     echo $joinlagi;
+                    //    // $result=array_intersect($request->checkbox, $joinlagi->genre);
+                    // }
 
-                   //$cek = Grupband::whereNotIn('id', ['sewas.object_id'])->get();
+                    //dd($genres);
+                   return $join;
 
-                    $query = "SELECT * FROM grupbands WHERE id NOT IN (SELECT object_id FROM sewas INNER JOIN gigs ON sewas.gig_id = gigs.id WHERE sewas.type_sewa = 'hireband' AND  $input[tanggal] NOT BETWEEN gigs.tanggal_mulai AND gigs.tanggal_selesai)";
+                    //return view('hasilcari')->with('listband',$join);
+            	}
+            //End gak pilih Kota
+            }
 
-                    $cek = DB::select($query);
-                                    
+            //kalau Kota di pilih (GAK NULL)
+            else
+            {
+                if($request->checkbox == null){
+                    $ceksewa = Sewa::where('type_sewa', '=', 'hireband')
+                                ->where('status_request', '!=', '1')
+                                ->orwhere('type_sewa', '=', 'bandhire')
+                                ->where('status_request', '!=', '1')
+                                ->get();
+                    //Kalau di cek ada grupband di tabel Sewa
+                    if(!$ceksewa->isEmpty()){
+                        foreach ($ceksewa as $sewa) {
+                            if($sewa->type_sewa == 'hireband'){
+                                $join = Grupband::join('sewas', 'grupbands.id', '=', 'sewas.object_id')
+                                    ->join('gigs', 'sewas.gig_id', '=', 'gigs.id')
+                                    //->where('grupbands.harga', '=', $input['budget'])
+                                    ->whereRaw('? NOT between gigs.tanggal_mulai and gigs.tanggal_selesai', [$input['tanggal']])
+                                    ->where('sewas.object_id', '!=', 'grupbands.id')
+                                    ->where('grupbands.kota', '=', $input['kota'])
+                                    ->groupBy('grupbands.id')
+                                    ->get(['grupbands.*']);
+                            }
+                            else
+                                $join = Grupband::join('sewas', 'grupbands.id', '=', 'sewas.subject_id')
+                                    ->join('gigs', 'sewas.gig_id', '=', 'gigs.id')
+                                    //->where('grupbands.harga', '=', $input['budget'])
+                                    ->whereRaw('? NOT between gigs.tanggal_mulai and gigs.tanggal_selesai', [$input['tanggal']])
+                                    ->where('sewas.subject_id', '!=', 'grupbands.id')
+                                    ->where('grupbands.kota', '=', $input['kota'])
+                                    ->groupBy('grupbands.id')
+                                    ->get(['grupbands.*']);
+                        }
+                        
+                    }
+                    //Kalau di cek gak ada grupband di tabel Sewa
+                    else{
+                        $join = Grupband::all();
+                    }
 
-        			
-        		}
-        		else{
-        			$join = Grupband::where('harga', $input['budget'])->get();
-        		}
-
-                return $cek;
-
-        		//return view('hasilcari')->with('listband',$join);
-        	}
-        	else{
-        		// $ceksewa = Sewa::where('type_sewa', '=', 'hireband')->get();
-
-        		// if(!$ceksewa->isEmpty()){
-        		// 	$join = Grupband::join('sewas', 'grupbands.id', '=', 'sewas.object_id')
-        		// 				->join('gigs', 'sewas.gig_id', '=', 'gigs.id')
-        		// 				->where('sewas.type_sewa', '=', 'hireband')
-        		// 				->where('grupbands.harga', '=', $input['budget'])
-        		// 				->whereRaw('? NOT between tanggal_mulai and tanggal_selesai', [$input['tanggal']])
-        		// 				->get(['grupbands.id']);
-
-        		// 	if(!$join->isEmpty()){
-        		// 		foreach ($join as $band) {
-        		// 			$joingenre = GenreMusisi::join('genres', 'genre_musisi.genre_id', '=', 'genres.id')
-        		// 								->where('genre_musisi.musician_id', $band->id)
-        		// 								->get(['genre_musisi.id']);
-
-        		// 			dd($joingenre);
-        		// 		}       				
-        		// 	}
-
-        		// }
-        		// else{
-        		// 	$join = Grupband::where('harga', $input['budget'])->get();
-        		// }
-
-        		echo "Under Maintenance! Coba pencarian tanpa memilih genre";
-        	}
+                    return view('hasilcari')->with('listband',$join);
+                }
+                else{
+                    echo "Under Maintenance! Coba pencarian tanpa memilih genre";
+                }
+            //End pilih Kota
+            }
         }
+        //Kalau Pilih musisi
         else
         {
-        	if($request->checkbox == null){
-	        	$ceksewa = Sewa::where('type_sewa', '=', 'hiremusisi')->get();
-	        	
-	        	if(!$ceksewa->isEmpty()){
-	        		$join = Musician::join('sewas', 'musicians.id', '=', 'sewas.object_id')
-	        						->join('gigs', 'sewas.gig_id', '=', 'gigs.id')
-	        						->where('sewas.type_sewa', '=', 'hiremusisi')
-	        						->where('musicians.harga_sewa', '=', $input['budget'])
-	        						->whereRaw('? NOT between tanggal_mulai and tanggal_selesai', [$input['tanggal']])
-	        						->get(['musicians.*']);
-	        	}else{
-	    			$join = Musician::where('harga_sewa', '=', $input['budget'])->get();
-	    		}
+        	if($request->checkbox == null){        	
+	        	$ceksewa = Sewa::where('type_sewa', '=', 'hiremusisi')
+                            ->where('status_request', '!=', '1')
+                            ->orwhere('type_sewa', '=', 'musisihire')
+                            ->where('status_request', '!=', '1')
+                            ->get();
 
-	    		return view('hasilcarimusisi')->with('listband',$join);
-
-	    	}else{
-	    		echo "Under Maintenance! Coba pencarian tanpa memilih genre";
-	    	}       
-
-        		
+                if(!$ceksewa->isEmpty()){
+                    foreach ($ceksewa as $sewa) {
+                        if($sewa->type_sewa == 'hiremusisi'){
+                            $join = Musician::join('sewas', 'musicians.id', '=', 'sewas.object_id')
+                                ->join('gigs', 'sewas.gig_id', '=', 'gigs.id')
+                                ->whereRaw('? NOT between gigs.tanggal_mulai and gigs.tanggal_selesai', [$input['tanggal']])
+                                ->where('sewas.object_id', '!=', 'musicians.id')
+                                ->groupBy('musicians.id')
+                                ->get(['musicians.*']);
+                        }
+                        else{
+                            $join = Musician::join('sewas', 'musicians.id', '=', 'sewas.subject_id')
+                                ->join('gigs', 'sewas.gig_id', '=', 'gigs.id')
+                                ->whereRaw('? NOT between gigs.tanggal_mulai and gigs.tanggal_selesai', [$input['tanggal']])
+                                ->where('sewas.subject_id', '!=', 'musicians.id')
+                                ->groupBy('musicians.id')
+                                ->get(['musicians.*']);
+                        }
+                    }
+                    return view('hasilcarimusisi')->with('listmusisi',$join);
+                }
+            }else{
+                echo "Under Maintenance! Coba pencarian tanpa memilih genre";
+            }
         }
 
-        //dd($input);
     }
 }

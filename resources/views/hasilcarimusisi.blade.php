@@ -4,19 +4,62 @@
 <div class="container">
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
-		@if(!$listmusisi->isEmpty())
-			<h4>Hasil Pencarian : </h4>	
-			@foreach($listmusisi as $_listmusisi)
-				<div class="panel panel-default">
-					<div class="panel-heading"><a href={{ url('/musician/'.$_listmusisi->slug) }}>{{$_listmusisi->name}}</a>
+        @if(is_object($listmusisi))
+			@if(!$listmusisi->isEmpty())
+				<h4>Hasil Pencarian : </h4>	
+				@foreach($listmusisi as $_listmusisi)
+					<div class="panel panel-default">
+						<div class="panel-heading"><a href={{ url('/musician/'.$_listmusisi->slug) }}>{{$_listmusisi->name}}</a>
+						</div>
+						<div class="panel-body">
+							{{$_listmusisi->deskripsi}}
+							<br/>
+
+							@if(Auth::guard('user')->user())
+	                        	<a href={{url('sewa-musisi/'.$_listmusisi->slug)}} class="btn btn-info" role="button">SEWA</a>
+	                    	@endif
+	                    	
+							@if(Auth::guard('user')->user())
+
+		                    @elseif(Auth::guard('musician')->user())
+
+		                    @else
+		                        <a href={{url('sewa-musisi/'.$_listmusisi->slug)}} class="btn btn-info" role="button">SEWA</a>
+		                    @endif
+						</div>
 					</div>
-					<div class="panel-body">
-						{{$_listmusisi->deskripsi}}
-					</div>
-				</div>
-			@endforeach
+				@endforeach
+			@else
+				<p class="center">Tidak ada musisi ditemukan.</p>
+			@endif
 		@else
-			<p class="center">Tidak ada musisi ditemukan.</p>
+			@if($listmusisi != null)
+				<h4>Hasil Pencarian : </h4>	
+				@foreach($listmusisi as $_listmusisi)
+					<div class="panel panel-default">
+						<div class="panel-heading"><a href={{ url('/musician/'.$_listmusisi->slug) }}>{{$_listmusisi->name}}</a>
+						</div>
+						<div class="panel-body">
+							{{$_listmusisi->deskripsi}}
+							<br/>
+
+							@if(Auth::guard('user')->user())
+	                        	<a href={{url('sewa-musisi/'.$_listmusisi->slug)}} class="btn btn-info" role="button">SEWA</a>
+	                    	@endif
+	                    	
+							@if(Auth::guard('user')->user())
+
+		                    @elseif(Auth::guard('musician')->user())
+
+		                    @else
+		                        <a href={{url('sewa-musisi/'.$_listmusisi->slug)}} class="btn btn-info" role="button">SEWA</a>
+		                    @endif
+						</div>
+					</div>
+				@endforeach
+			@else
+				<p class="center">Tidak ada musisi ditemukan.</p>
+			@endif
 		@endif
         </div>
     </div>

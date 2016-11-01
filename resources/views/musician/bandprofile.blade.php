@@ -43,6 +43,15 @@
 								@endif
 							@endif
 
+								@if(Auth::guard('user')->user())
+
+								@elseif(Auth::guard('musician')->user())
+
+								@else
+									<br/>
+									<a href={{url('sewa-band/'.$band->slug)}} class="btn btn-info" role="button">SEWA</a>
+								@endif
+
 								<h3>DESKRIPSI</h3>
 								<p>{{$band->deskripsi}}</p>
 							</div>

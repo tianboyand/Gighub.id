@@ -28,6 +28,8 @@ class OrganizerController extends Controller
             $this->middleware('auth');
         elseif(Auth::guard('musician')->user())
             $this->middleware('musician');
+        else
+            $this->middleware('auth');
 	}
 
     public function index(){

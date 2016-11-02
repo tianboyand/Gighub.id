@@ -276,7 +276,9 @@ class CariController extends Controller
                             }
                         }   
                     }
-                    
+                    else{
+                        $join = Musician::where('aktif', 'Y');
+                    }
                     return view('hasilcarimusisi')->with('listmusisi',$join);
                 //END Genre gak dipilih
                 }
@@ -383,6 +385,8 @@ class CariController extends Controller
                                     ->get(['musicians.*']);
                             }
                         }
+                    }else{
+                        $join = Musician::where('aktif', 'Y');
                     }
                     return view('hasilcarimusisi')->with('listmusisi',$join);
                 //END Kalau genre Kosong

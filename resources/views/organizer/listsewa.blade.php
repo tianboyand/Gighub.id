@@ -104,31 +104,30 @@
 						@if($_sewamusisi->status_request == 1)
 							<h3>Total Bayar : Rp. <b>{{$_sewamusisi->total_biaya}}</b></h3>
 							<b>
-							@if($_sewa->status == 0)
-								<p><a href={{url('konfirmasi-pembayaran/'.$_sewa->id)}}>Konfirmasi Pembayaran</a></p>
-							@elseif($_sewa->status == 1)
+							@if($_sewamusisi->status == 0)
+								<p><a href={{url('konfirmasi-pembayaran/'.$_sewamusisi->id)}}>Konfirmasi Pembayaran</a></p>
+							@elseif($_sewamusisi->status == 1)
 								<p>Menunggu Verifikasi Pembayaran</p>
-							@elseif($_sewa->status == 2)
+							@elseif($_sewamusisi->status == 2)
 								<p>LUNAS!</p>
-							@elseif($_sewa->status == 3)
+							@elseif($_sewamusisi->status == 3)
 								<p>SELESAI!</p>
-								@if($_sewa->review->isEmpty())
-									<p><a href={!! url('add-review/'.$_sewa->id) !!}>Berikan Review</a></p>
+								@if($_sewamusisi->review->isEmpty())
+									<p><a href={!! url('add-review/'.$_sewamusisi->id) !!}>Berikan Review</a></p>
 								@else
 									<?php 
-										for($i=0;$i<$_sewa->review[0]->nilai;$i++){
+										for($i=0;$i<$_sewamusisi->review[0]->nilai;$i++){
 											echo "<i class='fa fa-star'></i>";
 										}
 									?>
-									{{var_dump($_sewa->review)}}
 								@endif
-							@elseif($_sewa->status == 4)
-								<p>SELESAI! Dana telah di transfer ke <a href={{ url('/band/'.$_sewa->band->slug) }}>{{$_sewa->band->nama_grupband}}</a></p>
-								@if($_sewa->review->isEmpty())
-									<p><a href={!! url('add-review/'.$_sewa->id) !!}>Berikan Review</a></p>
+							@elseif($_sewamusisi->status == 4)
+								<p>SELESAI! Saldo telah di transfer ke <a href={{ url('/musician/'.$_sewamusisi->musisi->slug) }}>{{$_sewamusisi->musisi->name}}</a></p>
+								@if($_sewamusisi->review->isEmpty())
+									<p><a href={!! url('add-review/'.$_sewamusisi->id) !!}>Berikan Review</a></p>
 								@else
 									<?php 
-										for($i=0;$i<$_sewa->review[0]->nilai;$i++){
+										for($i=0;$i<$_sewamusisi->review[0]->nilai;$i++){
 											echo "<i class='fa fa-star'></i>";
 										}
 									?>

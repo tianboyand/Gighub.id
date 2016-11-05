@@ -73,6 +73,19 @@
                                         <div class="form-group">
                                             <button class="btn btn-primary" type="submit">Register </button>
                                         </div>
+
+                                        <div class="col-sm-12">
+                                           @if (count($errors) > 0)
+                                                <div class="alert alert-danger">
+                                                    <ul>
+                                                        @foreach ($errors->all() as $error)
+                                                            <li>{{ $error }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            @endif
+                                        </div>
+
                                     </form>
                                 </div>
                                 <div class="tab-pane" role="tabpanel" id="tab-2">
@@ -162,6 +175,20 @@
                                         <div class="form-group">
                                             <button class="btn btn-primary" type="submit">Register </button>
                                         </div>
+
+
+                                        <div class="col-sm-12">
+                                           @if (count($errors) > 0)
+                                                <div class="alert alert-danger">
+                                                    <ul>
+                                                        @foreach ($errors->all() as $error)
+                                                            <li>{{ $error }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        
                                     </form>
                                 </div>
                             </div>

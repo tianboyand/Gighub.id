@@ -54,9 +54,26 @@
                                     <i class="fa fa-btn fa-sign-in"></i>Login
                                 </button>
 
-                                <a class="btn btn-link" href="{{ url('musician/password/reset') }}">Forgot Your Password?</a>
+                                <a class="btn btn-link" href="{{ url('musician/password/reset') }}"> Your Password?</a>
                             </div>
                         </div>
+
+                        <div class="col-sm-12">
+                            @if(count($errors) > 0)
+                            <div class="alert alert-danger">
+                                <strong>Whoops!</strong> There were some problems with your input.<br>
+                                <ul>
+                                    @foreach ($errors as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @else
+                                <p>nothing {{$errors}}</p>
+                            @endif
+                        </div>
+
+
                     </form>
                 </div>
             </div>

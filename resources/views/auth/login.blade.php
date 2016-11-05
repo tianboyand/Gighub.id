@@ -64,6 +64,18 @@
                                 <a class="btn btn-link" href="{{ url('/password/reset') }}">Forgot Your Password?</a>
                             </div>
                         </div>
+
+                        <div class="col-sm-12">
+                            @if (count($errors) > 0)
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                        </div>
                     </form>
 
                                 </div>
@@ -119,6 +131,19 @@
                                 <a class="btn btn-link" href="{{ url('/password/reset') }}">Forgot Your Password?</a>
                             </div>
                         </div>
+
+                        <div class="col-sm-12">
+                           @if (count($errors) > 0)
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                        </div>
+
                     </form>
 
                                 </div>

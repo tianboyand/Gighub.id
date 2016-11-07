@@ -30,6 +30,16 @@ class OrganizerController extends Controller
             $this->middleware('musician');
         else
             $this->middleware('auth');
+
+        //SET Orderan Selesai
+        $setupdate = DB::Select("UPDATE sewas inner join gigs on gigs.id = sewas.gig_id SET sewas.status = '3' WHERE gigs.tanggal_selesai < NOW() AND sewas.status = '2'");
+
+        //SET Orderan Batal jika tidak melunasi pembayaran dalam 24 JAM
+        $setupdate = DB::Select("UPDATE sewas SET status = '5' WHERE HOUR(TIMEDIFF(NOW(), updated_at)) >= 24 AND status = '0' AND status_request = '1'");
+
+        //SET Orderan Batal jika tidak di konfirmasi organizer & musisi / band dalam 24 jam
+        // $setdelete = DB::Select("DELETE gigs inner join sewas WHERE HOUR(TIMEDIFF(NOW(), sewas.created_at)) >= 24 AND sewas.status_request = '0'");
+        // $setdelete = DB::Select("DELETE sewas WHERE HOUR(TIMEDIFF(NOW(), created_at)) >= 24 AND status_request = '0'");
 	}
 
     public function index(){

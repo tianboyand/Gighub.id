@@ -169,7 +169,7 @@ class CariController extends Controller
                     }
                     //Kalau di cek gak ada grupband di tabel Sewa
                     else{
-                         $join = Grupband::where('aktif', 'Y');
+                         $join = Grupband::where('aktif', 'Y')->get();
                     }
 
                     return view('hasilcari')->with('listband',$join);
@@ -218,7 +218,7 @@ class CariController extends Controller
                     }
                     //Kalau di cek gak ada grupband di tabel Sewa
                     else{
-                        $join = Grupband::where('aktif', 'Y');
+                        $join = Grupband::where('aktif', 'Y')->get();
                     }
 
                     foreach ($join as $final) {
@@ -246,6 +246,12 @@ class CariController extends Controller
         //Kalau Pilih musisi
         else
         {
+            $sewaall = Sewa::where('type_sewa', '=', 'hiremusisi')
+                        ->where('status_request', '=', '1')
+                        ->where('status', '=', '1')
+                        ->orwhere('type_sewa', '=', 'musisihire')
+                        ->where('status_request', '!=', '1')
+                        ->get();
             //KALAU Kota gak Dipilih
             if($input['kota'] == null){
                 //Kalau genre gak dipilih
@@ -259,7 +265,7 @@ class CariController extends Controller
                     if(!$ceksewa->isEmpty()){
                         foreach ($ceksewa as $sewa) {
                             if($sewa->type_sewa == 'hiremusisi'){
-                                $join = Musician::join('sewas', 'musicians.id', '=', 'sewas.object_id')
+                                $joinz = Musician::join('sewas', 'musicians.id', '=', 'sewas.object_id')
                                     ->join('gigs', 'sewas.gig_id', '=', 'gigs.id')
                                     ->whereRaw('? NOT between gigs.tanggal_mulai and gigs.tanggal_selesai', [$input['tanggal']])
                                     ->where('sewas.object_id', '!=', 'musicians.id')
@@ -267,17 +273,34 @@ class CariController extends Controller
                                     ->get(['musicians.*']);
                             }
                             else{
-                                $join = Musician::join('sewas', 'musicians.id', '=', 'sewas.subject_id')
+                                $joinz = Musician::join('sewas', 'musicians.id', '=', 'sewas.subject_id')
                                     ->join('gigs', 'sewas.gig_id', '=', 'gigs.id')
                                     ->whereRaw('? NOT between gigs.tanggal_mulai and gigs.tanggal_selesai', [$input['tanggal']])
                                     ->where('sewas.subject_id', '!=', 'musicians.id')
                                     ->groupBy('musicians.id')
                                     ->get(['musicians.*']);
                             }
-                        }   
+                        }
+                        $query = "SELECT * FROM  musicians WHERE id NOT IN (SELECT object_id FROM sewas WHERE status_request = '1' AND status ='3' OR status = '4' OR status_request !='1' AND type_sewa = 'hiremusisi')"; 
+                        $query2 = "SELECT * FROM  musicians WHERE id NOT IN (SELECT subject_id FROM sewas WHERE status_request = '1' AND status ='3' OR status = '4' OR status_request !='1' AND type_sewa = 'musisihire')"; 
+                        $joins = DB::select($query);  
+                        $joins2 = DB::select($query2);
+                        foreach ($joins as $val) {
+                            $mus[] = $val->id;                  
+                        }
+                        foreach ($joins2 as $val2) {
+                            $mus2[] = $val2->id;                  
+                        }
+                        foreach ($join as $val3) {
+                            $mus3[] = $val3->id;                  
+                        }
+
+                        $sama = array_intersect($mus,$mus2);
+                        $merge = array_merge($mus3, $sama);
+                        $join = Musician::whereIn('id', $merge)->where('aktif', 'Y')->get();
                     }
                     else{
-                        $join = Musician::where('aktif', 'Y');
+                        $join = Musician::where('aktif', 'Y')->get();
                     }
                     return view('hasilcarimusisi')->with('listmusisi',$join);
                 //END Genre gak dipilih
@@ -311,6 +334,24 @@ class CariController extends Controller
                                         ->get(['musicians.id']);
                             }
 
+                            $query = "SELECT * FROM  musicians WHERE id NOT IN (SELECT object_id FROM sewas WHERE status_request = '1' AND status ='3' OR status = '4' OR status_request !='1' AND type_sewa = 'hiremusisi')"; 
+                            $query2 = "SELECT * FROM  musicians WHERE id NOT IN (SELECT subject_id FROM sewas WHERE status_request = '1' AND status ='3' OR status = '4' OR status_request !='1' AND type_sewa = 'musisihire')"; 
+                            $joins = DB::select($query);  
+                            $joins2 = DB::select($query2);
+                            foreach ($joins as $val) {
+                                $mus[] = $val->id;                  
+                            }
+                            foreach ($joins2 as $val2) {
+                                $mus2[] = $val2->id;                  
+                            }
+                            foreach ($join as $val3) {
+                                $mus3[] = $val3->id;                  
+                            }
+
+                            $sama = array_intersect($mus,$mus2);
+                            $merge = array_merge($mus3, $sama);
+                            $join = Musician::whereIn('id', $merge)->where('aktif', 'Y')->get();
+
                             foreach ($join as $_join) {
                                 $cekgenre = GenreMusisi::where('musician_id', $_join->id)->get(['genre_id']);
                                 foreach ($cekgenre as $_cekgenre) {
@@ -325,9 +366,9 @@ class CariController extends Controller
 
                             
                         }
-                        //Kalau di cek gak ada grupband di tabel Sewa
+                        //Kalau di cek gak ada musisi di tabel Sewa
                         else{
-                            $join = Musician::where('aktif', 'Y');
+                            $join = Musician::where('aktif', 'Y')->get();
                         }
 
                         foreach ($join as $final) {
@@ -385,8 +426,25 @@ class CariController extends Controller
                                     ->get(['musicians.*']);
                             }
                         }
+                        $query = "SELECT * FROM  musicians WHERE id NOT IN (SELECT object_id FROM sewas WHERE status_request = '1' AND status ='3' OR status = '4' OR status_request !='1' AND type_sewa = 'hiremusisi')"; 
+                        $query2 = "SELECT * FROM  musicians WHERE id NOT IN (SELECT subject_id FROM sewas WHERE status_request = '1' AND status ='3' OR status = '4' OR status_request !='1' AND type_sewa = 'musisihire')"; 
+                        $joins = DB::select($query);  
+                        $joins2 = DB::select($query2);
+                        foreach ($joins as $val) {
+                            $mus[] = $val->id;                  
+                        }
+                        foreach ($joins2 as $val2) {
+                            $mus2[] = $val2->id;                  
+                        }
+                        foreach ($join as $val3) {
+                            $mus3[] = $val3->id;                  
+                        }
+
+                        $sama = array_intersect($mus,$mus2);
+                        $merge = array_merge($mus3, $sama);
+                        $join = Musician::whereIn('id', $merge)->where('aktif', 'Y')->get();
                     }else{
-                        $join = Musician::where('aktif', 'Y');
+                        $join = Musician::where('aktif', 'Y')->get();
                     }
                     return view('hasilcarimusisi')->with('listmusisi',$join);
                 //END Kalau genre Kosong
@@ -419,6 +477,23 @@ class CariController extends Controller
                                     ->groupBy('musicians.id')
                                     ->get(['musicians.*']);
                             }
+                            $query = "SELECT * FROM  musicians WHERE id NOT IN (SELECT object_id FROM sewas WHERE status_request = '1' AND status ='3' OR status = '4' OR status_request !='1' AND type_sewa = 'hiremusisi')"; 
+                            $query2 = "SELECT * FROM  musicians WHERE id NOT IN (SELECT subject_id FROM sewas WHERE status_request = '1' AND status ='3' OR status = '4' OR status_request !='1' AND type_sewa = 'musisihire')"; 
+                            $joins = DB::select($query);  
+                            $joins2 = DB::select($query2);
+                            foreach ($joins as $val) {
+                                $mus[] = $val->id;                  
+                            }
+                            foreach ($joins2 as $val2) {
+                                $mus2[] = $val2->id;                  
+                            }
+                            foreach ($join as $val3) {
+                                $mus3[] = $val3->id;                  
+                            }
+
+                            $sama = array_intersect($mus,$mus2);
+                            $merge = array_merge($mus3, $sama);
+                            $join = Musician::whereIn('id', $merge)->where('aktif', 'Y')->get();
                         }
                         return view('hasilcarimusisi')->with('listmusisi',$join);
                     }

@@ -291,7 +291,7 @@ class CariController extends Controller
                         foreach ($joins2 as $val2) {
                             $mus2[] = $val2->id;                  
                         }
-                        foreach ($join as $val3) {
+                        foreach ($joinz as $val3) {
                             $mus3[] = $val3->id;                  
                         }
 

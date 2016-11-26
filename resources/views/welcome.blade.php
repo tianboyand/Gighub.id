@@ -202,50 +202,58 @@
                     
 
                     <div class="jumbotron">
-                        <h2 class="text-center">Temukan musisi sesuai kriteramu</h2>
-                        <p class="text-center">Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
-                        <div class="row">
-                            <div class="col-md-4 col-md-offset-4">
-                                <form class="bootstrap-form-with-validation" action="/search" method="POST">
-                                    <h2 class="text-center">Tentukan Kriteriamu</h2>
-                                    <div class="form-group">
-                                        <label class="control-label" for="text-input">Tanggal Main</label>
-                                        <input class="form-control" type="text" name="tanggal" id="mulai">                            
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label" for="password-input">Budget </label>
-                                        <input class="form-control" type="number" name="budget" placeholder="Rp. 0" step="100">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label" for="email-input">Tipe Musisi</label>
-                                        <select class="form-control" name="tipe" required>
-                                            <option value="">Pilih Tipe</option>
-                                            <option value="0">Grup Band</option>
-                                            <option value="1">Solo</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                    <?php $genre = App\Genre::all(); $cek ='';?>
-                                        <label class="control-label" for="textarea-input">Genre Musisi</label>
-                                        <div class="row">
-                                        @foreach($genre as $genres)
-                                            <div class="col-lg-4 col-sm-6">
-                                                <div class="checkbox">
-                                                    <label class="control-label">
-                                                        <input type="checkbox" name="checkbox[]" value="{{$genres->id}}">{{$genres->genre_name}}
-                                                    </label>
-                                                </div>
+                    <h2 class="text-center">Temukan musisi sesuai kriteramu</h2>
+                    <p class="text-center">Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <form class="bootstrap-form-with-validation" action="/search" method="POST">
+                                <h2 class="text-center">Tentukan Kriteriamu</h2>
+                                <div class="form-group">
+                                    <label class="control-label" for="text-input">Tanggal Main</label>
+                                    <input class="form-control" type="text" name="tanggal" id="mulai">                            
+                                </div>
+                                <div class="form-group">
+                                    <?php
+                                        $kota = App\Grupband::groupBy('kota')->get(['kota']);
+                                    ?>
+                                    <label class="control-label" for="email-input">Kota</label>
+                                    <select class="form-control" name="kota">
+                                        <option value="">Pilih Kota (Opsional)</option>
+                                    @foreach($kota as $_kota)
+                                        <option value="{{$_kota->kota}}">{{$_kota->kota}}</option>
+                                    @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="email-input">Tipe Musisi</label>
+                                    <select class="form-control" name="tipe" required>
+                                        <option value="">Pilih Tipe</option>
+                                        <option value="0">Grup Band</option>
+                                        <option value="1">Solo</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                <?php $genre = App\Genre::all(); $cek ='';?>
+                                    <label class="control-label" for="textarea-input">Genre Musisi</label>
+                                    <div class="row">
+                                    @foreach($genre as $genres)
+                                        <div class="col-lg-4 col-sm-6">
+                                            <div class="checkbox">
+                                                <label class="control-label">
+                                                    <input type="checkbox" name="checkbox[]" value="{{$genres->id}}" >{{$genres->genre_name}}
+                                                </label>
                                             </div>
-                                        @endforeach
                                         </div>
+                                    @endforeach
                                     </div>
-                                    <div class="form-group">
-                                        <button class="btn btn-primary btn-lg" type="submit">Temukan </button>
-                                    </div>
-                                </form>
-                            </div>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary btn-lg" type="submit">Temukan </button>
+                                </div>
+                            </form>
                         </div>
-                    </div>    
+                    </div>
+                </div>    
 
 
                 @elseif(Auth::guard('musician')->user())

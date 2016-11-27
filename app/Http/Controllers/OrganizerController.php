@@ -15,6 +15,8 @@ use App\Gig;
 use App\User;
 use App\Review;
 use App\Notif;
+use App\SaldoDetail;
+use App\Saldo;
 use App\KonfirmasiPembayaran;
 use DB;
 use Session;
@@ -37,6 +39,145 @@ class OrganizerController extends Controller
         //SET Orderan Batal jika tidak melunasi pembayaran dalam 24 JAM
         $setupdate = DB::Select("UPDATE sewas SET status = '5' WHERE HOUR(TIMEDIFF(NOW(), updated_at)) >= 24 AND status = '0' AND status_request = '1'");
 
+        //SET Orderan Batal jika tidak melunasi pembayaran dalam 24 JAM
+        $query = "SELECT sewas.* FROM sewas INNER JOIN gigs ON gigs.id = sewas.gig_id WHERE HOUR(TIMEDIFF(NOW(), gigs.tanggal_selesai)) >= 25 AND sewas.status = '3' AND sewas.status_request = '1'";
+            $select = DB::Select($query);
+
+            if($select != null){
+                foreach ($select as $sewa) {
+                    if($sewa->type_sewa == 'hireband'){
+                        $ceksaldo = Saldo::where('subject_id', $sewa->object_id)->where('type_pemilik','=','band')->first();
+                        if($ceksaldo == null){
+                            $saldo = New Saldo;
+                            $saldo->saldo = $sewa->total_biaya;
+                            $saldo->subject_id = $sewa->object_id;
+                            $saldo->type_pemilik = 'band';
+                            $saldo->save();
+
+                            $saldodetail = New SaldoDetail;
+                            $saldodetail->saldo_id = $saldo->id;
+                            $saldodetail->sewa_id = $sewa->id;
+                            $saldodetail->save();
+                        }else{
+                            $ceksaldo->saldo = $sewa->total_biaya + $ceksaldo->saldo;
+                            $ceksaldo->save();
+
+                            $saldodetail = New SaldoDetail;
+                            $saldodetail->saldo_id = $ceksaldo->id;
+                            $saldodetail->sewa_id = $sewa->id;
+                            $saldodetail->save();
+                        }
+
+                        $notif = New Notif;
+                        $notif->object_id = $sewa->gig_id;
+                        $notif->subject_id = 0;
+                        $notif->user_id = $sewa->object_id;
+                        $notif->type_subject = 'admin';
+                        $notif->type_user = 'band'; 
+                        $notif->type_notif = 'tambahsaldo';
+                        $notif->save();
+
+                    }
+                    elseif($sewa->type_sewa == 'hiremusisi'){
+                        $ceksaldo = Saldo::where('subject_id', $sewa->object_id)->where('type_pemilik','=','musisi')->first();
+                        if($ceksaldo == null){
+                            $saldo = New Saldo;
+                            $saldo->saldo = $sewa->total_biaya;
+                            $saldo->subject_id = $sewa->object_id;
+                            $saldo->type_pemilik = 'musisi';
+                            $saldo->save();
+
+                            $saldodetail = New SaldoDetail;
+                            $saldodetail->saldo_id = $saldo->id;
+                            $saldodetail->sewa_id = $sewa->id;
+                            $saldodetail->save();
+                        }else{
+                            $ceksaldo->saldo = $sewa->total_biaya + $ceksaldo->saldo;
+                            $ceksaldo->save();
+
+                            $saldodetail = New SaldoDetail;
+                            $saldodetail->saldo_id = $ceksaldo->id;
+                            $saldodetail->sewa_id = $sewa->id;
+                            $saldodetail->save();
+                        }
+
+                        $notif = New Notif;
+                        $notif->object_id = $sewa->gig_id;
+                        $notif->subject_id = 0;
+                        $notif->user_id = $sewa->object_id;
+                        $notif->type_subject = 'admin';
+                        $notif->type_user = 'musisi'; 
+                        $notif->type_notif = 'tambahsaldo';
+                        $notif->save();
+                    }
+                    elseif($sewa->type_sewa == 'bandhire'){
+                        $ceksaldo = Saldo::where('subject_id', $sewa->subject_id)->where('type_pemilik','=','band')->first();
+                        if($ceksaldo == null){
+                            $saldo = New Saldo;
+                            $saldo->saldo = $sewa->total_biaya;
+                            $saldo->subject_id = $sewa->subject_id;
+                            $saldo->type_pemilik = 'band';
+                            $saldo->save();
+
+                            $saldodetail = New SaldoDetail;
+                            $saldodetail->saldo_id = $saldo->id;
+                            $saldodetail->sewa_id = $sewa->id;
+                            $saldodetail->save();
+                        }else{
+                            $ceksaldo->saldo = $sewa->total_biaya + $ceksaldo->saldo;
+                            $ceksaldo->save();
+
+                            $saldodetail = New SaldoDetail;
+                            $saldodetail->saldo_id = $ceksaldo->id;
+                            $saldodetail->sewa_id = $sewa->id;
+                            $saldodetail->save();
+                        }
+
+                        $notif = New Notif;
+                        $notif->object_id = $sewa->gig_id;
+                        $notif->subject_id = 0;
+                        $notif->user_id = $sewa->subject_id;
+                        $notif->type_subject = 'admin';
+                        $notif->type_user = 'band'; 
+                        $notif->type_notif = 'tambahsaldo';
+                        $notif->save();
+                    }
+                    elseif($sewa->type_sewa == 'musisihire'){
+                        $ceksaldo = Saldo::where('subject_id', $sewa->subject_id)->where('type_pemilik','=','musisi')->first();
+                        if($ceksaldo == null){
+                            $saldo = New Saldo;
+                            $saldo->saldo = $sewa->total_biaya;
+                            $saldo->subject_id = $sewa->subject_id;
+                            $saldo->type_pemilik = 'musisi';
+                            $saldo->save();
+
+                            $saldodetail = New SaldoDetail;
+                            $saldodetail->saldo_id = $saldo->id;
+                            $saldodetail->sewa_id = $sewa->id;
+                            $saldodetail->save();
+                        }else{
+                            $ceksaldo->saldo = $sewa->total_biaya + $ceksaldo->saldo;
+                            $ceksaldo->save();
+
+                            $saldodetail = New SaldoDetail;
+                            $saldodetail->saldo_id = $ceksaldo->id;
+                            $saldodetail->sewa_id = $sewa->id;
+                            $saldodetail->save();
+                        }
+
+                        $notif = New Notif;
+                        $notif->object_id = $sewa->gig_id;
+                        $notif->subject_id = 0;
+                        $notif->user_id = $sewa->subject_id;
+                        $notif->type_subject = 'admin';
+                        $notif->type_user = 'musisi'; 
+                        $notif->type_notif = 'tambahsaldo';
+                        $notif->save();
+                    }
+                    $setupdate = DB::Select("UPDATE sewas SET status = '4' WHERE id = $sewa->id");
+                }
+            }
+
         //SET Orderan Batal jika tidak di konfirmasi organizer & musisi / band dalam 24 jam
         // $setdelete = DB::Select("DELETE gigs inner join sewas WHERE HOUR(TIMEDIFF(NOW(), sewas.created_at)) >= 24 AND sewas.status_request = '0'");
         // $setdelete = DB::Select("DELETE sewas WHERE HOUR(TIMEDIFF(NOW(), created_at)) >= 24 AND status_request = '0'");
@@ -47,7 +188,6 @@ class OrganizerController extends Controller
     	// 	return view('/');
     	// else{
     		$bands = Grupband::where('aktif', 'Y')->get();
-
     		return view('organizer.discover')->with('band', $bands);
     	//}
     	//return view('musician.dashboard');

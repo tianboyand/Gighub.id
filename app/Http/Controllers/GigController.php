@@ -15,6 +15,8 @@ use App\Sewa;
 use App\Gig;
 use App\Notif;
 use App\User;
+use App\SaldoDetail;
+use App\Saldo;
 use App\KonfirmasiPembayaran;
 use DB;
 use Input;
@@ -139,13 +141,151 @@ class GigController extends Controller
 		$cek = Review::where('sewa_id', $id)->get();
 
 		if($cek->isEmpty()){
-			$review = new Review;
-	        $review->sewa_id = $id;
-	        $review->user_id = Auth::guard('user')->user()->id;
-	        $review->pesan = $req->pesan;
-	        $review->nilai = $req->rate;
-	        $review->save();
+			//cek sudah 24 jam belum kasih review ny sejak order
+			$today = date('Y-m-d H:i:s');
+			$getgig = Gig::where('id', $sewa->gig_id)->first();
+			$finishdate = $getgig->tanggal_selesai;
+			$hours = round((strtotime($today) - strtotime($finishdate)) / 3600);
 
+			if($hours <= 24){
+				$review = new Review;
+		        $review->sewa_id = $id;
+		        $review->user_id = Auth::guard('user')->user()->id;
+		        $review->pesan = $req->pesan;
+		        $review->nilai = $req->rate;
+		        $review->save();
+
+		        if($sewa->type_sewa == 'hireband'){
+	                $ceksaldo = Saldo::where('subject_id', $sewa->object_id)->where('type_pemilik','=','band')->first();
+	                if($ceksaldo == null){
+	                    $saldo = New Saldo;
+	                    $saldo->saldo = $sewa->total_biaya;
+	                    $saldo->subject_id = $sewa->object_id;
+	                    $saldo->type_pemilik = 'band';
+	                    $saldo->save();
+
+	                    $saldodetail = New SaldoDetail;
+	                    $saldodetail->saldo_id = $saldo->id;
+	                    $saldodetail->sewa_id = $sewa->id;
+	                    $saldodetail->save();
+	                }else{
+	                    $ceksaldo->saldo = $sewa->total_biaya + $ceksaldo->saldo;
+	                    $ceksaldo->save();
+
+	                    $saldodetail = New SaldoDetail;
+	                    $saldodetail->saldo_id = $ceksaldo->id;
+	                    $saldodetail->sewa_id = $sewa->id;
+	                    $saldodetail->save();
+	                }
+
+	                $notif = New Notif;
+	                $notif->object_id = $sewa->gig_id;
+	                $notif->subject_id = 0;
+	                $notif->user_id = $sewa->object_id;
+	                $notif->type_subject = 'admin';
+	                $notif->type_user = 'band'; 
+	                $notif->type_notif = 'tambahsaldo';
+	                $notif->save();
+
+	            }
+	            elseif($sewa->type_sewa == 'hiremusisi'){
+	                $ceksaldo = Saldo::where('subject_id', $sewa->object_id)->where('type_pemilik','=','musisi')->first();
+	                if($ceksaldo == null){
+	                    $saldo = New Saldo;
+	                    $saldo->saldo = $sewa->total_biaya;
+	                    $saldo->subject_id = $sewa->object_id;
+	                    $saldo->type_pemilik = 'musisi';
+	                    $saldo->save();
+
+	                    $saldodetail = New SaldoDetail;
+	                    $saldodetail->saldo_id = $saldo->id;
+	                    $saldodetail->sewa_id = $sewa->id;
+	                    $saldodetail->save();
+	                }else{
+	                    $ceksaldo->saldo = $sewa->total_biaya + $ceksaldo->saldo;
+	                    $ceksaldo->save();
+
+	                    $saldodetail = New SaldoDetail;
+	                    $saldodetail->saldo_id = $ceksaldo->id;
+	                    $saldodetail->sewa_id = $sewa->id;
+	                    $saldodetail->save();
+	                }
+
+	                $notif = New Notif;
+	                $notif->object_id = $sewa->gig_id;
+	                $notif->subject_id = 0;
+	                $notif->user_id = $sewa->object_id;
+	                $notif->type_subject = 'admin';
+	                $notif->type_user = 'musisi'; 
+	                $notif->type_notif = 'tambahsaldo';
+	                $notif->save();
+	            }
+	            elseif($sewa->type_sewa == 'bandhire'){
+	                $ceksaldo = Saldo::where('subject_id', $sewa->subject_id)->where('type_pemilik','=','band')->first();
+	                if($ceksaldo == null){
+	                    $saldo = New Saldo;
+	                    $saldo->saldo = $sewa->total_biaya;
+	                    $saldo->subject_id = $sewa->subject_id;
+	                    $saldo->type_pemilik = 'band';
+	                    $saldo->save();
+
+	                    $saldodetail = New SaldoDetail;
+	                    $saldodetail->saldo_id = $saldo->id;
+	                    $saldodetail->sewa_id = $sewa->id;
+	                    $saldodetail->save();
+	                }else{
+	                    $ceksaldo->saldo = $sewa->total_biaya + $ceksaldo->saldo;
+	                    $ceksaldo->save();
+
+	                    $saldodetail = New SaldoDetail;
+	                    $saldodetail->saldo_id = $ceksaldo->id;
+	                    $saldodetail->sewa_id = $sewa->id;
+	                    $saldodetail->save();
+	                }
+
+	                $notif = New Notif;
+	                $notif->object_id = $sewa->gig_id;
+	                $notif->subject_id = 0;
+	                $notif->user_id = $sewa->subject_id;
+	                $notif->type_subject = 'admin';
+	                $notif->type_user = 'band'; 
+	                $notif->type_notif = 'tambahsaldo';
+	                $notif->save();
+	            }
+	            elseif($sewa->type_sewa == 'musisihire'){
+	                $ceksaldo = Saldo::where('subject_id', $sewa->subject_id)->where('type_pemilik','=','musisi')->first();
+	                if($ceksaldo == null){
+	                    $saldo = New Saldo;
+	                    $saldo->saldo = $sewa->total_biaya;
+	                    $saldo->subject_id = $sewa->subject_id;
+	                    $saldo->type_pemilik = 'musisi';
+	                    $saldo->save();
+
+	                    $saldodetail = New SaldoDetail;
+	                    $saldodetail->saldo_id = $saldo->id;
+	                    $saldodetail->sewa_id = $sewa->id;
+	                    $saldodetail->save();
+	                }else{
+	                    $ceksaldo->saldo = $sewa->total_biaya + $ceksaldo->saldo;
+	                    $ceksaldo->save();
+
+	                    $saldodetail = New SaldoDetail;
+	                    $saldodetail->saldo_id = $ceksaldo->id;
+	                    $saldodetail->sewa_id = $sewa->id;
+	                    $saldodetail->save();
+	                }
+	            }
+	            $sewa->update(['status' => 4]);
+		    }else{
+		    	$review = new Review;
+		        $review->sewa_id = $id;
+		        $review->user_id = Auth::guard('user')->user()->id;
+		        $review->pesan = $req->pesan;
+		        $review->nilai = $req->rate;
+		        $review->save();
+		    }
+
+	        //kasih notifikasi
 	        if($sewa->type_sewa == 'hireband'){
 		        $notif = New Notif;
 			    $notif->object_id = $sewa->gig_id;

@@ -49,21 +49,27 @@ class MusicianController extends Controller
 
         $query = "SELECT sum(review.nilai) AS nilai, count(sewas.id) AS bagi FROM review INNER JOIN sewas ON review.sewa_id = sewas.id WHERE sewas.type_sewa = 'musisihire' AND sewas.subject_id = $musisis->id"; 
 
-        $query2 = "SELECT sum(review.nilai) AS nilai, count(sewas.id) AS bagi FROM review INNER JOIN sewas ON review.sewa_id = sewas.id WHERE sewas.type_sewa = 'hiremusisi' AND sewas.subject_id = $musisis->id"; 
+        $query2 = "SELECT sum(review.nilai) AS nilai, count(sewas.id) AS bagi FROM review INNER JOIN sewas ON review.sewa_id = sewas.id WHERE sewas.type_sewa = 'hiremusisi' AND sewas.object_id = $musisis->id"; 
+
+         $join = Sewa::join('review', 'sewas.id', '=', 'review.sewa_id')
+                        ->join('gigs', 'sewas.gig_id', '=', 'gigs.id')
+                        ->where('sewas.type_sewa', '=', 'musisihire')
+                        ->where('sewas.subject_id', $musisis->id)
+                        ->orWhere('sewas.type_sewa', '=', 'hiremusisi')
+                        ->where('sewas.object_id', $musisis->id)
+                        ->get(['review.id', 'review.pesan', 'review.nilai']);
 
         $review = DB::select($query);
         $review2 = DB::select($query2);
+       
+        $pembagi = count($join);
+        $plus = $review[0]->nilai + $review2[0]->nilai;
+        if($pembagi == 0 && $plus == 0)
+            $hasil = 0;
+        else
+            $hasil = round($plus / $pembagi);
 
-        if($review2['0']->nilai == null && $review2['0']->nilai == 0 && $review['0']->nilai == null && $review['0']->nilai == 0){
-            $totalreview = 0;
-        }
-        else{
-            $pembagi = $review2['0']->bagi + $review['0']->bagi;
-            $penjumlah = $review2['0']->nilai + $review['0']->nilai;
-            $totalreview = round($penjumlah / $pembagi);
-        }
-
-    	return view('musician.profile')->with('musisi', $musisis)->with('review', $totalreview);
+    	return view('musician.profile')->with('musisi', $musisis)->with('review', $hasil)->with('totalrev', $pembagi);
     }
 
     protected function create(array $data)
@@ -231,24 +237,29 @@ class MusicianController extends Controller
                                     ->where('grupband_id', $band->id)->get(['musicians.id','musicians.name','musicians.photo','musicians.slug','positions.position_name']);
 
         //hitung review type bandhire
-        $query = "SELECT sum(review.nilai) AS nilai, count(sewas.id) AS bagi FROM review INNER JOIN sewas ON review.sewa_id = sewas.id WHERE sewas.type_sewa = 'bandhire' AND sewas.subject_id = $band->id"; 
-
-        $review = DB::select($query);
-
+        $query = "SELECT sum(review.nilai) AS nilai FROM review INNER JOIN sewas ON review.sewa_id = sewas.id WHERE sewas.type_sewa = 'bandhire' AND sewas.subject_id = $band->id"; 
 
         //hitung review type hireband
-        $query2 = "SELECT sum(review.nilai) AS nilai, count(sewas.id) AS bagi FROM review INNER JOIN sewas ON review.sewa_id = sewas.id WHERE sewas.type_sewa = 'hireband' AND sewas.object_id = $band->id"; 
+        $query2 = "SELECT sum(review.nilai) AS nilai FROM review INNER JOIN sewas ON review.sewa_id = sewas.id WHERE sewas.type_sewa = 'hireband' AND sewas.object_id = $band->id"; 
 
+        $join = Sewa::join('review', 'sewas.id', '=', 'review.sewa_id')
+                        ->join('gigs', 'sewas.gig_id', '=', 'gigs.id')
+                        ->where('sewas.type_sewa', '=', 'bandhire')
+                        ->where('sewas.subject_id', $band->id)
+                        ->orWhere('sewas.type_sewa', '=', 'hireband')
+                        ->where('sewas.object_id', $band->id)
+                        ->get(['review.id', 'review.pesan', 'review.nilai']);
+
+
+        $review = DB::select($query);
         $review2 = DB::select($query2);
 
-        if($review2['0']->nilai == null && $review2['0']->nilai == 0 && $review['0']->nilai == null && $review['0']->nilai == 0){
-            $totalreview = 0;
-        }
-        else{
-            $pembagi = $review2['0']->bagi + $review['0']->bagi;
-            $penjumlah = $review2['0']->nilai + $review['0']->nilai;
-            $totalreview = round($penjumlah / $pembagi);
-        }
+        $pembagi = count($join);
+        $plus = $review[0]->nilai + $review2[0]->nilai;
+        if($pembagi == 0 && $plus == 0)
+            $hasil = 0;
+        else
+            $hasil = round($plus / $pembagi);
 
         $query = "SELECT * FROM  musicians WHERE id NOT IN (SELECT musician_id FROM grupband_musisi WHERE grupband_id = ".$band->id.")";
 
@@ -259,7 +270,9 @@ class MusicianController extends Controller
         else
             $data = $ceknotanggota;
       
-        return view('musician.bandprofile')->with('band', $band)->with('anggota', $anggotaband)->with('compare', $data)->with('review', $totalreview);
+        return view('musician.bandprofile')->with('band', $band)->with('anggota', $anggotaband)->with('compare', $data)->with('review', $hasil)->with('totalrev',$pembagi);
+        
+
     }
 
     public function listBand(){
@@ -837,6 +850,42 @@ class MusicianController extends Controller
         $notif->save();
 
         return redirect()->back();
+    }
+
+    public function detailReview($slug){
+        $musisi = Musician::whereSlug($slug)->firstOrFail()->id;
+        $musisis = Musician::findOrFail($musisi);
+
+        $join = Sewa::join('review', 'sewas.id', '=', 'review.sewa_id')
+                        ->join('gigs', 'sewas.gig_id', '=', 'gigs.id')
+                        ->where('sewas.type_sewa', '=', 'musisihire')
+                        ->where('sewas.subject_id', $musisis->id)
+                        ->orWhere('sewas.type_sewa', '=', 'hiremusisi')
+                        ->where('sewas.object_id', $musisis->id)
+                        ->get();
+
+
+        //return $join;
+
+        return view('musician.detail-review')->with('review',$join)->with('musisi',$musisis);
+    }
+
+    public function detailReviewBand($slug){
+        $band = Grupband::whereSlug($slug)->firstOrFail()->id;
+        $bands = Grupband::findOrFail($band);
+
+        $join = Sewa::join('review', 'sewas.id', '=', 'review.sewa_id')
+                        ->join('gigs', 'sewas.gig_id', '=', 'gigs.id')
+                        ->where('sewas.type_sewa', '=', 'bandhire')
+                        ->where('sewas.subject_id', $bands->id)
+                        ->orWhere('sewas.type_sewa', '=', 'hireband')
+                        ->where('sewas.object_id', $bands->id)
+                        ->get();
+
+
+        //return $join;
+
+        return view('musician.detail-review-band')->with('review',$join)->with('band',$bands);
     }
     
  

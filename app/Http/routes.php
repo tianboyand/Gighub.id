@@ -147,6 +147,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('edit-gig/save/{slug}', 'GigController@inputEditGig');
     Route::get('add-review/{idsewa}', 'GigController@addReview');
     Route::post('add-review/{idsewa}',['as' => 'review.new','uses' =>'GigController@inputReview']);
+    Route::get('detail-review/{slug}', 'MusicianController@detailReview');
+    Route::get('detail-review/band/{slug}', 'MusicianController@detailReviewBand');
 
     Route::get('musician/saldo/{slug}', 'MusicianController@saldo');
     Route::get('listband/saldo/{slug}', 'MusicianController@saldoBandList');

@@ -19,6 +19,7 @@
                     for($i=0;$i<$review;$i++)
                         echo "<i class='fa fa-star'></i>";
                 ?>
+                <a href={{ url('detail-review/'.$musisi->slug) }}>( {{$totalrev}} )</a>
                 </p>
                 </div>
 

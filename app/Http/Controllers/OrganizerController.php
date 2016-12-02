@@ -39,7 +39,7 @@ class OrganizerController extends Controller
         //SET Orderan Batal jika tidak melunasi pembayaran dalam 24 JAM
         $setupdate = DB::Select("UPDATE sewas SET status = '5' WHERE HOUR(TIMEDIFF(NOW(), updated_at)) >= 24 AND status = '0' AND status_request = '1'");
 
-        //SET Orderan Batal jika tidak melunasi pembayaran dalam 24 JAM
+        //Isi saldo otomatis
         $query = "SELECT sewas.* FROM sewas INNER JOIN gigs ON gigs.id = sewas.gig_id WHERE HOUR(TIMEDIFF(NOW(), gigs.tanggal_selesai)) >= 25 AND sewas.status = '3' AND sewas.status_request = '1'";
             $select = DB::Select($query);
 

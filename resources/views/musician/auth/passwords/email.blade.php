@@ -6,10 +6,16 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Reset musician Password</div>
+                <div class="panel-heading">Reset Musician Password</div>
                 <div class="panel-body">
-                    @if (session('status'))
+                    @if (session('status2'))
                         <div class="alert alert-success">
+                            {{ session('status2') }}
+                        </div>
+                    @endif
+					
+					@if (session('status'))
+                        <div class="alert alert-danger">
                             {{ session('status') }}
                         </div>
                     @endif

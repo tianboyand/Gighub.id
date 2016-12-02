@@ -9,6 +9,7 @@
 		"jrm2k6/cloudder": "0.2.*",
         "laravel/framework": "5.2.*",
         "cviebrock/eloquent-sluggable": "4.1",
+		"guzzlehttp/guzzle": "~4.0",
 		"laravelcollective/html": "5.2.*"
     },
     "require-dev": {

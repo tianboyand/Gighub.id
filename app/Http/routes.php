@@ -41,9 +41,13 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('musician/register', 'MusicianAuth\AuthController@showRegistrationForm');
     Route::post('musician/register', 'MusicianAuth\AuthController@register');
 
-    Route::post('musician/password/email','MusicianAuth\PasswordController@sendResetLinkEmail');
-    Route::post('musician/password/reset','MusicianAuth\PasswordController@reset');
-    Route::get('musician/password/reset/{token?}','MusicianAuth\PasswordController@showResetForm');
+    //Route::post('musician/password/email','MusicianAuth\PasswordController@sendResetLinkEmail');
+    Route::post('musician/password/email','EmailController@sendResetLinkEmail');
+    Route::get('musician/password/reset','EmailController@showLinkRequestForm');
+    //Route::get('musician/password/reset','MusicianAuth\PasswordController@showLinkRequestForm');
+    //Route::get('musician/password/reset/{token?}','MusicianAuth\PasswordController@showResetForm');
+    Route::get('musician/password/reset/{token}','EmailController@showResetForm');
+    Route::post('musician/password/reset','EmailController@reset');
 
     Route::get('/musician', 'MusicianController@index'); 
 

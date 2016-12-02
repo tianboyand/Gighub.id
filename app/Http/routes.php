@@ -138,7 +138,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('confirmoffer-band/{idsewa}/{slug}', 'MusicianController@confirmOfferBand');
     Route::get('canceloffer-band/{idsewa}/{slug}', 'MusicianController@cancelOfferBand');
 
-    Route::post('/search','CariController@pencarian');
+    //Route::post('/search','CariController@pencarian');
+    Route::post('/search','SearchController@pencarian');
 
     Route::get('create-gig', 'OrganizerController@createGig');
     Route::post('create-gig',['as' => 'add.gig','uses' =>'OrganizerController@inputGig']);

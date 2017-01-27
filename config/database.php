@@ -54,11 +54,11 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => 127.13.151.2,
-            'port' => 3306,
-            'database' => gighub,
-            'username' => adminzMz3jLi,
-            'password' => xgdzsNnsDBgE,
+            'host' => env('DB_HOST', 'localhost'),
+ -          'port' => env('DB_PORT', '3306'),
+ -          'database' => env('DB_DATABASE', 'forge'),
+ -          'username' => env('DB_USERNAME', 'forge'),
+ -          'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',

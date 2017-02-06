@@ -11,6 +11,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        Eloquent::unguard();
+        
+        $path = 'gighub.sql';
+        DB::unprepared(file_get_contents($path));
+        $this->command->info('Gighub table seeded!');
     }
 }

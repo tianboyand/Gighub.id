@@ -206,7 +206,7 @@
                     <p class="text-center">Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
                     <div class="row">
                         <div class="col-md-4 col-md-offset-4">
-                            <form class="bootstrap-form-with-validation" action="/search" method="POST">
+                            <form class="bootstrap-form-with-validation" action="{{ url('/search')}}" method="POST">
                                 <h2 class="text-center">Tentukan Kriteriamu</h2>
                                 <div class="form-group">
                                     <label class="control-label" for="text-input">Tanggal Main</label>
@@ -275,7 +275,7 @@
                     <p class="text-center">Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
                     <div class="row">
                         <div class="col-md-4 col-md-offset-4">
-                            <form class="bootstrap-form-with-validation" action="/search" method="POST">
+                            <form class="bootstrap-form-with-validation" action="{{ url('/search')}}" method="POST">
                                 <h2 class="text-center">Tentukan Kriteriamu</h2>
                                 <div class="form-group">
                                     <label class="control-label" for="text-input">Tanggal Main</label>

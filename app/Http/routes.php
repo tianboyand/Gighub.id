@@ -163,3 +163,140 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('notif/{id}', 'HomeController@detailNotif');
 
 });  
+
+// ==================================================================================//
+    // MOBILE API
+// ==================================================================================//
+
+
+Route::get('/mobile/tesnotif', 'MobileMusicianController@tesnotif');
+
+####################################################################################################
+// MUSICIANs and ORGANIZERS
+####################################################################################################
+// Logout
+Route::Post('mobile/logout', 'MobileMusicianController@logout');
+
+// Search
+Route::get('/mobile/musicians/search/1000','MobileMusicianController@search');
+// 
+// Konfirmasi Pembayaran
+Route::post('mobile/organizer/konfirmasipembayaran','MobileOrganizerController@konfirmasiPembayaran');
+// 
+// Update Profile
+Route::post('mobile/update/profile','MobileMusicianController@updateProfile');
+//
+// Book Confirm Request 
+Route::post('mobile/confirm/bookrequest','MobileMusicianController@confirmRequest');
+// 
+// Show gigs
+Route::get('/mobile/gigs/1000','MobileOrganizerController@allGigs');
+// 
+// Booking On Request, On Process, Completed.
+Route::post('mobile/organizer/onrequestbook','MobileOrganizerController@onRequestBooking');
+Route::post('mobile/organizer/onproccessbook','MobileOrganizerController@onProccessBooking');
+Route::post('mobile/organizer/completedbook','MobileOrganizerController@completedBooking');
+// 
+// Update Photo
+Route::post('mobile/update/photo','MobileMusicianController@updatePhotoProfile');
+// 
+###################################################################################################
+
+
+###################################################################################################
+// MUSICIANS
+###################################################################################################
+// Registration Routes Musician
+Route::post('mobile/musician/register', 'MobileMusicianController@register');
+// 
+//Login
+Route::post('mobile/musician/login','MobileMusicianController@login');
+// 
+// Genres
+Route::post('mobile/musician/genres', 'MobileMusicianController@musicianGenres');
+// 
+// Create Band
+Route::post('mobile/musician/create/band', 'MobileMusicianController@createBand');
+// 
+// Show Musician's Group / Band
+Route::post('mobile/musician/yourbands','MobileMusicianController@yourBands');
+// 
+// Musician's Bank
+Route::post('mobile/musician/bank','MobileMusicianController@bankMusisi');
+// 
+// Update Musician's Bank
+Route::post('mobile/musician/updatemusicianbank','MobileMusicianController@updateMusicianBank');
+// 
+// All Musicians
+Route::get('/mobile/musicians/1000','MobileMusicianController@all');
+// 
+// Genres
+Route::get('/mobile/genres/1000','MobileMusicianController@genres');
+// 
+// Grupbands
+Route::get('/mobile/grupbands/1000','MobileMusicianController@allBands');
+// 
+// View Musician for add to group
+Route::post('mobile/musician/viewaddanggota','MobileMusicianController@viewAddAnggota');
+// 
+// position
+Route::get('mobile/musician/position','MobileMusicianController@position');
+// 
+// Musician's Position
+Route::post('mobile/musician/musicianposition','MobileMusicianController@musicianPosition');
+// 
+// Add Musician to Group
+Route::post('mobile/musician/addanggota','MobileMusicianController@addAnggota');
+// 
+// View Remove Anggota
+Route::post('mobile/musician/viewremoveanggota','MobileMusicianController@viewRemoveAnggota');
+// 
+// Remove Anggota
+Route::post('mobile/musician/removeanggota','MobileMusicianController@removeAnggota');
+// 
+// Gig Offer
+Route::post('mobile/musician/gigoffer','MobileMusicianController@gigOffer');
+// 
+// List Gig Offer
+Route::post('mobile/musician/listgigoffer','MobileMusicianController@listGigOffer');
+// 
+// View Saldo
+Route::post('mobile/musician/viewsaldo', 'MobileMusicianController@viewSaldo');
+// 
+// View member of group
+Route::post('mobile/musician/viewmember', 'MobileMusicianController@viewMember');
+// 
+// Withdraw
+Route::post('mobile/musician/withdraw','MobileMusicianController@withdraw');
+// 
+// View Organizer profile for gig activity
+Route::post('mobile/organizerprofile','MobileMusicianController@organizerProfile');
+// 
+// list musician reviewer
+Route::post('mobile/musician/reviewer','MobileMusicianController@musicianReviewer');
+// 
+##################################################################################################
+
+
+##################################################################################################
+// ORGANIZERS
+##################################################################################################
+// Registration Routes Organizer
+Route::post('mobile/organizer/register', 'MobileOrganizerController@register');
+// Login Organizer
+Route::post('mobile/organizer/login','MobileOrganizerController@login');
+// Book Musician
+Route::post('mobile/organizer/book/musician','MobileOrganizerController@bookMusician');
+// Create Gig
+Route::post('mobile/organizer/create/gig','MobileOrganizerController@createGig');
+// Show Organizer's Gig
+Route::post('mobile/organizer/yourgig','MobileOrganizerController@yourGigs');
+// Book On Request
+Route::post('mobile/organizer/onrequest','MobileOrganizerController@onRequestBooking');
+// callMemberGroup
+Route::post('mobile/organizer/membergroup','MobileOrganizerController@memberGroup');
+// sendReview
+Route::post('mobile/organizer/sendreview','MobileOrganizerController@sendReview');
+// yourReview
+Route::post('mobile/organizer/yourreview','MobileOrganizerController@yourReview');
+##################################################################################################

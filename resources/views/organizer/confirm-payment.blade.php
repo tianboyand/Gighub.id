@@ -13,7 +13,7 @@
                 <div class="panel-body">
                     <p>Sudah ditransfer sebesar <b>Rp. {{$konfirm->total_biaya}}</b></p>
                     {{ Form::open(['route'=>['add.confirmpayment',$konfirm->id],'role'=> 'form', 'class' => 'ui reply form', 'enctype' => 'multipart/form-data']) }}
-                    <?php $bank = App\BankAdmin::all();?>
+                    <?php $bank = App\Bankadmin::all();?>
                             <p><b>Ke Bank: </b></p>
                             <select class="form-control" name="bank" id="bank" required>
                                 @foreach($bank as $_bank)                               

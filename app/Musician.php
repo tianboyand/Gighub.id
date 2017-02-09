@@ -31,7 +31,7 @@ class Musician extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id','name','email','password','deskripsi', 'harga_sewa','aktif', 'basis', 'no_telp', 'kota', 'photo', 'youtube_video', 'url_website', 'username_soundcloud', 'username_reverbnation',
+        'id','name','email','firebase','password','deskripsi', 'harga_sewa','aktif', 'basis', 'no_telp', 'kota', 'photo', 'youtube_video', 'url_website', 'username_soundcloud', 'username_reverbnation',
     ];
 
     /**
@@ -40,7 +40,7 @@ class Musician extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'id','password', 'remember_token',
+        'password', 'remember_token',
     ];
 
     public function grupbandmusisi(){

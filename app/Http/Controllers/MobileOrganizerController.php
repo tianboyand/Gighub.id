@@ -680,6 +680,9 @@ class MobileOrganizerController extends Controller
             $konpem->no_rek = $request['no_rek'];
             $konpem->nama_bank = $request['nama_bank'];
             // $konpem->photo = $request['photo'];
+            if($request['photo'] != ""){
+                $req['photo'] = $konpem->photo;
+            }
             $konpem->bank_admin_id = $request['bank_admin_id'];
 
             // dd($konpem);

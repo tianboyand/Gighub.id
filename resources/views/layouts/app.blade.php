@@ -244,7 +244,7 @@
                                                 $gig = App\Gig::where('id', $notif->object_id)->first();
                                             ?>
                                                 @if($notif->type_notif == 'reqsewa')
-                                                    <li><a href={{url('notif/'.$notif->id)}}>{{$org->first_name}} mengirimi Anda permintaan di Gig {{$gig->nama_gig}}</a>
+                                                    <li><a href={{url('notif/'.$notif->id)}}>{{$org->first()->first_name}} mengirimi Anda permintaan di Gig {{$gig->first()->nama_gig}}</a>
                                                     </li>
                                                 @elseif($notif->type_notif == 'terimaoffer')
                                                     <li><a href={{url('notif/'.$notif->id)}}>{{$org->first_name}} menerima tawaran Anda di Gig {{$gig->nama_gig}}</a>

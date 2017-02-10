@@ -19,7 +19,7 @@
 							<br/>
 
 							@if(Auth::guard('user')->user())
-	                        	<a href={{url('sewa-musisi/'.$_listband->slug)}} class="btn btn-info" role="button">SEWA</a>
+	                        	<a href={{url('sewa-band/'.$_listband->slug)}} class="btn btn-info" role="button">SEWA</a>
 	                    	@endif
 	                    	
 							@if(Auth::guard('user')->user())
@@ -27,7 +27,7 @@
 		                    @elseif(Auth::guard('musician')->user())
 
 		                    @else
-		                        <a href={{url('sewa-musisi/'.$_listband->slug)}} class="btn btn-info" role="button">SEWA</a>
+		                        <a href={{url('sewa-band/'.$_listband->slug)}} class="btn btn-info" role="button">SEWA</a>
 		                    @endif
 						</div>
 					</div>

@@ -74,30 +74,43 @@ class SearchController extends Controller
             }
             elseif($input['kota'] == null && $request->checkbox != null && $input['tanggal'] == null){
                 $musisi = Musician::where('aktif', 'Y')->get();
+                $genreinput = $request->checkbox;
                 foreach ($musisi as $_musisi) {
                     $cekgenre = GenreMusisi::where('musician_id', $_musisi->id)->get(['genre_id']);
-                    foreach ($cekgenre as $_cekgenre) {
-                        $arrgen = (array) $_cekgenre->genre_id; 
-                        $result = array_intersect($request->checkbox, $arrgen);
-
-                        $_cekgenre->hasil = $result;
-                    }
+                    // foreach ($cekgenre as $_cekgenre) {
+                    //     $arrgen = (array) $_cekgenre->genre_id; 
+                    //     $result = array_intersect($request->checkbox, $arrgen);
+                    //     if($result == null)
+                    //         $_cekgenre->hasil = null;
+                    //     else
+                    //         $_cekgenre->hasil = $result;
+                    // }
+                    //$request->checkbox as $genreinput)
                     $_musisi->genre = $cekgenre;
+                    $_musisi->hasil = $genreinput;
                 }
 
                 foreach ($musisi as $final) {
                     foreach ($final->genre as $finalgenre) {
-                        foreach ($finalgenre->hasil as $temp) {
-                            if($temp != null){
-                                $finalid[] = $final->id;
-                            }
-                        }
+                        $genreid[] = $finalgenre->genre_id;
                     }
+
+                    $result = array_intersect($genreid, $final->hasil);
+                    if ($result != null){
+                        $finalid[] = $final->id;
+                    }
+                    else{
+                        $finalid = [];
+                    }                   
                 }
 
-                foreach ($finalid as $hasilakhir) {
-                    $hasilcariband = Musician::where('id', $hasilakhir)->where('aktif', 'Y')->first();
-                    $idband[] = $hasilcariband;
+                if($finalid != null){
+                    foreach ($finalid as $hasilakhir) {
+                        $hasilcariband = Musician::where('id', $hasilakhir)->where('aktif', 'Y')->first();
+                        $idband[] = $hasilcariband;
+                    }
+                }else{
+                    $idband = [];
                 }
 
                 return view('hasilcarimusisi')->with('listmusisi',$idband);
@@ -150,58 +163,79 @@ class SearchController extends Controller
                         $id[] = $value->id;
                     }
                     $musisi = Musician::whereIn('id', $id)->where('aktif', 'Y')->get();
+                    $genreinput = $request->checkbox;
                     foreach ($musisi as $_musisi) {
                         $cekgenre = GenreMusisi::where('musician_id', $_musisi->id)->get(['genre_id']);
-                        foreach ($cekgenre as $_cekgenre) {
-                            $arrgen = (array) $_cekgenre->genre_id; 
-                            $result = array_intersect($request->checkbox, $arrgen);
+                        // foreach ($cekgenre as $_cekgenre) {
+                        //     $arrgen = (array) $_cekgenre->genre_id; 
+                        //     $result = array_intersect($request->checkbox, $arrgen);
 
-                            $_cekgenre->hasil = $result;
-                        }
+                        //     $_cekgenre->hasil = $result;
+                        // }
                         $_musisi->genre = $cekgenre;
+                        $_musisi->hasil = $genreinput;
                     }
 
                     foreach ($musisi as $final) {
                         foreach ($final->genre as $finalgenre) {
-                            foreach ($finalgenre->hasil as $temp) {
-                                if($temp != null){
-                                    $finalid[] = $final->id;
-                                }
-                            }
+                            $genreid[] = $finalgenre->genre_id;
                         }
+
+                        $result = array_intersect($genreid, $final->hasil);
+                        if ($result != null){
+                            $finalid[] = $final->id;
+                        }
+                        else{
+                            $finalid = [];
+                        }                   
                     }
 
-                    foreach ($finalid as $hasilakhir) {
-                        $hasilcariband = Musician::where('id', $hasilakhir)->where('aktif', 'Y')->first();
-                        $idband[] = $hasilcariband;
+                    if($finalid != null){
+                        foreach ($finalid as $hasilakhir) {
+                            $hasilcariband = Musician::where('id', $hasilakhir)->where('aktif', 'Y')->first();
+                            $idband[] = $hasilcariband;
+                        }
+                    }else{
+                        $idband = [];
                     }
+
                 }
                 else{
                     $musisi = Musician::where('aktif', 'Y')->get();
+                    $genreinput = $request->checkbox;
                     foreach ($musisi as $_musisi) {
                         $cekgenre = GenreMusisi::where('musician_id', $_musisi->id)->get(['genre_id']);
-                        foreach ($cekgenre as $_cekgenre) {
-                            $arrgen = (array) $_cekgenre->genre_id; 
-                            $result = array_intersect($request->checkbox, $arrgen);
+                        // foreach ($cekgenre as $_cekgenre) {
+                        //     $arrgen = (array) $_cekgenre->genre_id; 
+                        //     $result = array_intersect($request->checkbox, $arrgen);
 
-                            $_cekgenre->hasil = $result;
-                        }
+                        //     $_cekgenre->hasil = $result;
+                        // }
                         $_musisi->genre = $cekgenre;
+                        $_musisi->hasil = $genreinput;
                     }
 
                     foreach ($musisi as $final) {
                         foreach ($final->genre as $finalgenre) {
-                            foreach ($finalgenre->hasil as $temp) {
-                                if($temp != null){
-                                    $finalid[] = $final->id;
-                                }
-                            }
+                            $genreid[] = $finalgenre->genre_id;
                         }
+
+                        $result = array_intersect($genreid, $final->hasil);
+                        if ($result != null){
+                            $finalid[] = $final->id;
+                        }
+                        else{
+                            $finalid = [];
+                        }                   
                     }
 
-                    foreach ($finalid as $hasilakhir) {
-                        $hasilcariband = Musician::where('id', $hasilakhir)->where('aktif', 'Y')->first();
-                        $idband[] = $hasilcariband;
+                    if($finalid != null){
+                        foreach ($finalid as $hasilakhir) {
+                            $hasilcariband = Musician::where('id', $hasilakhir)->where('aktif', 'Y')->first();
+                            $idband[] = $hasilcariband;
+                        }
+                    }else{
+                        $idband = [];
                     }
                 }
 
@@ -217,30 +251,43 @@ class SearchController extends Controller
             elseif($input['kota'] != null && $request->checkbox != null && $input['tanggal'] == null){
                 
                 $musisi = Musician::where('aktif', 'Y')->where('kota', $input['kota'])->get();
+                $genreinput = $request->checkbox;
                 foreach ($musisi as $_musisi) {
                     $cekgenre = GenreMusisi::where('musician_id', $_musisi->id)->get(['genre_id']);
-                    foreach ($cekgenre as $_cekgenre) {
-                        $arrgen = (array) $_cekgenre->genre_id; 
-                        $result = array_intersect($request->checkbox, $arrgen);
-
-                        $_cekgenre->hasil = $result;
-                    }
+                    // foreach ($cekgenre as $_cekgenre) {
+                    //     $arrgen = (array) $_cekgenre->genre_id; 
+                    //     $result = array_intersect($request->checkbox, $arrgen);
+                    //     if($result == null)
+                    //         $_cekgenre->hasil = null;
+                    //     else
+                    //         $_cekgenre->hasil = $result;
+                    // }
+                    //$request->checkbox as $genreinput)
                     $_musisi->genre = $cekgenre;
+                    $_musisi->hasil = $genreinput;
                 }
 
                 foreach ($musisi as $final) {
                     foreach ($final->genre as $finalgenre) {
-                        foreach ($finalgenre->hasil as $temp) {
-                            if($temp != null){
-                                $finalid[] = $final->id;
-                            }
-                        }
+                        $genreid[] = $finalgenre->genre_id;
                     }
+
+                    $result = array_intersect($genreid, $final->hasil);
+                    if ($result != null){
+                        $finalid[] = $final->id;
+                    }
+                    else{
+                        $finalid = [];
+                    }                   
                 }
 
-                foreach ($finalid as $hasilakhir) {
-                    $hasilcariband = Musician::where('id', $hasilakhir)->where('aktif', 'Y')->first();
-                    $idband[] = $hasilcariband;
+                if($finalid != null){
+                    foreach ($finalid as $hasilakhir) {
+                        $hasilcariband = Musician::where('id', $hasilakhir)->where('aktif', 'Y')->first();
+                        $idband[] = $hasilcariband;
+                    }
+                }else{
+                    $idband = [];
                 }
 
                 return view('hasilcarimusisi')->with('listmusisi',$idband);
@@ -345,58 +392,80 @@ class SearchController extends Controller
                         $id[] = $value->id;
                     }
                     $musisi = Musician::whereIn('id', $id)->where('kota', $input['kota'])->where('aktif', 'Y')->get();
+                    $genreinput = $request->checkbox;
                     foreach ($musisi as $_musisi) {
                         $cekgenre = GenreMusisi::where('musician_id', $_musisi->id)->get(['genre_id']);
-                        foreach ($cekgenre as $_cekgenre) {
-                            $arrgen = (array) $_cekgenre->genre_id; 
-                            $result = array_intersect($request->checkbox, $arrgen);
+                        // foreach ($cekgenre as $_cekgenre) {
+                        //     $arrgen = (array) $_cekgenre->genre_id; 
+                        //     $result = array_intersect($request->checkbox, $arrgen);
 
-                            $_cekgenre->hasil = $result;
-                        }
+                        //     $_cekgenre->hasil = $result;
+                        // }
                         $_musisi->genre = $cekgenre;
+                        $_musisi->hasil = $genreinput;
+
                     }
 
                     foreach ($musisi as $final) {
                         foreach ($final->genre as $finalgenre) {
-                            foreach ($finalgenre->hasil as $temp) {
-                                if($temp != null){
-                                    $finalid[] = $final->id;
-                                }
-                            }
+                            $genreid[] = $finalgenre->genre_id;
                         }
+
+                        $result = array_intersect($genreid, $final->hasil);
+                        if ($result != null){
+                            $finalid[] = $final->id;
+                        }
+                        else{
+                            $finalid = [];
+                        }                   
                     }
 
-                    foreach ($finalid as $hasilakhir) {
-                        $hasilcariband = Musician::where('id', $hasilakhir)->where('aktif', 'Y')->first();
-                        $idband[] = $hasilcariband;
+                    if($finalid != null){
+                        foreach ($finalid as $hasilakhir) {
+                            $hasilcariband = Musician::where('id', $hasilakhir)->where('aktif', 'Y')->first();
+                            $idband[] = $hasilcariband;
+                        }
+                    }else{
+                        $idband = [];
                     }
+
                 }
                 else{
                     $musisi = Musician::where('kota', $input['kota'])->where('aktif', 'Y')->get();
+                    $genreinput = $request->checkbox;
                     foreach ($musisi as $_musisi) {
                         $cekgenre = GenreMusisi::where('musician_id', $_musisi->id)->get(['genre_id']);
-                        foreach ($cekgenre as $_cekgenre) {
-                            $arrgen = (array) $_cekgenre->genre_id; 
-                            $result = array_intersect($request->checkbox, $arrgen);
+                        // foreach ($cekgenre as $_cekgenre) {
+                        //     $arrgen = (array) $_cekgenre->genre_id; 
+                        //     $result = array_intersect($request->checkbox, $arrgen);
 
-                            $_cekgenre->hasil = $result;
-                        }
+                        //     $_cekgenre->hasil = $result;
+                        // }
                         $_musisi->genre = $cekgenre;
+                        $_musisi->hasil = $genreinput;
                     }
 
                     foreach ($musisi as $final) {
                         foreach ($final->genre as $finalgenre) {
-                            foreach ($finalgenre->hasil as $temp) {
-                                if($temp != null){
-                                    $finalid[] = $final->id;
-                                }
-                            }
+                            $genreid[] = $finalgenre->genre_id;
                         }
+
+                        $result = array_intersect($genreid, $final->hasil);
+                        if ($result != null){
+                            $finalid[] = $final->id;
+                        }
+                        else{
+                            $finalid = [];
+                        }                   
                     }
 
-                    foreach ($finalid as $hasilakhir) {
-                        $hasilcariband = Musician::where('id', $hasilakhir)->where('aktif', 'Y')->first();
-                        $idband[] = $hasilcariband;
+                    if($finalid != null){
+                        foreach ($finalid as $hasilakhir) {
+                            $hasilcariband = Musician::where('id', $hasilakhir)->where('aktif', 'Y')->first();
+                            $idband[] = $hasilcariband;
+                        }
+                    }else{
+                        $idband = [];
                     }
                 }
 
@@ -463,30 +532,41 @@ class SearchController extends Controller
             }
             elseif($input['kota'] == null && $request->checkbox != null && $input['tanggal'] == null){
                 $musisi = Grupband::where('aktif', 'Y')->get();
+                $genreinput = $request->checkbox;
                 foreach ($musisi as $_musisi) {
                     $cekgenre = GenreBand::where('band_id', $_musisi->id)->get(['genre_id']);
-                    foreach ($cekgenre as $_cekgenre) {
-                        $arrgen = (array) $_cekgenre->genre_id; 
-                        $result = array_intersect($request->checkbox, $arrgen);
+                    // foreach ($cekgenre as $_cekgenre) {
+                    //     $arrgen = (array) $_cekgenre->genre_id; 
+                    //     $result = array_intersect($request->checkbox, $arrgen);
 
-                        $_cekgenre->hasil = $result;
-                    }
+                    //     $_cekgenre->hasil = $result;
+                    // }
                     $_musisi->genre = $cekgenre;
+                    $_musisi->hasil = $genreinput;
                 }
+
 
                 foreach ($musisi as $final) {
                     foreach ($final->genre as $finalgenre) {
-                        foreach ($finalgenre->hasil as $temp) {
-                            if($temp != null){
-                                $finalid[] = $final->id;
-                            }
-                        }
+                        $genreid[] = $finalgenre->genre_id;
                     }
+
+                    $result = array_intersect($genreid, $final->hasil);
+                    if ($result != null){
+                        $finalid[] = $final->id;
+                    }
+                    else{
+                        $finalid = [];
+                    }                   
                 }
 
-                foreach ($finalid as $hasilakhir) {
-                    $hasilcariband = Grupband::where('id', $hasilakhir)->where('aktif', 'Y')->first();
-                    $idband[] = $hasilcariband;
+                if($finalid != null){
+                    foreach ($finalid as $hasilakhir) {
+                        $hasilcariband = Grupband::where('id', $hasilakhir)->where('aktif', 'Y')->first();
+                        $idband[] = $hasilcariband;
+                    }
+                }else{
+                    $idband = [];
                 }
 
                 return view('hasilcari')->with('listband',$idband);
@@ -539,59 +619,81 @@ class SearchController extends Controller
                         $id[] = $value->id;
                     }
                     $musisi = Grupband::whereIn('id', $id)->where('aktif', 'Y')->get();
+                    $genreinput = $request->checkbox;
                     foreach ($musisi as $_musisi) {
                         $cekgenre = GenreBand::where('band_id', $_musisi->id)->get(['genre_id']);
-                        foreach ($cekgenre as $_cekgenre) {
-                            $arrgen = (array) $_cekgenre->genre_id; 
-                            $result = array_intersect($request->checkbox, $arrgen);
+                        // foreach ($cekgenre as $_cekgenre) {
+                        //     $arrgen = (array) $_cekgenre->genre_id; 
+                        //     $result = array_intersect($request->checkbox, $arrgen);
 
-                            $_cekgenre->hasil = $result;
-                        }
+                        //     $_cekgenre->hasil = $result;
+                        // }
                         $_musisi->genre = $cekgenre;
+                        $_musisi->hasil = $genreinput;
                     }
 
                     foreach ($musisi as $final) {
                         foreach ($final->genre as $finalgenre) {
-                            foreach ($finalgenre->hasil as $temp) {
-                                if($temp != null){
-                                    $finalid[] = $final->id;
-                                }
-                            }
+                            $genreid[] = $finalgenre->genre_id;
                         }
+
+                        $result = array_intersect($genreid, $final->hasil);
+                        if ($result != null){
+                            $finalid[] = $final->id;
+                        }
+                        else{
+                            $finalid = [];
+                        }                   
                     }
 
-                    foreach ($finalid as $hasilakhir) {
-                        $hasilcariband = Grupband::where('id', $hasilakhir)->where('aktif', 'Y')->first();
-                        $idband[] = $hasilcariband;
+                    if($finalid != null){
+                        foreach ($finalid as $hasilakhir) {
+                            $hasilcariband = Grupband::where('id', $hasilakhir)->where('aktif', 'Y')->first();
+                            $idband[] = $hasilcariband;
+                        }
+                    }else{
+                        $idband = [];
                     }
+
                 }
                 else{
                     $musisi = Grupband::where('aktif', 'Y')->get();
+                    $genreinput = $request->checkbox;
                     foreach ($musisi as $_musisi) {
                         $cekgenre = GenreBand::where('band_id', $_musisi->id)->get(['genre_id']);
-                        foreach ($cekgenre as $_cekgenre) {
-                            $arrgen = (array) $_cekgenre->genre_id; 
-                            $result = array_intersect($request->checkbox, $arrgen);
+                        // foreach ($cekgenre as $_cekgenre) {
+                        //     $arrgen = (array) $_cekgenre->genre_id; 
+                        //     $result = array_intersect($request->checkbox, $arrgen);
 
-                            $_cekgenre->hasil = $result;
-                        }
+                        //     $_cekgenre->hasil = $result;
+                        // }
                         $_musisi->genre = $cekgenre;
+                        $_musisi->hasil = $genreinput;
                     }
 
                     foreach ($musisi as $final) {
                         foreach ($final->genre as $finalgenre) {
-                            foreach ($finalgenre->hasil as $temp) {
-                                if($temp != null){
-                                    $finalid[] = $final->id;
-                                }
-                            }
+                            $genreid[] = $finalgenre->genre_id;
                         }
+
+                        $result = array_intersect($genreid, $final->hasil);
+                        if ($result != null){
+                            $finalid[] = $final->id;
+                        }
+                        else{
+                            $finalid = [];
+                        }                   
                     }
 
-                    foreach ($finalid as $hasilakhir) {
-                        $hasilcariband = Grupband::where('id', $hasilakhir)->where('aktif', 'Y')->first();
-                        $idband[] = $hasilcariband;
+                    if($finalid != null){
+                        foreach ($finalid as $hasilakhir) {
+                            $hasilcariband = Grupband::where('id', $hasilakhir)->where('aktif', 'Y')->first();
+                            $idband[] = $hasilcariband;
+                        }
+                    }else{
+                        $idband = [];
                     }
+
                 }
 
                 return view('hasilcari')->with('listband',$idband);
@@ -606,30 +708,40 @@ class SearchController extends Controller
             elseif($input['kota'] != null && $request->checkbox != null && $input['tanggal'] == null){
                 
                 $musisi = Grupband::where('aktif', 'Y')->where('kota', $input['kota'])->get();
+                $genreinput = $request->checkbox;
                 foreach ($musisi as $_musisi) {
                     $cekgenre = GenreBand::where('band_id', $_musisi->id)->get(['genre_id']);
-                    foreach ($cekgenre as $_cekgenre) {
-                        $arrgen = (array) $_cekgenre->genre_id; 
-                        $result = array_intersect($request->checkbox, $arrgen);
+                    // foreach ($cekgenre as $_cekgenre) {
+                    //     $arrgen = (array) $_cekgenre->genre_id; 
+                    //     $result = array_intersect($request->checkbox, $arrgen);
 
-                        $_cekgenre->hasil = $result;
-                    }
+                    //     $_cekgenre->hasil = $result;
+                    // }
                     $_musisi->genre = $cekgenre;
+                    $_musisi->hasil = $genreinput;
                 }
 
                 foreach ($musisi as $final) {
                     foreach ($final->genre as $finalgenre) {
-                        foreach ($finalgenre->hasil as $temp) {
-                            if($temp != null){
-                                $finalid[] = $final->id;
-                            }
-                        }
+                        $genreid[] = $finalgenre->genre_id;
                     }
+
+                    $result = array_intersect($genreid, $final->hasil);
+                    if ($result != null){
+                        $finalid[] = $final->id;
+                    }
+                    else{
+                        $finalid = [];
+                    }                   
                 }
 
-                foreach ($finalid as $hasilakhir) {
-                    $hasilcariband = Grupband::where('id', $hasilakhir)->where('aktif', 'Y')->first();
-                    $idband[] = $hasilcariband;
+                if($finalid != null){
+                    foreach ($finalid as $hasilakhir) {
+                        $hasilcariband = Grupband::where('id', $hasilakhir)->where('aktif', 'Y')->first();
+                        $idband[] = $hasilcariband;
+                    }
+                }else{
+                    $idband = [];
                 }
 
                 return view('hasilcari')->with('listband',$idband);
@@ -734,59 +846,81 @@ class SearchController extends Controller
                         $id[] = $value->id;
                     }
                     $musisi = Grupband::whereIn('id', $id)->where('kota', $input['kota'])->where('aktif', 'Y')->get();
+                    $genreinput = $request->checkbox;
                     foreach ($musisi as $_musisi) {
                         $cekgenre = GenreBand::where('band_id', $_musisi->id)->get(['genre_id']);
-                        foreach ($cekgenre as $_cekgenre) {
-                            $arrgen = (array) $_cekgenre->genre_id; 
-                            $result = array_intersect($request->checkbox, $arrgen);
+                        // foreach ($cekgenre as $_cekgenre) {
+                        //     $arrgen = (array) $_cekgenre->genre_id; 
+                        //     $result = array_intersect($request->checkbox, $arrgen);
 
-                            $_cekgenre->hasil = $result;
-                        }
+                        //     $_cekgenre->hasil = $result;
+                        // }
                         $_musisi->genre = $cekgenre;
+                        $_musisi->hasil = $genreinput;
                     }
 
                     foreach ($musisi as $final) {
                         foreach ($final->genre as $finalgenre) {
-                            foreach ($finalgenre->hasil as $temp) {
-                                if($temp != null){
-                                    $finalid[] = $final->id;
-                                }
-                            }
+                            $genreid[] = $finalgenre->genre_id;
                         }
+
+                        $result = array_intersect($genreid, $final->hasil);
+                        if ($result != null){
+                            $finalid[] = $final->id;
+                        }
+                        else{
+                            $finalid = [];
+                        }                   
                     }
 
-                    foreach ($finalid as $hasilakhir) {
-                        $hasilcariband = Grupband::where('id', $hasilakhir)->where('aktif', 'Y')->first();
-                        $idband[] = $hasilcariband;
+                    if($finalid != null){
+                        foreach ($finalid as $hasilakhir) {
+                            $hasilcariband = Grupband::where('id', $hasilakhir)->where('aktif', 'Y')->first();
+                            $idband[] = $hasilcariband;
+                        }
+                    }else{
+                        $idband = [];
                     }
+
                 }
                 else{
                     $musisi = Grupband::where('kota', $input['kota'])->where('aktif', 'Y')->get();
+                    $genreinput = $request->checkbox;
                     foreach ($musisi as $_musisi) {
                         $cekgenre = GenreBand::where('band_id', $_musisi->id)->get(['genre_id']);
-                        foreach ($cekgenre as $_cekgenre) {
-                            $arrgen = (array) $_cekgenre->genre_id; 
-                            $result = array_intersect($request->checkbox, $arrgen);
+                        // foreach ($cekgenre as $_cekgenre) {
+                        //     $arrgen = (array) $_cekgenre->genre_id; 
+                        //     $result = array_intersect($request->checkbox, $arrgen);
 
-                            $_cekgenre->hasil = $result;
-                        }
+                        //     $_cekgenre->hasil = $result;
+                        // }
                         $_musisi->genre = $cekgenre;
+                        $_musisi->hasil = $genreinput;
                     }
 
                     foreach ($musisi as $final) {
                         foreach ($final->genre as $finalgenre) {
-                            foreach ($finalgenre->hasil as $temp) {
-                                if($temp != null){
-                                    $finalid[] = $final->id;
-                                }
-                            }
+                            $genreid[] = $finalgenre->genre_id;
                         }
+
+                        $result = array_intersect($genreid, $final->hasil);
+                        if ($result != null){
+                            $finalid[] = $final->id;
+                        }
+                        else{
+                            $finalid = [];
+                        }                   
                     }
 
-                    foreach ($finalid as $hasilakhir) {
-                        $hasilcariband = Grupband::where('id', $hasilakhir)->where('aktif', 'Y')->first();
-                        $idband[] = $hasilcariband;
+                    if($finalid != null){
+                        foreach ($finalid as $hasilakhir) {
+                            $hasilcariband = Grupband::where('id', $hasilakhir)->where('aktif', 'Y')->first();
+                            $idband[] = $hasilcariband;
+                        }
+                    }else{
+                        $idband = [];
                     }
+
                 }
 
                 return view('hasilcari')->with('listband',$idband);

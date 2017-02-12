@@ -71,7 +71,7 @@
 									<div class="form-group">
 										<div class="row">
 			                                <?php $genre = App\Genre::all(); $cek ='';
-			                                $genreband = App\Genreband::join('genres', 'genre_bands.genre_id' ,'=', 'genres.id')->where('band_id', $band->id)->get();
+			                                $genreband = App\GenreBand::join('genres', 'genre_bands.genre_id' ,'=', 'genres.id')->where('band_id', $band->id)->get();
 			                                ?>
 
 			                                @foreach($genre as $genres)

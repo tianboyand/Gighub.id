@@ -10,9 +10,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                 @if($sewas->type_sewa == 'hireband')
-                    Berikan Review Kepada - <a href={{url('band/'.$sewas->objreview->slug)}}>{{$sewas->objreview->nama_grupband}}</a>
+                    Berikan Review Kepada - <a href={{url('band/'.$sewas->first()->slug)}}>{{$sewas->first()->nama_grupband}}</a>
                 @else
-                    Berikan Review Kepada - <a href={{url('musician/'.$sewas->objreview->slug)}}>{{$sewas->objreview->name}}</a>
+                    Berikan Review Kepada - <a href={{url('musician/'.$sewas->first()->slug)}}>{{$sewas->first()->name}}</a>
                 @endif
                 </div>
 

@@ -621,12 +621,32 @@ class MobileMusicianController extends Controller
         $object = Musician::find($request['user_id']);
 
         // $sewa->update(['status_request' =>1]);
-
-        Firebase::sendPushNotification(
+ // // subject_id mengirim object_id ke user_id (type_user) 
+        if ($req['tipe']=="org") {
+            
+            Firebase::sendPushNotification(
+                        array(
+                            'object_id'=>$sewa->id,
+                            'subject_id'=>$req['user_id'],
+                            'user_id'=>$sewa->object_id,
+                            'type_user'=>'musisi',
+                            'type_notif'=>'terimasewa',
+                            'type_subject'=>'organizer',
+                            'baca'=>'N'
+                        ),
                     array(
-                            'object_id'=>$sewa->object_id,
-                            'subject_id'=>$request['user_id'],
-                            'user_id'=>$sewa->subject_id,
+                            'title'=>'GigHub',
+                            'body'=>''.$object->name.' menerima permintaan sewa anda',
+                            'type'=>'booking'
+                        )
+                );
+        }
+        else{
+            Firebase::sendPushNotification(
+                        array(
+                            'object_id'=>$sewa->id,
+                            'subject_id'=>$req['user_id'],
+                            'user_id'=>$sewa->object_id,
                             'type_user'=>'organizer',
                             'type_notif'=>'terimasewa',
                             'type_subject'=>'musisi',
@@ -638,6 +658,7 @@ class MobileMusicianController extends Controller
                             'type'=>'booking'
                         )
                 );
+        }
 
         return array("message"=>"Success, Confirm Request has been sent","error"=>0);
     }

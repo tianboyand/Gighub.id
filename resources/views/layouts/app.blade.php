@@ -282,6 +282,7 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href={{ url('/musician/'.Auth::guard('musician')->user()->slug) }}><i class="fa fa-btn fa-sign-out"></i>Profile</a></li>
+                                <li><a href={{ url('/my-account') }}><i class="fa fa-btn fa-sign-out"></i>My Account</a></li>
                                 <li><a href={{ url('/musician/saldo/'.Auth::guard('musician')->user()->slug) }}><i class="fa fa-btn fa-money"></i>Saldo</a></li>
                                 <li><a href="{{ url('musician-logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                             </ul>

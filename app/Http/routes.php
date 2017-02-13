@@ -88,6 +88,8 @@ Route::group(['middleware' => ['web']], function () {
 
 
     Route::post('musician/profile/update','MusicianController@doUpdateProfile');
+    Route::post('musician/akun/update','MusicianController@doUpdateAkun');
+    Route::post('musician/password/update','MusicianController@doUpdatePassword');
     Route::post('musician/photo/update','MusicianController@doUpdatePhoto');
     Route::post('musician/add/band',['as' => 'add.band','uses' =>'MusicianController@addBand']);
     Route::get('band/{slug}', 'MusicianController@bandProfile');
@@ -140,6 +142,13 @@ Route::group(['middleware' => ['web']], function () {
 
     //Route::post('/search','CariController@pencarian');
     Route::post('/search','SearchController@pencarian');
+    Route::get('/my-account', function () {
+        return view('musician.myaccount');
+    });
+
+    Route::get('/my-password', function () {
+        return view('musician.changepassword');
+    });
 
     Route::get('create-gig', 'OrganizerController@createGig');
     Route::post('create-gig',['as' => 'add.gig','uses' =>'OrganizerController@inputGig']);

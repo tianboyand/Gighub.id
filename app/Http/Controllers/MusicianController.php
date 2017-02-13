@@ -24,6 +24,7 @@ use App\Notif;
 use DB;
 use Session;
 use Cloudder;
+use Hash;
 
 class MusicianController extends Controller
 {
@@ -88,18 +89,15 @@ class MusicianController extends Controller
             $input = $req->all();
             $musicianAuth->update($input);
 
-            $bank = Bank::join('bank_musisi', 'bank_musisi.bank_id','=','banks.id')
-                            ->where('bank_musisi.musician_id', Auth::guard('musician')->user()->id)->first();
+            $bank = BankMusisi::where('musician_id', $authId)->first();
 
             if($bank != null){
-                $input['no_rek'] = $req->norek;
-                $input['atas_nama'] = $req->namapemilik;
-                $input['nama_bank'] = $req->bank;
-                $bank->update($input);
+                Bank::where('id', $bank->bank_id)
+                          ->update(['no_rek' => $req->no_rek, 'atas_nama' => $req->atas_nama, 'nama_bank' => $req->nama_bank]);
             }else{
-                $input['no_rek'] = $req->norek;
-                $input['atas_nama'] = $req->namapemilik;
-                $input['nama_bank'] = $req->bank;
+                $input['no_rek'] = $req->no_rek;
+                $input['atas_nama'] = $req->atas_nama;
+                $input['nama_bank'] = $req->nama_bank;
                 $bankid = Bank::create($input)->id;
 
                 $bankmusisi = new BankMusisi;
@@ -159,6 +157,61 @@ class MusicianController extends Controller
         $input['photo'] = Cloudder::getPublicId();
         $musisi->update($input); 
         return redirect()->back();
+    }
+
+    public function doUpdateAkun(Request $req){
+        if(Auth::guard('musician')->user()){
+            $authId = Auth::guard('musician')->user()->id;
+            $musicianAuth = Musician::find($authId);
+            $input = $req->all();
+            $musicianAuth->update($input);
+
+            $bank = BankMusisi::where('musician_id', $authId)->first();
+
+            if($bank != null){
+                Bank::where('id', $bank->bank_id)
+                          ->update(['no_rek' => $req->no_rek, 'atas_nama' => $req->atas_nama, 'nama_bank' => $req->nama_bank]);
+            }else{
+                $input['no_rek'] = $req->no_rek;
+                $input['atas_nama'] = $req->atas_nama;
+                $input['nama_bank'] = $req->nama_bank;
+                $bankid = Bank::create($input)->id;
+
+                $bankmusisi = new BankMusisi;
+                $bankmusisi->musician_id = $authId;
+                $bankmusisi->bank_id = $bankid;
+                $bankmusisi->save();
+            }
+            Session::flash('message', 'Data akun berhasil di ubah!');
+            return redirect()->back();
+        }
+        else{
+            return redirect()->back();
+        }
+    }
+
+    public function doUpdatePassword(Request $req){
+        if(Auth::guard('musician')->user()){
+            $authId = Auth::guard('musician')->user()->id;
+            $musicianAuth = Musician::find($authId);
+            if (Hash::check($req->pass, $musicianAuth->password)){
+                if($req->newpass != $req->confirmpass){
+                    Session::flash('message', 'Password baru tidak cocok');
+                    return redirect()->back();
+                }else{
+                    $musicianAuth->password = bcrypt($req->newpass);
+                    $musicianAuth->save();
+                    Session::flash('message', 'Password berhasil di ubah!');
+                    return redirect()->back();
+                }
+            }else{
+                Session::flash('message', 'Password Salah');
+                return redirect()->back();
+            }
+        }
+        else{
+            return redirect()->back();
+        }
     }
 
     public function addBand(Request $request){

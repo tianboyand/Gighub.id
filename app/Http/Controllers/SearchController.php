@@ -249,7 +249,7 @@ class SearchController extends Controller
                 //echo "TERPILIH KOTA, NULL CEKBOX, NULL TANGGAL";
             }
             elseif($input['kota'] != null && $request->checkbox != null && $input['tanggal'] == null){
-                
+                $finalid = "";
                 $musisi = Musician::where('aktif', 'Y')->where('kota', $input['kota'])->get();
                 $genreinput = $request->checkbox;
                 foreach ($musisi as $_musisi) {
@@ -347,6 +347,7 @@ class SearchController extends Controller
                 //echo "TERPILIH KOTA, NULL CEKBOX, TERPILIH TANGGAL";
             }
             else{
+                $finalid = "";
                 $ceksewa = Sewa::join('gigs', 'sewas.gig_id', '=', 'gigs.id')
                                 ->where('sewas.type_sewa', '=', 'hiremusisi')
                                 ->where('sewas.status_request', '=', '1')

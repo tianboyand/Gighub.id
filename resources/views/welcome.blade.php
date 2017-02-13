@@ -17,8 +17,8 @@
                             <img src={!! Cloudder::show(Auth::guard('musician')->user()->photo , ['format' => 'jpg', 'crop' => 'fit', 'width' => '350', 'height'=> '350']) !!} alt="Logo" class="widthfull">
                             <div class="row">
                                 <div class="col-lg-10 col-lg-offset-2 col-md-12">
-                                <label class="uploading btn btn-primary">
-                                    <span>Upload Photo</span>
+                                <label class="uploading btn btn-black">
+                                    <span>Upload  Photo Musisi</span>
                                     <input type="file" id="photo" name="photo" required>
                                 </label>
                                 </div>
@@ -26,7 +26,7 @@
                         </form>
                     </div>
                     <div class="media-body">
-                        <?php $bankakun = App\Musician::join('bank_musisi', 'musicians.id','=','bank_musisi.musician_id')
+                     <?php $bankakun = App\Musician::join('bank_musisi', 'musicians.id','=','bank_musisi.musician_id')
                                                     ->join('banks', 'bank_musisi.bank_id','=','banks.id')
                                                     ->where('musicians.id', Auth::guard('musician')->user()->id)->first();
                         ?>
@@ -70,28 +70,7 @@
                             <div class="col-lg-11 col-lg-offset-1 col-sm-12">
                                 <p>Deskripsi : {{ Auth::guard('musician')->user()->deskripsi }}</p>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-11 col-lg-offset-1 col-sm-12">
-                                <p>No.Telepon : {{ Auth::guard('musician')->user()->no_telp }}</p>
-                            </div>
-                        </div>
-                        <hr/>
-                        <div class="row">
-                            <div class="col-lg-11 col-lg-offset-1 col-sm-12">
-                                <p>No.Rekening : @if($bankakun != null){{ $bankakun->no_rek }}@endif</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-11 col-lg-offset-1 col-sm-12">
-                                <p>Nama Pemilik Rekening : @if($bankakun != null){{ $bankakun->atas_nama }}@endif</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-11 col-lg-offset-1 col-sm-12">
-                                <p>Nama bank : @if($bankakun != null){{ $bankakun->nama_bank }}@endif</p>
-                            </div>
-                        </div>
+                        </div>                                                                    
                     </div>
                 </div>
                 <hr>
@@ -117,6 +96,7 @@
                                 <option value="Surabaya">Surabaya</option>
                                 <option value="Semarang">Semarang</option>
                             </select>
+
                             <div class="form-group"></div>
                             <label>Genre Musisi</label>
                             <div class="row">
@@ -148,17 +128,21 @@
                             <div class="form-group"></div>
                             <label>Basis</label>
                             <div class="form-group">
-                                <input class="form-control" type="text" name="basis" id="text-input" value="{{ Auth::guard('musician')->user()->basis }}" required>
+                                <input class="form-control" type="text" name="basis" id="text-input" value="{{ Auth::guard('musician')->user()->basis }}" required placeholder="Ex : Vokalis">
                             </div>
                             <div class="form-group"></div>
                             <label>No.Telepon </label>
-                            <input class="form-control" type="text" name='no_telp' placeholder="No.Telepon" value="{{ Auth::guard('musician')->user()->no_telp }}" required>
+                            <input class="form-control" type="text" name='no_telp' placeholder="No.Telepon" value="{{ Auth::guard('musician')->user()->no_telp }}" required>                            
                             <div class="form-group"></div>
                             <label>Deskripsi </label>
                             <textarea class="form-control" rows="5" name='deskripsi' placeholder="Jelaskan informasi tentang dirimu" required>{{ Auth::guard('musician')->user()->deskripsi }}</textarea>
                             <div class="form-group"></div>
                             <label>Harga Sewa / Jam</label>
                             <input class="form-control" type="number" name="harga_sewa" value="{{ Auth::guard('musician')->user()->harga_sewa }}" required>
+                            <div class="form-group"></div>
+                            <label>Url Video </label>
+                            <input class="form-control" type="text" name="youtube_video" value="{{ Auth::guard('musician')->user()->youtube_video }}" placeholder="http://" required>
+
                             <div class="form-group"></div>
                             <label>No.Rekening </label>
                             <input class="form-control" type="text" name='norek' placeholder="No.Rekening" @if($bankakun != null) value="{{ $bankakun->no_rek }}" @endif required>
@@ -168,22 +152,20 @@
                             <div class="form-group"></div>
                             <label>Nama Bank </label>
                             <input class="form-control" type="text" name='bank' placeholder="eg: BRI" @if($bankakun != null) value="{{ $bankakun->nama_bank }}" @endif required>
-
-                            <div class="form-group"></div>
-                            <label>Channel Youtube </label>
-                            <input class="form-control" type="text" name="youtube_video"  value="{{ Auth::guard('musician')->user()->youtube_video }}" placeholder="http://www.youtube.com/watch?v=a8ZIHib0__4">
+                            
+                         
                             <div class="form-group"></div>
                             <label>Soundcloud Username (Optional)</label>
-                            <input class="form-control" type="text" name="username_soundcloud" value="{{ Auth::guard('musician')->user()->username_soundcloud }}" placeholder="http://www.soundcloud.com/username">
+                            <input class="form-control" type="text" name="username_soundcloud" value="{{ Auth::guard('musician')->user()->username_soundcloud }}" placeholder="http://">
                             <div class="form-group"></div>
                             <label>Revebnation Username (Optional)</label>
-                            <input class="form-control" type="text" name="username_reverbnation" value="{{ Auth::guard('musician')->user()->username_reverbnation }}" placeholder="http://www.reverbnation.com/username">
+                            <input class="form-control" type="text" name="username_reverbnation" value="{{ Auth::guard('musician')->user()->username_reverbnation }}" placeholder="http://">
                             <div class="form-group"></div>
                             <label>Website (Optional)</label>
-                            <input class="form-control" type="text" name="url_website" value="{{ Auth::guard('musician')->user()->url_website }}" placeholder="http://www.namamusisi.com/">
+                            <input class="form-control" type="text" name="url_website" value="{{ Auth::guard('musician')->user()->url_website }}" placeholder="http://">
                             <div class="form-group"></div>
                             <div class="form-group">
-                                <button class="btn btn-primary" type="submit">Submit</button>
+                                <button class="btn btn-black btn-block" type="submit">Submit</button>
                             </div>
                         </form>
                     </div>
@@ -196,21 +178,18 @@
 @else
     <div class="container">
         <div class="row">
-            <div class="col-md-10 col-md-offset-1">
-                <div class="panel panel-default">
+            <div class="col-md-12">
+                <div>
                 @if(Auth::guard('user')->user())
-                    
-
                     <div class="jumbotron">
-                    <h2 class="text-center">Temukan musisi sesuai kriteramu</h2>
-                    <p class="text-center">Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+                    <h1 class="text-center">Temukan Musisi di Kotamu</h1>   
+                    <p class="text-center">Sesuaikan Kritera</p>                 
                     <div class="row">
                         <div class="col-md-4 col-md-offset-4">
-                            <form class="bootstrap-form-with-validation" action="{{ url('/search')}}" method="POST">
-                                <h2 class="text-center">Tentukan Kriteriamu</h2>
+                            <form class="bootstrap-form-with-validation" action="{{ url('/search')}}" method="POST">                                
                                 <div class="form-group">
                                     <label class="control-label" for="text-input">Tanggal Main</label>
-                                    <input class="form-control" type="text" name="tanggal" id="mulai">                            
+                                    <input class="form-control" type="text" name="tanggal" placeholder="Tanggal Main" id="mulai">                            
                                 </div>
                                 <div class="form-group">
                                     <?php
@@ -248,7 +227,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn btn-primary btn-lg" type="submit">Temukan </button>
+                                    <button class="btn btn-black btn-block" type="submit">Temukan </button>
                                 </div>
                             </form>
                         </div>
@@ -271,15 +250,14 @@
                 @else
 
                 <div class="jumbotron">
-                    <h2 class="text-center">Temukan musisi sesuai kriteramu</h2>
-                    <p class="text-center">Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+                    <h1 class="text-center">Temukan Musisi di Kotamu</h1>   
+                    <p class="text-center">Sesuaikan Kritera</p>                 
                     <div class="row">
                         <div class="col-md-4 col-md-offset-4">
-                            <form class="bootstrap-form-with-validation" action="{{ url('/search')}}" method="POST">
-                                <h2 class="text-center">Tentukan Kriteriamu</h2>
+                            <form class="bootstrap-form-with-validation" action="{{ url('/search')}}" method="POST">                                
                                 <div class="form-group">
                                     <label class="control-label" for="text-input">Tanggal Main</label>
-                                    <input class="form-control" type="text" name="tanggal" id="mulai">                            
+                                    <input class="form-control" type="text" name="tanggal" placeholder="Tanggal Main" id="mulai">                            
                                 </div>
                                 <div class="form-group">
                                     <?php
@@ -317,7 +295,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn btn-primary btn-lg" type="submit">Temukan </button>
+                                    <button class="btn btn-black btn-block" type="submit">Temukan </button>
                                 </div>
                             </form>
                         </div>

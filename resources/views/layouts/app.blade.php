@@ -71,8 +71,7 @@
                 <ul class="nav navbar-nav">
                     @if(Auth::guard('musician')->user())
                         @if(Auth::guard('musician')->user()->deskripsi != null && Auth::guard('musician')->user()->no_telp != null && Auth::guard('musician')->user()->kota != null && Auth::guard('musician')->user()->harga_sewa != null)
-                            <li role="presentation"><a href="{{url('discover')}}">Discover </a></li>
-                            <li role="presentation"><a href={{ url('/musician/'.Auth::guard('musician')->user()->slug) }}>Profil </a></li>
+                            <li role="presentation"><a href="{{url('discover')}}">Discover </a></li>                            
                             <li role="presentation"><a href="{{ url('/list-band') }}">Band </a></li>
                             <li role="presentation"><a href="{{url('listsewa/musisi')}}">Booking Musisi</a></li>        
                             <li role="presentation"><a href="{{url('listsewa/band')}}">Booking Band</a></li>

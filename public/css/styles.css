@@ -10,10 +10,6 @@ a.btn.btn-link.navbar-btn.navbar-right{
   margin:5px;
 }
 
-div.form-group{
-  text-align:center;
-}
-
 .uploading {
   position: relative;
     overflow: hidden;
@@ -21,7 +17,7 @@ div.form-group{
 }
 
 .uploading input[type="file"] {
-	position: absolute;
+  position: absolute;
     top: 0;
     right: 0;
     margin: 0;
@@ -32,3 +28,14 @@ div.form-group{
     filter: alpha(opacity=0);
 }
 
+.btn-black {
+  color: #ffffff;
+  background-color: #333333;
+  border-color: #222222;
+
+}
+.btn-black:hover, .btn-black:focus, .btn-black:active, .btn-black.active, .open>.dropdown-toggle.btn-black {
+    color: #333;
+    background-color: #ffffff;
+    border-color: #222; /*set the color you want here*/
+}

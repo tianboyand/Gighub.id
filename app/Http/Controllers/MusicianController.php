@@ -93,11 +93,11 @@ class MusicianController extends Controller
 
             if($bank != null){
                 Bank::where('id', $bank->bank_id)
-                          ->update(['no_rek' => $req->no_rek, 'atas_nama' => $req->atas_nama, 'nama_bank' => $req->nama_bank]);
+                          ->update(['no_rek' => $req->norek, 'atas_nama' => $req->namapemilik, 'nama_bank' => $req->bank]);
             }else{
-                $input['no_rek'] = $req->no_rek;
-                $input['atas_nama'] = $req->atas_nama;
-                $input['nama_bank'] = $req->nama_bank;
+                $input['no_rek'] = $req->norek;
+                $input['atas_nama'] = $req->namapemilik;
+                $input['nama_bank'] = $req->bank;
                 $bankid = Bank::create($input)->id;
 
                 $bankmusisi = new BankMusisi;

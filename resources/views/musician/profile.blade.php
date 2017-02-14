@@ -29,6 +29,16 @@
                 <hr> 
                 <section>
                     <h1 class="text-center">{{$musisi->name}}</h1>
+                    @if(Auth::guard('musician')->user()) 
+                        @if(Auth::guard('musician')->user()->id == $musisi->id)
+                         <div class="row">
+                            <div class="col-md-6 col-md-offset-3">
+                            <a class="btn btn-black btn-block" href={{ url('/') }}>Edit</a>
+                        </div>
+                        </div>
+                    @endif
+                    @endif
+
                     <p class="text-center">Harga Sewa / Jam : Rp. {{$musisi->harga_sewa }}</p>
 
                     @if(Auth::guard('user')->user())   
@@ -48,17 +58,17 @@
                             </div>
                         </div>
                     @endif
-                    <p class="text-center">
+                    <p class="text-center">Reviews :
                         <?php 
                             for($i=0;$i<$review;$i++)
                                 echo "<i class='fa fa-star'></i>";
                         ?>
-                    <a href={{ url('detail-review/'.$musisi->slug) }}>( {{$totalrev}} )</a>
+                        <a href={{ url('detail-review/'.$musisi->slug) }}>( {{$totalrev}} )</a>
                     </p>
                     <p>Tipe : {{$musisi->tipe}}</p>
                     <p>Basis : {{$musisi->basis}}</p>
                      <p>Kota : {{$musisi->kota}}</p>
-                    <p>Genre : </p>
+                    <p>Genre : Pop | Jazz</p>
                     <p>Deskripsi : {{$musisi->deskripsi}}</p>                    
                 </section>
             </div>            

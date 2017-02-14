@@ -223,69 +223,75 @@ class MusicianController extends Controller
     public function addBand(Request $request){
         $authId = Auth::guard('musician')->user()->id;
         $input = $request->all();
-        $input['nama_grupband'] = $request->name;
-        $input['admin_id'] = $authId;
-        $input['youtube_video'] = $request->youtube;
-        $input['url_website'] = $request->web;
-        $input['username_soundcloud'] = $request->soundcloud;
-        $input['username_reverbnation'] = $request->reverb;
-        $input['cover'] = 'sample';
-        if ($request->hasFile('photo'))
-        {
-            $file = array('photo' => $request->file('photo'));
-            Cloudder::upload($request->file('photo')->getPathName());
-            $input['photo'] = Cloudder::getPublicId();
-        }
-        else{
-            $input['photo'] = 'sample';
-        }
-
-        GrupBand::create($input);
-        $piladmin = Grupband::where('admin_id', $authId)->orderBy('created_at', 'desc')->first();
-        $bandmusisi = new GrupbandMusisi;
-        $bandmusisi->position_id = $request->posisi;
-        $bandmusisi->musician_id = $authId;
-        $bandmusisi->grupband_id = $piladmin->id;
-        $bandmusisi->save();
-
-        $genre_band = GenreBand::where('band_id', $piladmin->id)->get(['genre_id']);
-            if(!$genre_band->isEmpty()){
-                foreach ($genre_band as $genrem) {
-                    $genres[] = $genrem->genre_id;                  
-                }
-                $result = array_merge(array_diff($genres,$request->checkbox),array_diff($request->checkbox,$genres));
-
-                $sama = array_intersect($result,$genres); 
-                $beda = array_diff($result,$genres); 
-
-                if($beda != null){
-                    foreach ($beda as $genrebeda) {
-                        $genremu = new GenreBand;
-                        $genremu->genre_id = $genrebeda;
-                        $genremu->band_id = $piladmin->id;
-                        $genremu->save();
-                    }
-                }
-
-                if($sama != null){
-                    foreach ($sama as $genresama) {
-                        GenreBand::where('band_id', $piladmin->id)->where('genre_id', $genresama)->delete();
-                    }
-                }            
+        if($request->checkbox != null){
+            $input['nama_grupband'] = $request->name;
+            $input['admin_id'] = $authId;
+            $input['youtube_video'] = $request->youtube;
+            $input['url_website'] = $request->web;
+            $input['username_soundcloud'] = $request->soundcloud;
+            $input['username_reverbnation'] = $request->reverb;
+            $input['cover'] = 'sample';
+            if ($request->hasFile('photo'))
+            {
+                $file = array('photo' => $request->file('photo'));
+                Cloudder::upload($request->file('photo')->getPathName());
+                $input['photo'] = Cloudder::getPublicId();
             }
             else{
-                if($request->checkbox != null) {          
-                    foreach ($request->checkbox as $value) {
-                        $genremu = new GenreBand;
-                        $genremu->genre_id = $value;
-                        $genremu->band_id = $piladmin->id;
-                        $genremu->save();
-                    }   
-                }      
+                $input['photo'] = 'sample';
             }
 
-        Session::flash('message', 'Band'.$request->name.'Berhasil dibuat.');
-        return redirect()->action('MusicianController@bandProfile', [$piladmin->slug]);
+            GrupBand::create($input);
+            $piladmin = Grupband::where('admin_id', $authId)->orderBy('created_at', 'desc')->first();
+            $bandmusisi = new GrupbandMusisi;
+            $bandmusisi->position_id = $request->posisi;
+            $bandmusisi->musician_id = $authId;
+            $bandmusisi->grupband_id = $piladmin->id;
+            $bandmusisi->save();
+
+            $genre_band = GenreBand::where('band_id', $piladmin->id)->get(['genre_id']);
+                if(!$genre_band->isEmpty()){
+                    foreach ($genre_band as $genrem) {
+                        $genres[] = $genrem->genre_id;                  
+                    }
+                    $result = array_merge(array_diff($genres,$request->checkbox),array_diff($request->checkbox,$genres));
+
+                    $sama = array_intersect($result,$genres); 
+                    $beda = array_diff($result,$genres); 
+
+                    if($beda != null){
+                        foreach ($beda as $genrebeda) {
+                            $genremu = new GenreBand;
+                            $genremu->genre_id = $genrebeda;
+                            $genremu->band_id = $piladmin->id;
+                            $genremu->save();
+                        }
+                    }
+
+                    if($sama != null){
+                        foreach ($sama as $genresama) {
+                            GenreBand::where('band_id', $piladmin->id)->where('genre_id', $genresama)->delete();
+                        }
+                    }            
+                }
+                else{
+                    if($request->checkbox != null) {          
+                        foreach ($request->checkbox as $value) {
+                            $genremu = new GenreBand;
+                            $genremu->genre_id = $value;
+                            $genremu->band_id = $piladmin->id;
+                            $genremu->save();
+                        }   
+                    }      
+                }
+
+            Session::flash('message', 'Band'.$request->name.'Berhasil dibuat.');
+            return redirect()->action('MusicianController@bandProfile', [$piladmin->slug]);
+        }
+        else{
+            Session::flash('message', 'HARAP ISI GENRE BAND!!!');
+            return redirect()->back();
+        }
     }
 
     public function bandProfile($slug){

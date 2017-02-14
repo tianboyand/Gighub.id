@@ -473,7 +473,7 @@ class AdminController extends Controller
 
         //return $withdraw->saldo_akhir;
 
-        return view('admin.editWithdraw')->with('wd',$withdraw)->with('owners',$owner)->with('saldos',$saldo);
+        return view('admin.editwithdraw')->with('wd',$withdraw)->with('owners',$owner)->with('saldos',$saldo);
     }
 
     public function inputEditWithdraw(Request $req, $id){

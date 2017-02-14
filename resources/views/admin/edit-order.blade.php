@@ -7,7 +7,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Detail Order</div>
                 <div class="panel-body">
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         <?php
                             if($orders->status == '0')
                                 $status = 'Belum Bayar';
@@ -86,7 +86,7 @@
  
                     {{ Form::close() }}
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <?php 
                             $banks = App\KonfirmasiPembayaran::where('sewa_id', $orders->id)->first();
                         ?>
@@ -98,6 +98,8 @@
                             <p>Nama Rekening : {{$banks->nama_rek}} </p>
                             <p>Nama Bank : {{$banks->nama_bank}} </p>
                             <p>Bank Tujuan : {{$bankadmin->nama_bank}} </p>
+                            <h3>Bukti Pembayaran</h3>
+                            <img name="buktipembayaran" src={!! Cloudder::show($banks->photo, array("crop" => "scale", "width" => 350, "height" => 350)) !!}>
                         @endif
                     </div>
                 </div>

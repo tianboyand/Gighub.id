@@ -84,65 +84,71 @@ class MusicianController extends Controller
     
     public function doUpdateProfile(Request $req){
         if(Auth::guard('musician')->user()){
-            $authId = Auth::guard('musician')->user()->id;
-            $musicianAuth = Musician::find($authId);
-            $input = $req->all();
-            $musicianAuth->update($input);
+            if($req->checkbox != null){
+                $authId = Auth::guard('musician')->user()->id;
+                $musicianAuth = Musician::find($authId);
+                $input = $req->all();
+                $input['aktif'] = 'Y';
+                $musicianAuth->update($input);
 
-            $bank = BankMusisi::where('musician_id', $authId)->first();
+                $bank = BankMusisi::where('musician_id', $authId)->first();
 
-            if($bank != null){
-                Bank::where('id', $bank->bank_id)
-                          ->update(['no_rek' => $req->norek, 'atas_nama' => $req->namapemilik, 'nama_bank' => $req->bank]);
+                if($bank != null){
+                    Bank::where('id', $bank->bank_id)
+                              ->update(['no_rek' => $req->norek, 'atas_nama' => $req->namapemilik, 'nama_bank' => $req->bank]);
+                }else{
+                    $input['no_rek'] = $req->norek;
+                    $input['atas_nama'] = $req->namapemilik;
+                    $input['nama_bank'] = $req->bank;
+                    $bankid = Bank::create($input)->id;
+
+                    $bankmusisi = new BankMusisi;
+                    $bankmusisi->musician_id = $authId;
+                    $bankmusisi->bank_id = $bankid;
+                    $bankmusisi->save();
+                }
+
+                $genre_musisi = GenreMusisi::where('musician_id', $authId)->get(['genre_id']);
+                if(!$genre_musisi->isEmpty()){
+                    foreach ($genre_musisi as $genrem) {
+                        $genres[] = $genrem->genre_id;                  
+                    }
+                    $result = array_merge(array_diff($genres,$req->checkbox),array_diff($req->checkbox,$genres));
+
+                    $sama = array_intersect($result,$genres); 
+                    $beda = array_diff($result,$genres); 
+
+                    if($beda != null){
+                        foreach ($beda as $genrebeda) {
+                            $genremu = new GenreMusisi;
+                            $genremu->genre_id = $genrebeda;
+                            $genremu->musician_id = $authId;
+                            $genremu->save();
+                        }
+                    }
+
+                    if($sama != null){
+                        foreach ($sama as $genresama) {
+                            GenreMusisi::where('musician_id', $authId)->where('genre_id', $genresama)->delete();
+                        }
+                    }            
+                }
+                else{
+                    if($req->checkbox != null) {          
+                        foreach ($req->checkbox as $value) {
+                            $genremu = new GenreMusisi;
+                            $genremu->genre_id = $value;
+                            $genremu->musician_id = $authId;
+                            $genremu->save();
+                        }   
+                    }      
+                }
+
+                return redirect('/');
             }else{
-                $input['no_rek'] = $req->norek;
-                $input['atas_nama'] = $req->namapemilik;
-                $input['nama_bank'] = $req->bank;
-                $bankid = Bank::create($input)->id;
-
-                $bankmusisi = new BankMusisi;
-                $bankmusisi->musician_id = $authId;
-                $bankmusisi->bank_id = $bankid;
-                $bankmusisi->save();
+                Session::flash('message', 'PILIH GENRE MUSISI KAMU!!!');
+                return redirect()->back();
             }
-
-            $genre_musisi = GenreMusisi::where('musician_id', $authId)->get(['genre_id']);
-            if(!$genre_musisi->isEmpty()){
-                foreach ($genre_musisi as $genrem) {
-                    $genres[] = $genrem->genre_id;                  
-                }
-                $result = array_merge(array_diff($genres,$req->checkbox),array_diff($req->checkbox,$genres));
-
-                $sama = array_intersect($result,$genres); 
-                $beda = array_diff($result,$genres); 
-
-                if($beda != null){
-                    foreach ($beda as $genrebeda) {
-                        $genremu = new GenreMusisi;
-                        $genremu->genre_id = $genrebeda;
-                        $genremu->musician_id = $authId;
-                        $genremu->save();
-                    }
-                }
-
-                if($sama != null){
-                    foreach ($sama as $genresama) {
-                        GenreMusisi::where('musician_id', $authId)->where('genre_id', $genresama)->delete();
-                    }
-                }            
-            }
-            else{
-                if($req->checkbox != null) {          
-                    foreach ($req->checkbox as $value) {
-                        $genremu = new GenreMusisi;
-                        $genremu->genre_id = $value;
-                        $genremu->musician_id = $authId;
-                        $genremu->save();
-                    }   
-                }      
-            }
-
-            return redirect('/');
         }
         else{
             return redirect()->back();
@@ -372,8 +378,18 @@ class MusicianController extends Controller
             $input['photo'] = Cloudder::getPublicId();
         }
 
+        if ($request->hasFile('cover'))
+        {
+            $file = array('cover' => $request->file('cover'));
+            Cloudder::upload($request->file('cover')->getPathName());
+            $input['cover'] = Cloudder::getPublicId();
+        }
+
         //dd($input);
         $band->update($input);
+        // print "<pre>";
+        // print_r($input);
+        // print "</pre>";
         $genre_band = GenreBand::where('band_id', $bands)->get(['genre_id']);
             if(!$genre_band->isEmpty()){
                 foreach ($genre_band as $genrem) {

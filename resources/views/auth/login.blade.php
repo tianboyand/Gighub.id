@@ -5,27 +5,30 @@
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <div class="row">
+
                     @if (session('status'))
                     <div class="alert alert-success">
                         {{ session('status') }}
                     </div>
                     @endif
-                    <div class="col-md-6 col-md-offset-3">
-                        <div>
-                            <ul class="nav nav-tabs">
-                                <li class="active"><a href="#tab-1" role="tab" data-toggle="tab">Musisi </a></li>
-                                <li><a href="#tab-2" role="tab" data-toggle="tab">Organizer </a></li>
+
+                    <div class="col-md-8 col-md-offset-2">
+                         <div class="panel panel-default">
+                            <ul class="nav nav-tabs panel-body">                            
+                                <li class="active"><a style="padding-left: 50px; padding-right: 50px;" href="#tab-2" role="tab" data-toggle="tab">Organizer </a></li>
+                                <li><a  style="padding-left: 50px; padding-right: 50px;" href="#tab-1" role="tab" data-toggle="tab">Musisi </a></li>
                             </ul>
                             <div class="tab-content">
-                                <div class="tab-pane active" role="tabpanel" id="tab-1">
+                                <div class="tab-pane" role="tabpanel" id="tab-1">
                                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/musician/login') }}">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                        <br>                            
                             <label class="col-md-4 control-label">E-Mail Address</label>
 
                             <div class="col-md-6">
-                                <input type="email" class="form-control" name="email" value="{{ old('email') }}">
+                                <input type="email" class="form-control" name="email" value="{{ old('email') }}" placeholder="Email Address" required>
 
                                 @if ($errors->has('email'))
                                     <span class="help-block">
@@ -39,7 +42,7 @@
                             <label class="col-md-4 control-label">Password</label>
 
                             <div class="col-md-6">
-                                <input type="password" class="form-control" name="password">
+                                <input type="password" class="form-control" name="password" placeholder="Password" required>
 
                                 @if ($errors->has('password'))
                                     <span class="help-block">
@@ -62,8 +65,8 @@
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-btn fa-sign-in"></i>Login
+                                <button type="submit" class="btn btn-black btn-block">
+                                    <i class="fa fa-btn fa-sign-in"></i>Login Musisi
                                 </button>
 
                                 <a class="btn btn-link" href="{{ url('/musician/password/reset') }}">Forgot Your Password?</a>
@@ -84,15 +87,16 @@
                     </form>
 
                                 </div>
-                                <div class="tab-pane" role="tabpanel" id="tab-2">
+                                <div class="tab-pane  active" role="tabpanel" id="tab-2">
                                      <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                        <br>
                             <label class="col-md-4 control-label">E-Mail Address</label>
 
                             <div class="col-md-6">
-                                <input type="email" class="form-control" name="email" value="{{ old('email') }}">
+                                <input type="email" class="form-control" name="email" value="{{ old('email') }}" placeholder="Email Address" required>
 
                                 @if ($errors->has('email'))
                                     <span class="help-block">
@@ -106,7 +110,7 @@
                             <label class="col-md-4 control-label">Password</label>
 
                             <div class="col-md-6">
-                                <input type="password" class="form-control" name="password">
+                                <input type="password" class="form-control" name="password" placeholder="Password" required>
 
                                 @if ($errors->has('password'))
                                     <span class="help-block">
@@ -129,8 +133,8 @@
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-btn fa-sign-in"></i>Login
+                                <button type="submit" class="btn btn-black btn-block">
+                                    <i class="fa fa-btn fa-sign-in"></i>Login Organizer
                                 </button>
 
                                 <a class="btn btn-link" href="{{ url('/password/reset') }}">Forgot Your Password?</a>
@@ -154,6 +158,7 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>

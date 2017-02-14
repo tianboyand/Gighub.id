@@ -6,8 +6,8 @@
     <div class="alert alert-info">{{ Session::get('message') }}</div>
 @endif
     <div class="row">
-		<div class="col-md-12">
-			<img name="cover" class="coverimage" src={!! Cloudder::show($band->cover, array("crop" => "scale", "width" => 1140, "height" => 187)) !!}>
+		<div class="col-md-10 col-md-offset-1">
+			<img name="cover" class="coverimage" src={!! Cloudder::show($band->cover, array("crop" => "scale", "width" => 950, "height" => 250)) !!}>
 			<hr/>
 		</div>
         <div class="col-md-10 col-md-offset-1">
@@ -18,28 +18,20 @@
 							<img name="aboutme"class="img-circle" src={!! Cloudder::show($band->photo) !!}>
 							<div class="row">
 								<br/>
-								{{$band->nama_grupband}} | 
+								<h1 style="display: inline;">{{$band->nama_grupband}}</h1> | 
 								@if(Auth::guard('musician')->user())
 									@if($band->admin_id == Auth::guard('musician')->user()->id)
 										<a href={{ url('/edit-band/'.$band->slug) }}>edit</a>
 									@endif
-								@endif
-								<p>{{$band->basis}}</p>
-								Rp. {{$band->harga}} /Jam
-								<p>{{$band->kota}}</p>
-								<p>
-									<?php 
-									for($i=0;$i<$review;$i++)
-										echo "<i class='fa fa-star'></i>";
-									?>
-									<a href={{ url('detail-review/band/'.$band->slug) }}>( {{$totalrev}} )</a>
-								</p>
-
-
-							@if(Auth::guard('user')->user())
-								@if(Auth::guard('user')->user()->id)
-									<br/>
-									<a href={{url('sewa-band/'.$band->slug)}} class="btn btn-info" role="button">SEWA</a>
+								@endif							
+								<p>Rp. {{$band->harga}} / Jam</p>
+								@if(Auth::guard('user')->user())
+								@if(Auth::guard('user')->user()->id)									
+									<div class="row">
+			                            <div class="col-md-6">
+			                                <span><a href={{url('sewa-band/'.$band->slug)}} class="btn btn-black btn-block" role="button">SEWA</a></span>
+			                            </div>
+                        			</div>
 
 								@endif
 							@endif
@@ -48,20 +40,35 @@
 
 								@elseif(Auth::guard('musician')->user())
 
-								@else
-									<br/>
-									<a href={{url('sewa-band/'.$band->slug)}} class="btn btn-info" role="button">SEWA</a>
-								@endif
+								@else									
+									<div class="row">
+			                            <div class="col-md-6">
+			                                <span><a href={{url('sewa-band/'.$band->slug)}} class="btn btn-black btn-block" role="button">SEWA</a></span>
+			                            </div>
+                        			</div>
 
-								<h3>DESKRIPSI</h3>
-								<p>{{$band->deskripsi}}</p>
+								@endif
+												
+								<p>Reviews : 
+									<?php 
+									for($i=0;$i<$review;$i++)
+										echo "<i class='fa fa-star'></i>";
+									?>
+									<a href={{ url('detail-review/band/'.$band->slug) }}>( {{$totalrev}} )</a>
+								</p>
+								<p>Basis : {{$band->basis}}</p>
+								<p>Kota :{{$band->kota}}</p>
+								<p>Genre : Pop | Jazz</p>
+								<p>Deskripsi :{{$band->deskripsi}}</p>
+
+
+											
 							</div>
 						</div>
 						<div class="col-md-6">
 							@if($band->youtube_video != null)
 								<?php $str = "$band->youtube_video";
-								$embed = str_replace("watch?v=","embed/",$str);?>
-								<h3>Video {{$band->nama_grupband}}</h3>
+								$embed = str_replace("watch?v=","embed/",$str);?>								
 									<iframe title="YouTube video player" class="youtube-player" type="text/html" 
 									width="430" height="280" src="{{$embed}}"
 									frameborder="0" allowFullScreen></iframe>

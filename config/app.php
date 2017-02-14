@@ -150,6 +150,7 @@ return [
         Cviebrock\EloquentSluggable\ServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         'JD\Cloudder\CloudderServiceProvider',
+        'Cohensive\Embed\EmbedServiceProvider',
 
         /*
          * Application Service Providers...
@@ -207,6 +208,7 @@ return [
         'Cloudder' => 'JD\Cloudder\Facades\Cloudder',
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        'Embed' => 'Cohensive\Embed\Facades\Embed',
 
     ],
 

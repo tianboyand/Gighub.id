@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+    <title>Gighub - Discover Musician in Town</title>
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
@@ -62,7 +62,7 @@
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    Laravel
+                    Gighub
                 </a>
             </div>
 
@@ -281,7 +281,7 @@
                                 {{ Auth::guard('musician')->user()->name }} <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href={{ url('/musician/'.Auth::guard('musician')->user()->slug) }}><i class="fa fa-btn fa-sign-out"></i>Profile</a></li>
+                                <li><a href={{ url('/my-account') }}><i class="fa fa-btn fa-user"></i>My Account</a></li>
                                 <li><a href={{ url('/musician/saldo/'.Auth::guard('musician')->user()->slug) }}><i class="fa fa-btn fa-money"></i>Saldo</a></li>
                                 <li><a href="{{ url('musician-logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                             </ul>

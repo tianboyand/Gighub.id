@@ -10,53 +10,42 @@
 			
             <div class="panel panel-default">			
 					<div class="panel-body">
-						<div class="col-md-6">
-							<img name="aboutme" src={!! Cloudder::show($gigs->photo_gig) !!}>
-							<div class="row">
-								<br/>
-								{{$gigs->nama_gig}}
+						<div class="col-md-6 col-md-offset-3">
+							<img name="aboutme" class="text-center" src={!! Cloudder::show($gigs->photo_gig, array("crop" => "scale", "width" => 430, "height" => 400)) !!}>
+														
+								<h1 class="text-center">{{$gigs->nama_gig}}</h1>
 								@if(Auth::guard('user')->user())
 									@if($gigs->user_id == Auth::guard('user')->user()->id)
 										<a href={{ url('/edit-gig/'.$gigs->slug) }}>edit</a>
 									@endif
-								@endif
-								<br/>
-								Waktu : {{$gigs->tanggal_mulai}} s/d {{$gigs->tanggal_selesai}}
-								<br/>
-								{{$gigs->lokasi}}
+								@endif								
+								<p>Tanggal Main : {{$gigs->tanggal_mulai}} s/d {{$gigs->tanggal_selesai}}</p>								
+								<p>Lokasi : {{$gigs->lokasi}} - {{$gigs->lokasi_detail}}</p>					
+								<p>Deskripsi : {{$gigs->deskripsi}}</p>
 
-							@if(Auth::guard('musician')->user())
-								<?php
-									$sewa = App\Sewa::where('gig_id', $gigs->id)->where('status_request', 1)->get();
-								?>
-								@if($sewa->isEmpty())
-									<br/>									
-									<a href="#" data-toggle="modal" data-target="#modalOffer">OFFER GIG</a>
-								@endif
-							@endif
-
-								<h3>DESKRIPSI</h3>
-								<p>{{$gigs->deskripsi}}</p>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="row">
-								<h3>List Penawar</h3>
+								<h3>Daftar Penawar</h3>
 								@if(!$offer->isEmpty())
 									@foreach($offer as $penawar)
-										@if($penawar->type_sewa == 'bandhire')
-											<img name="aboutme"class="img-circle" style="width: 20%;" src={!! Cloudder::show($penawar->penawar[0]->photo) !!}>
+										@if($penawar->type_sewa == 'bandhire')											
 											<p><a href={{url('band/'.$penawar->penawar[0]->slug)}}>{{$penawar->penawar[0]->nama_grupband}}</a></p>
-										@elseif($penawar->type_sewa == 'musisihire')
-											<img name="aboutme"class="img-circle" style="width: 20%;" src={!! Cloudder::show($penawar->penawar[0]->photo) !!}>
+										@elseif($penawar->type_sewa == 'musisihire')											
 											<p><a href={{url('musician/'.$penawar->penawar[0]->slug)}}>{{$penawar->penawar[0]->name}}</a></p>
 										@endif
 									@endforeach
 								@else
 									<p>Tidak ada Penawar</p>
 								@endif
-							</div>
-						</div>
+								@if(Auth::guard('musician')->user())
+								<?php
+									$sewa = App\Sewa::where('gig_id', $gigs->id)->where('status_request', 1)->get();
+								?>
+								@if($sewa->isEmpty())
+									<br/>									
+									<a href="#" data-toggle="modal" data-target="#modalOffer" class="btn btn-block btn-black">Tawarkan</a>
+								@endif
+							@endif
+						
+						</div>						
 					</div>
             </div>			
         </div>
@@ -78,8 +67,8 @@
 		  <div class="modal-body" id="modaladd">
 		  	<div class="col-md-12">
 				<div class="col-md-6">
-					<p>Offer sebagai musisi</p>
-					<a class="btn btn-primary" href={{url('offer-gig/'.$gigs->id)}}>OFFER</a>
+					<p>Offer sebagai musisi</p>					
+					<a class="btn btn-black btn-block" href={{url('offer-gig/'.$gigs->id)}}>Tawarkan Saya</a>
 				</div>
 				<div class="col-md-6">
 					<p>Offer sebagai Band</p>
@@ -91,7 +80,7 @@
 								<option value="{{$band->id}}">{{$band->nama_grupband}}</option>
 							@endforeach
 						</select>
-						<button>OFFER</button>
+						<button class="btn btn-block btn-black">Tawarkan Kami</button>
 					{{ Form::close() }}
 				</div>
 			</div>

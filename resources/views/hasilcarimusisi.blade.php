@@ -9,26 +9,41 @@
         <div class="col-md-10 col-md-offset-1">
         @if(is_object($listmusisi))
 			@if(!$listmusisi->isEmpty())
-				<h4>Hasil Pencarian : </h4>	
+				<h2 class="text-center">Hasil Pencarian</h2>	
 				@foreach($listmusisi as $_listmusisi)
 					<div class="panel panel-default">
-						<div class="panel-heading"><a href={{ url('/musician/'.$_listmusisi->slug) }}>{{$_listmusisi->name}}</a>
+						<div class="panel-heading"><a href={{ url('/musician/'.$_listmusisi->slug) }}>{{$_listmusisi->name}}</a> - <span>{{$_listmusisi->basis}}</span>
 						</div>
 						<div class="panel-body">
-							{{$_listmusisi->deskripsi}}
-							<br/>
+							<div class="row">
+								<div class="col-xs-12 col-sm-6 col-md-8">							
+									<p>Kota : {{$_listmusisi->kota}} </p>
+									<p>Tipe : {{$_listmusisi->tipe}} </p>									
+								</div>
+														
+								@if(Auth::guard('user')->user())
+								<div class="col-xs-6 col-md-4">
+									<section class="text-center">
+										<span>Rp.{{$_listmusisi->harga_sewa}} / Jam</span>
+		                        		<a href={{url('sewa-musisi/'.$_listmusisi->slug)}} class="btn btn-black btn-block" role="button">SEWA</a>
+		                        	</section>
+		                        </div>
+		                    	@endif
+		                    	
+		                    	
+								@if(Auth::guard('user')->user())
 
-							@if(Auth::guard('user')->user())
-	                        	<a href={{url('sewa-musisi/'.$_listmusisi->slug)}} class="btn btn-info" role="button">SEWA</a>
-	                    	@endif
-	                    	
-							@if(Auth::guard('user')->user())
+			                    @elseif(Auth::guard('musician')->user())
 
-		                    @elseif(Auth::guard('musician')->user())
-
-		                    @else
-		                        <a href={{url('sewa-musisi/'.$_listmusisi->slug)}} class="btn btn-info" role="button">SEWA</a>
-		                    @endif
+			                    @else
+			                    <div class="col-xs-6 col-md-4">
+			                        <section class="text-center">
+										<span>Rp.{{$_listmusisi->harga_sewa}} / Jam</span>
+		                        		<a href={{url('sewa-musisi/'.$_listmusisi->slug)}} class="btn btn-black btn-block" role="button">SEWA</a>
+		                        	</section>
+			                    </div>
+			                    @endif
+		                    </div>
 						</div>
 					</div>
 				@endforeach
@@ -40,14 +55,22 @@
 				<h4>Hasil Pencarian : </h4>	
 				@foreach($listmusisi as $_listmusisi)
 					<div class="panel panel-default">
-						<div class="panel-heading"><a href={{ url('/musician/'.$_listmusisi->slug) }}>{{$_listmusisi->name}}</a>
+						<div class="panel-heading"><a href={{ url('/musician/'.$_listmusisi->slug) }}>{{$_listmusisi->name}}</a> - <span>{{$_listmusisi->basis}}</span>
 						</div>
 						<div class="panel-body">
-							{{$_listmusisi->deskripsi}}
-							<br/>
+						<div class="row">
+							<div class="col-xs-12 col-sm-6 col-md-8">							
+									<p>Kota : {{$_listmusisi->kota}} </p>
+									<p>Tipe : {{$_listmusisi->tipe}} </p>									
+							</div>
 
-							@if(Auth::guard('user')->user())
-	                        	<a href={{url('sewa-musisi/'.$_listmusisi->slug)}} class="btn btn-info" role="button">SEWA</a>
+							@if(Auth::guard('user')->user())						
+							<div class="col-xs-6 col-md-4">
+	                        	<section class="text-center">
+										<span>Rp.{{$_listmusisi->harga_sewa}} / Jam</span>
+		                        		<a href={{url('sewa-musisi/'.$_listmusisi->slug)}} class="btn btn-black btn-block" role="button">SEWA</a>
+		                        </section>
+	                        </div>
 	                    	@endif
 	                    	
 							@if(Auth::guard('user')->user())
@@ -55,7 +78,12 @@
 		                    @elseif(Auth::guard('musician')->user())
 
 		                    @else
-		                        <a href={{url('sewa-musisi/'.$_listmusisi->slug)}} class="btn btn-info" role="button">SEWA</a>
+		                    <div class="col-xs-6 col-md-4">
+		                        <section class="text-center">
+										<span>Rp.{{$_listmusisi->harga_sewa}} / Jam</span>
+		                        		<a href={{url('sewa-musisi/'.$_listmusisi->slug)}} class="btn btn-black btn-block" role="button">SEWA</a>
+		                        </section>
+		                    </div>
 		                    @endif
 						</div>
 					</div>

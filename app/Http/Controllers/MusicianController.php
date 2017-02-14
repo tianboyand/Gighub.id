@@ -24,6 +24,7 @@ use App\Notif;
 use DB;
 use Session;
 use Cloudder;
+use Hash;
 
 class MusicianController extends Controller
 {
@@ -83,68 +84,71 @@ class MusicianController extends Controller
     
     public function doUpdateProfile(Request $req){
         if(Auth::guard('musician')->user()){
-            $authId = Auth::guard('musician')->user()->id;
-            $musicianAuth = Musician::find($authId);
-            $input = $req->all();
-            $musicianAuth->update($input);
+            if($req->checkbox != null){
+                $authId = Auth::guard('musician')->user()->id;
+                $musicianAuth = Musician::find($authId);
+                $input = $req->all();
+                $input['aktif'] = 'Y';
+                $musicianAuth->update($input);
 
-            $bank = Bank::join('bank_musisi', 'bank_musisi.bank_id','=','banks.id')
-                            ->where('bank_musisi.musician_id', Auth::guard('musician')->user()->id)->first();
+                $bank = BankMusisi::where('musician_id', $authId)->first();
 
-            if($bank != null){
-                $input['no_rek'] = $req->norek;
-                $input['atas_nama'] = $req->namapemilik;
-                $input['nama_bank'] = $req->bank;
-                $bank->update($input);
+                if($bank != null){
+                    Bank::where('id', $bank->bank_id)
+                              ->update(['no_rek' => $req->norek, 'atas_nama' => $req->namapemilik, 'nama_bank' => $req->bank]);
+                }else{
+                    $input['no_rek'] = $req->norek;
+                    $input['atas_nama'] = $req->namapemilik;
+                    $input['nama_bank'] = $req->bank;
+                    $bankid = Bank::create($input)->id;
+
+                    $bankmusisi = new BankMusisi;
+                    $bankmusisi->musician_id = $authId;
+                    $bankmusisi->bank_id = $bankid;
+                    $bankmusisi->save();
+                }
+
+                $genre_musisi = GenreMusisi::where('musician_id', $authId)->get(['genre_id']);
+                if(!$genre_musisi->isEmpty()){
+                    foreach ($genre_musisi as $genrem) {
+                        $genres[] = $genrem->genre_id;                  
+                    }
+                    $result = array_merge(array_diff($genres,$req->checkbox),array_diff($req->checkbox,$genres));
+
+                    $sama = array_intersect($result,$genres); 
+                    $beda = array_diff($result,$genres); 
+
+                    if($beda != null){
+                        foreach ($beda as $genrebeda) {
+                            $genremu = new GenreMusisi;
+                            $genremu->genre_id = $genrebeda;
+                            $genremu->musician_id = $authId;
+                            $genremu->save();
+                        }
+                    }
+
+                    if($sama != null){
+                        foreach ($sama as $genresama) {
+                            GenreMusisi::where('musician_id', $authId)->where('genre_id', $genresama)->delete();
+                        }
+                    }            
+                }
+                else{
+                    if($req->checkbox != null) {          
+                        foreach ($req->checkbox as $value) {
+                            $genremu = new GenreMusisi;
+                            $genremu->genre_id = $value;
+                            $genremu->musician_id = $authId;
+                            $genremu->save();
+                        }   
+                    }      
+                }
+
+                return redirect('/');
             }else{
-                $input['no_rek'] = $req->norek;
-                $input['atas_nama'] = $req->namapemilik;
-                $input['nama_bank'] = $req->bank;
-                $bankid = Bank::create($input)->id;
-
-                $bankmusisi = new BankMusisi;
-                $bankmusisi->musician_id = $authId;
-                $bankmusisi->bank_id = $bankid;
-                $bankmusisi->save();
+                Session::flash('message', 'PILIH GENRE MUSISI KAMU!!!');
+                return redirect()->back();
             }
-
-            $genre_musisi = GenreMusisi::where('musician_id', $authId)->get(['genre_id']);
-            if(!$genre_musisi->isEmpty()){
-                foreach ($genre_musisi as $genrem) {
-                    $genres[] = $genrem->genre_id;                  
-                }
-                $result = array_merge(array_diff($genres,$req->checkbox),array_diff($req->checkbox,$genres));
-
-                $sama = array_intersect($result,$genres); 
-                $beda = array_diff($result,$genres); 
-
-                if($beda != null){
-                    foreach ($beda as $genrebeda) {
-                        $genremu = new GenreMusisi;
-                        $genremu->genre_id = $genrebeda;
-                        $genremu->musician_id = $authId;
-                        $genremu->save();
-                    }
-                }
-
-                if($sama != null){
-                    foreach ($sama as $genresama) {
-                        GenreMusisi::where('musician_id', $authId)->where('genre_id', $genresama)->delete();
-                    }
-                }            
-            }
-            else{
-                if($req->checkbox != null) {          
-                    foreach ($req->checkbox as $value) {
-                        $genremu = new GenreMusisi;
-                        $genremu->genre_id = $value;
-                        $genremu->musician_id = $authId;
-                        $genremu->save();
-                    }   
-                }      
-            }
-
-            return redirect('/');
         }
         else{
             return redirect()->back();
@@ -161,72 +165,133 @@ class MusicianController extends Controller
         return redirect()->back();
     }
 
+    public function doUpdateAkun(Request $req){
+        if(Auth::guard('musician')->user()){
+            $authId = Auth::guard('musician')->user()->id;
+            $musicianAuth = Musician::find($authId);
+            $input = $req->all();
+            $musicianAuth->update($input);
+
+            $bank = BankMusisi::where('musician_id', $authId)->first();
+
+            if($bank != null){
+                Bank::where('id', $bank->bank_id)
+                          ->update(['no_rek' => $req->no_rek, 'atas_nama' => $req->atas_nama, 'nama_bank' => $req->nama_bank]);
+            }else{
+                $input['no_rek'] = $req->no_rek;
+                $input['atas_nama'] = $req->atas_nama;
+                $input['nama_bank'] = $req->nama_bank;
+                $bankid = Bank::create($input)->id;
+
+                $bankmusisi = new BankMusisi;
+                $bankmusisi->musician_id = $authId;
+                $bankmusisi->bank_id = $bankid;
+                $bankmusisi->save();
+            }
+            Session::flash('message', 'Data akun berhasil di ubah!');
+            return redirect()->back();
+        }
+        else{
+            return redirect()->back();
+        }
+    }
+
+    public function doUpdatePassword(Request $req){
+        if(Auth::guard('musician')->user()){
+            $authId = Auth::guard('musician')->user()->id;
+            $musicianAuth = Musician::find($authId);
+            if (Hash::check($req->pass, $musicianAuth->password)){
+                if($req->newpass != $req->confirmpass){
+                    Session::flash('message', 'Password baru tidak cocok');
+                    return redirect()->back();
+                }else{
+                    $musicianAuth->password = bcrypt($req->newpass);
+                    $musicianAuth->save();
+                    Session::flash('message', 'Password berhasil di ubah!');
+                    return redirect()->back();
+                }
+            }else{
+                Session::flash('message', 'Password Salah');
+                return redirect()->back();
+            }
+        }
+        else{
+            return redirect()->back();
+        }
+    }
+
     public function addBand(Request $request){
         $authId = Auth::guard('musician')->user()->id;
         $input = $request->all();
-        $input['nama_grupband'] = $request->name;
-        $input['admin_id'] = $authId;
-        $input['youtube_video'] = $request->youtube;
-        $input['url_website'] = $request->web;
-        $input['username_soundcloud'] = $request->soundcloud;
-        $input['username_reverbnation'] = $request->reverb;
-        $input['cover'] = 'sample';
-        if ($request->hasFile('photo'))
-        {
-            $file = array('photo' => $request->file('photo'));
-            Cloudder::upload($request->file('photo')->getPathName());
-            $input['photo'] = Cloudder::getPublicId();
-        }
-        else{
-            $input['photo'] = 'sample';
-        }
-
-        GrupBand::create($input);
-        $piladmin = Grupband::where('admin_id', $authId)->orderBy('created_at', 'desc')->first();
-        $bandmusisi = new GrupbandMusisi;
-        $bandmusisi->position_id = $request->posisi;
-        $bandmusisi->musician_id = $authId;
-        $bandmusisi->grupband_id = $piladmin->id;
-        $bandmusisi->save();
-
-        $genre_band = GenreBand::where('band_id', $piladmin->id)->get(['genre_id']);
-            if(!$genre_band->isEmpty()){
-                foreach ($genre_band as $genrem) {
-                    $genres[] = $genrem->genre_id;                  
-                }
-                $result = array_merge(array_diff($genres,$request->checkbox),array_diff($request->checkbox,$genres));
-
-                $sama = array_intersect($result,$genres); 
-                $beda = array_diff($result,$genres); 
-
-                if($beda != null){
-                    foreach ($beda as $genrebeda) {
-                        $genremu = new GenreBand;
-                        $genremu->genre_id = $genrebeda;
-                        $genremu->band_id = $piladmin->id;
-                        $genremu->save();
-                    }
-                }
-
-                if($sama != null){
-                    foreach ($sama as $genresama) {
-                        GenreBand::where('band_id', $piladmin->id)->where('genre_id', $genresama)->delete();
-                    }
-                }            
+        if($request->checkbox != null){
+            $input['nama_grupband'] = $request->name;
+            $input['admin_id'] = $authId;
+            $input['youtube_video'] = $request->youtube;
+            $input['url_website'] = $request->web;
+            $input['username_soundcloud'] = $request->soundcloud;
+            $input['username_reverbnation'] = $request->reverb;
+            $input['cover'] = 'sample';
+            if ($request->hasFile('photo'))
+            {
+                $file = array('photo' => $request->file('photo'));
+                Cloudder::upload($request->file('photo')->getPathName());
+                $input['photo'] = Cloudder::getPublicId();
             }
             else{
-                if($request->checkbox != null) {          
-                    foreach ($request->checkbox as $value) {
-                        $genremu = new GenreBand;
-                        $genremu->genre_id = $value;
-                        $genremu->band_id = $piladmin->id;
-                        $genremu->save();
-                    }   
-                }      
+                $input['photo'] = 'sample';
             }
 
-        Session::flash('message', 'Band'.$request->name.'Berhasil dibuat.');
-        return redirect()->action('MusicianController@bandProfile', [$piladmin->slug]);
+            GrupBand::create($input);
+            $piladmin = Grupband::where('admin_id', $authId)->orderBy('created_at', 'desc')->first();
+            $bandmusisi = new GrupbandMusisi;
+            $bandmusisi->position_id = $request->posisi;
+            $bandmusisi->musician_id = $authId;
+            $bandmusisi->grupband_id = $piladmin->id;
+            $bandmusisi->save();
+
+            $genre_band = GenreBand::where('band_id', $piladmin->id)->get(['genre_id']);
+                if(!$genre_band->isEmpty()){
+                    foreach ($genre_band as $genrem) {
+                        $genres[] = $genrem->genre_id;                  
+                    }
+                    $result = array_merge(array_diff($genres,$request->checkbox),array_diff($request->checkbox,$genres));
+
+                    $sama = array_intersect($result,$genres); 
+                    $beda = array_diff($result,$genres); 
+
+                    if($beda != null){
+                        foreach ($beda as $genrebeda) {
+                            $genremu = new GenreBand;
+                            $genremu->genre_id = $genrebeda;
+                            $genremu->band_id = $piladmin->id;
+                            $genremu->save();
+                        }
+                    }
+
+                    if($sama != null){
+                        foreach ($sama as $genresama) {
+                            GenreBand::where('band_id', $piladmin->id)->where('genre_id', $genresama)->delete();
+                        }
+                    }            
+                }
+                else{
+                    if($request->checkbox != null) {          
+                        foreach ($request->checkbox as $value) {
+                            $genremu = new GenreBand;
+                            $genremu->genre_id = $value;
+                            $genremu->band_id = $piladmin->id;
+                            $genremu->save();
+                        }   
+                    }      
+                }
+
+            Session::flash('message', 'Band'.$request->name.'Berhasil dibuat.');
+            return redirect()->action('MusicianController@bandProfile', [$piladmin->slug]);
+        }
+        else{
+            Session::flash('message', 'HARAP ISI GENRE BAND!!!');
+            return redirect()->back();
+        }
     }
 
     public function bandProfile($slug){
@@ -319,8 +384,18 @@ class MusicianController extends Controller
             $input['photo'] = Cloudder::getPublicId();
         }
 
+        if ($request->hasFile('cover'))
+        {
+            $file = array('cover' => $request->file('cover'));
+            Cloudder::upload($request->file('cover')->getPathName());
+            $input['cover'] = Cloudder::getPublicId();
+        }
+
         //dd($input);
         $band->update($input);
+        // print "<pre>";
+        // print_r($input);
+        // print "</pre>";
         $genre_band = GenreBand::where('band_id', $bands)->get(['genre_id']);
             if(!$genre_band->isEmpty()){
                 foreach ($genre_band as $genrem) {

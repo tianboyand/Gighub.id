@@ -62,7 +62,7 @@
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    Laravel
+                    Gighub
                 </a>
             </div>
 
@@ -71,7 +71,8 @@
                 <ul class="nav navbar-nav">
                     @if(Auth::guard('musician')->user())
                         @if(Auth::guard('musician')->user()->deskripsi != null && Auth::guard('musician')->user()->no_telp != null && Auth::guard('musician')->user()->kota != null && Auth::guard('musician')->user()->harga_sewa != null)
-                            <li role="presentation"><a href="{{url('discover')}}">Discover </a></li>                            
+                            <li role="presentation"><a href="{{url('discover')}}">Discover </a></li>
+                            <li role="presentation"><a href={{ url('/musician/'.Auth::guard('musician')->user()->slug) }}>Profil </a></li>
                             <li role="presentation"><a href="{{ url('/list-band') }}">Band </a></li>
                             <li role="presentation"><a href="{{url('listsewa/musisi')}}">Booking Musisi</a></li>        
                             <li role="presentation"><a href="{{url('listsewa/band')}}">Booking Band</a></li>
@@ -280,8 +281,7 @@
                                 {{ Auth::guard('musician')->user()->name }} <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href={{ url('/musician/'.Auth::guard('musician')->user()->slug) }}><i class="fa fa-btn fa-sign-out"></i>Profile</a></li>
-                                <li><a href={{ url('/my-account') }}><i class="fa fa-btn fa-sign-out"></i>My Account</a></li>
+                                <li><a href={{ url('/my-account') }}><i class="fa fa-btn fa-user"></i>My Account</a></li>
                                 <li><a href={{ url('/musician/saldo/'.Auth::guard('musician')->user()->slug) }}><i class="fa fa-btn fa-money"></i>Saldo</a></li>
                                 <li><a href="{{ url('musician-logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                             </ul>

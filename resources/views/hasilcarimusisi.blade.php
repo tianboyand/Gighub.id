@@ -9,7 +9,7 @@
         <div class="col-md-10 col-md-offset-1">
         @if(is_object($listmusisi))
 			@if(!$listmusisi->isEmpty())
-				<h2 class="text-center">Hasil Pencarian</h2>	
+				<h2 class="text-center">Hasil Pencarian</h2>
 				@foreach($listmusisi as $_listmusisi)
 					<div class="panel panel-default">
 						<div class="panel-heading"><a href={{ url('/musician/'.$_listmusisi->slug) }}>{{$_listmusisi->name}}</a> - <span>{{$_listmusisi->basis}}</span>
@@ -52,7 +52,7 @@
 			@endif
 		@else
 			@if($listmusisi != null)
-				<h4>Hasil Pencarian : </h4>	
+				<h2 class="text-center">Hasil Pencarian</h2>
 				@foreach($listmusisi as $_listmusisi)
 					<div class="panel panel-default">
 						<div class="panel-heading"><a href={{ url('/musician/'.$_listmusisi->slug) }}>{{$_listmusisi->name}}</a> - <span>{{$_listmusisi->basis}}</span>
@@ -86,6 +86,7 @@
 		                    </div>
 		                    @endif
 						</div>
+					</div>
 					</div>
 				@endforeach
 			@else

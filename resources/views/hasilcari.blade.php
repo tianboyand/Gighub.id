@@ -52,7 +52,7 @@
 			@endif
 		@else
 			@if($listband != null)
-				<h4>Hasil Pencarian : </h4>	
+				<h2 class="text-center">Hasil Pencarian</h2>	
 				@foreach($listband as $_listband)
 					<div class="panel panel-default">
 						<div class="panel-heading"><a href={{ url('/band/'.$_listband->slug) }}>{{$_listband->nama_grupband}}</a>

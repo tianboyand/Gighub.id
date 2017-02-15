@@ -84,12 +84,12 @@
                         @endif       
                     @elseif(Auth::guard('user')->user())
                         <li><a href="{{ url('/discover-organizer') }}">Discover</a></li>
-                        <li><a href={{ url('user/'.Auth::guard('user')->user()->slug) }}>Profile</a></li>
-                        <li><a href="{{ url('/listsewa') }}">Data Sewa </a></li>
-                        <li><a href="{{ url('/listoffer') }}">Data Penawaran </a></li>
+                        <li><a href={{ url('user/'.Auth::guard('user')->user()->slug) }}>Gig</a></li>
+                        <li><a href="{{ url('/listsewa') }}">Sewa </a></li>
+                        <li><a href="{{ url('/listoffer') }}">Penawaran </a></li>
                     @elseif(Auth::guard('admin')->user())
                         <li><a href="{{ url('/admin') }}">Dashboard</a></li>
-                        <li><a href="{{ url('admin/listuser') }}">Data user</a></li>
+                        <li><a href="{{ url('admin/listuser') }}">Data Organizer</a></li>
                         <li><a href="{{ url('admin/listmusisi') }}">Data Musisi</a></li>
                         <li><a href="{{ url('admin/listband') }}">Data Band</a></li>
                         <li><a href="{{ url('admin/listgig') }}">Data Gig</a></li>
@@ -449,7 +449,8 @@
 $(document).ready(
     function () {
       $("#rateYo").rateYo({
-        rating: 4,
+        rating: 0,
+        numStars: 5,
         fullStar: true
       }).on("rateyo.set", function (e, data) {
             $("#rate").val(data.rating);         

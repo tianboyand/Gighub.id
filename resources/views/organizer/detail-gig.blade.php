@@ -16,11 +16,12 @@
 								<h1 class="text-center">{{$gigs->nama_gig}}</h1>
 								@if(Auth::guard('user')->user())
 									@if($gigs->user_id == Auth::guard('user')->user()->id)
-										<a href={{ url('/edit-gig/'.$gigs->slug) }}>edit</a>
+										<a class="btn btn-block btn-black" href={{ url('/edit-gig/'.$gigs->slug) }}>Edit</a>
+										<br>
 									@endif
 								@endif								
 								<p>Tanggal Main : {{$gigs->tanggal_mulai}} s/d {{$gigs->tanggal_selesai}}</p>								
-								<p>Lokasi : {{$gigs->lokasi}} - {{$gigs->lokasi_detail}}</p>					
+								<p>Lokasi : {{$gigs->lokasi}} - {{$gigs->detail_lokasi}}</p>					
 								<p>Deskripsi : {{$gigs->deskripsi}}</p>
 
 								<h3>Daftar Penawar</h3>

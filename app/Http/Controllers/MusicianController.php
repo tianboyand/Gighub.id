@@ -529,8 +529,10 @@ class MusicianController extends Controller
             foreach ($reqmusisi as $sewam) {
                 $organizer = User::where('id', $sewam->subject_id)->first();
                 $gig = Gig::where('id', $sewam->gig_id)->first();
+                $cek = Review::where('sewa_id', $sewam->id)->get();
                 $sewam->organizer = $organizer;
                 $sewam->gig = $gig;
+                $sewam->review = $cek;
             }
 
             return view('musician.bookinglist-musisi-selesai')->with('sewamusisi', $reqmusisi);

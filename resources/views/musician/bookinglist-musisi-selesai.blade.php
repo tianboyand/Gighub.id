@@ -45,10 +45,25 @@
 								<p>Status Booking : <b>LUNAS!</b></p>
 							@elseif($_sewamusisi->status == 3)
 								<p>Status Booking : <b>SELESAI!</b></p>
-								<p><a href="">Berikan Review</a></p>
+								@if(!$_sewamusisi->review->isEmpty())
+									<?php 
+										for($i=0;$i<$_sewamusisi->review[0]->nilai;$i++){
+											echo "<i class='fa fa-star'></i>";
+										}
+									?>
+								@endif
+								<!-- <p><a href="">Berikan Review</a></p> -->
 							@elseif($_sewamusisi->status == 4)
 								<p>Status Booking : <b>SELESAI! Saldo telah di tambahkan ke akun <a href={{ url('musician/saldo/'.Auth::guard('musician')->user()->slug) }}> kamu</a></b></p>
-								<p><a href="">Berikan Review</a></p>
+								<!-- <p><a href="">Berikan Review</a></p> -->
+								@if(!$_sewamusisi->review->isEmpty())
+									<?php 
+										for($i=0;$i<$_sewamusisi->review[0]->nilai;$i++){
+											echo "<i class='fa fa-star'></i>";
+										}
+									?>
+									<a href={{ url('detail-review/'.Auth::guard('musician')->user()->slug) }}>Lihat Review</a>
+								@endif
 							@else
 								<p>Status Booking : <b>BATAL!</b></p>
 							@endif

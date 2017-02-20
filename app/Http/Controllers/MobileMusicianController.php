@@ -667,7 +667,10 @@ class MobileMusicianController extends Controller
         $req = $request->all();
         // $band = DB::table('grupbands')->where('admin_id',$req['user_id'])->first();
 
-        $calonAnggota = DB::select("SELECT m.* FROM musicians AS m JOIN grupband_musisi as gbm ON m.id = gbm.musician_id JOIN grupbands as gb ON gbm.grupband_id = gb.id WHERE gbm.musician_id <> ".$req['user_id']." AND gbm.grupband_id <> ".$req['grupband_id']);
+        // $calonAnggota = DB::select("SELECT m.* FROM musicians AS m JOIN grupband_musisi as gbm ON m.id = gbm.musician_id WHERE gbm.musician_id <> ".$req['user_id']." AND gbm.grupband_id <> ".$req['grupband_id']);
+
+        $calonAnggota = DB::select("SELECT m.* FROM musicians AS m JOIN grupband_musisi as gbm ON m.id = gbm.musician_id WHERE gbm.musician_id <> ".$req["user_id"]." AND gbm.grupband_id <> ".$req["grupband_id"]." UNION SELECT m.* FROM musicians AS m LEFT JOIN grupband_musisi AS gbm ON m.id = gbm.musician_id WHERE gbm.musician_id IS NULL AND gbm.grupband_id is null");
+
 
         return response()->json(['status'=>'ok', 'error'=>0, 'musicianans'=>$calonAnggota],200);
 
@@ -691,7 +694,9 @@ class MobileMusicianController extends Controller
     public function viewRemoveAnggota(Request $request){
         $req = $request->all();
 
-        $calonMantanAnggota = DB::select("SELECT m.*, p.position_name FROM musicians AS m JOIN grupband_musisi AS gbm ON gbm.musician_id = m.id JOIN positions AS p ON gbm.position_id = p.id JOIN grupbands AS gb ON gbm.grupband_id = gb.id WHERE gb.admin_id = 4 AND gbm.musician_id <> ".$req['user_id']." AND gb.id = ".$req['grupband_id']);
+        // $calonMantanAnggota = DB::select("SELECT m.*, p.position_name FROM musicians AS m JOIN grupband_musisi AS gbm ON gbm.musician_id = m.id JOIN positions AS p ON gbm.position_id = p.id JOIN grupbands AS gb ON gbm.grupband_id = gb.id WHERE gb.admin_id = 4 AND gbm.musician_id <> ".$req['user_id']." AND gb.id = ".$req['grupband_id']);
+
+        $calonMantanAnggota = DB::select("SELECT m.*, p.position_name FROM musicians AS m JOIN grupband_musisi AS gbm ON gbm.musician_id = m.id JOIN positions AS p ON gbm.position_id = p.id WHERE gbm.grupband_id = ".$req['grupband_id']." AND m.id <> ".$req['user_id']);
 
         return response()->json(['status'=>'ok', 'error'=>0, 'musicianans'=>$calonMantanAnggota],200);
 

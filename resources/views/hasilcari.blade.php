@@ -25,7 +25,7 @@
 							@if(Auth::guard('user')->user())
 							<div class="col-xs-6 col-md-4">
 		                        <section class="text-center">
-		                        	<span>Rp.{{$_listband->harga_sewa}} / Jam</span>
+		                        	<span>Rp.{{$_listband->harga}} / Jam</span>
 	                        		<a href={{url('sewa-band/'.$_listband->slug)}} class="btn btn-black btn-block" role="button">SEWA</a>
 	                        	</section>
 		                    </div>
@@ -38,7 +38,7 @@
 		                    @else
 		                        <div class="col-xs-6 col-md-4">
 		                        	<section class="text-center">
-		                        		<span>Rp.{{$_listband->harga_sewa}} / Jam</span>
+		                        		<span>Rp.{{$_listband->harga}} / Jam</span>
 	                        			<a href={{url('sewa-band/'.$_listband->slug)}} class="btn btn-black btn-block" role="button">SEWA</a>
 	                        		</section>
 		                    	</div>
@@ -52,7 +52,7 @@
 			@endif
 		@else
 			@if($listband != null)
-				<h4>Hasil Pencarian : </h4>	
+				<h2 class="text-center">Hasil Pencarian</h2>	
 				@foreach($listband as $_listband)
 					<div class="panel panel-default">
 						<div class="panel-heading"><a href={{ url('/band/'.$_listband->slug) }}>{{$_listband->nama_grupband}}</a>

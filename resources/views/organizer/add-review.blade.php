@@ -30,6 +30,7 @@
                         <br/>
                         <div id="rateYo"></div>
                         <input type="hidden" name="rate" id="rate" class="form-control" required/>
+                        
                     </div>
 
                     <div class="form-group">

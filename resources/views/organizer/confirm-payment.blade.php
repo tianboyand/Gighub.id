@@ -30,8 +30,8 @@
                             <label>Nama Bank Pengirim </label>
                                 <input class="form-control" type="text" name="nama_bank" id="nama_bank" placeholder="eg. BCA" required>
                             <div class="form-group"></div>
-                            <label>Photo bukti (opsional) :</label>
-                                <input name="photo" id="photo" type="file" class="btn">
+                            <label>Photo Bukti Pembayaran:</label>
+                                <input name="photo" id="photo" type="file" class="btn" required>
                             <div class="form-group"></div>
                             <div class="form-group">
                                 <button class="btn btn-primary" type="submit">Konfirmasi</button>

@@ -17,6 +17,7 @@
                 </div>
 
                 <div class="panel-body">
+                <img name="aboutme" class="img-circle" src={!! Cloudder::show($organizer->photo) !!}>
                     @if(!Auth::guard('user')->user())
                        This is {{$organizer->first_name}} Profile page
                     @else
@@ -26,7 +27,7 @@
                             This is {{$organizer->first_name}} Profile page
                         @endif
                     @endif
-                    <img name="aboutme" class="img-circle" src={!! Cloudder::show($organizer->photo) !!}> 
+                     
                 </div>
             </div>
 

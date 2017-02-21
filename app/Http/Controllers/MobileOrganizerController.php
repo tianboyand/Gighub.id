@@ -735,13 +735,18 @@ class MobileOrganizerController extends Controller
         return array("message"=>"Gig Photo has been uploaded","error"=>0);
     }
 
-    public function rejectGigRequest(Request $request){
-        DB::table('sewas')->where('id',$request['sewa_id'])
-            ->update(array(
-                'status_request' => '2',
-                ));
-        
-        return array("message"=>"reject success","error"=>0);
+    public function declineGigRequest(Request $request){
+        if($request['sewa_id']!=null || $request['sewa_id']!=""){
+            DB::table('sewas')->where('id',$request['sewa_id'])
+                ->update(array(
+                    'status_request' => '2',
+                    ));
+            
+            return array("message"=>"Decline success","error"=>0);
+        }
+        elseif ($request['sewa_id']==null || $request['sewa_id']=="") {
+            return array("message"=>"Failed to Decline","error"=>1);
+        }
     }
 
     public function memberGroup(Request $request){
@@ -796,12 +801,19 @@ class MobileOrganizerController extends Controller
 
     public function yourReview(Request $request){
         if($request!=null){
-            $_result = DB::select("SELECT r.*, u.first_name, u.last_name, u.email, u.photo,u.aktif, r.created_at FROM review as r JOIN sewas as s ON r.sewa_id = s.id JOIN musicians as m ON s.object_id = m.id JOIN users AS u ON r.user_id = u.id WHERE r.sewa_id = ".$request['sewa_id']);
+            if($request['type_sewa']=="hireband" || $request['type_sewa']=="bandhire"){   
+                $_result = DB::select("SELECT r.*, u.first_name, u.last_name, u.email, u.photo,u.aktif, r.created_at FROM review as r JOIN sewas as s ON r.sewa_id = s.id JOIN grupbands as gpb ON s.object_id = gpb.id JOIN users AS u ON r.user_id = u.id WHERE r.sewa_id = ".$request['sewa_id']);
 
-            return response()->json(["message"=>"ok","error"=>0,"yourReview"=>$_result[0]],200);
+                return response()->json(["message"=>"ok","error"=>0,"yourReviews"=>$_result],200);
+            }
+            else if($request['type_sewa']=="hiremusisi" || $request['type_sewa']=="musisihire"){
+                $_result = DB::select("SELECT r.*, u.first_name, u.last_name, u.email, u.photo,u.aktif, r.created_at FROM review as r JOIN sewas as s ON r.sewa_id = s.id JOIN musicians as m ON s.object_id = m.id JOIN users AS u ON r.user_id = u.id WHERE r.sewa_id = ".$request['sewa_id']);
+
+                return response()->json(["message"=>"ok","error"=>0,"yourReviews"=>$_result],200);
+            } 
         }
         else{
-            return response()->json(["message"=>"error","error"=>1,"member"=>$_result[0]]);
+            return response()->json(["message"=>"error","error"=>1,"yourReviews"=>$_result]);
         }
     }
 }

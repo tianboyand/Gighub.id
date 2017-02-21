@@ -284,6 +284,11 @@ Route::post('mobile/organizerprofile','MobileMusicianController@organizerProfile
 // list musician reviewer
 Route::post('mobile/musician/reviewer','MobileMusicianController@musicianReviewer');
 // 
+// declineBookRequest
+Route::post('mobile/musician/declinebookrequest','MobileMusicianController@declineBookRequest');
+// 
+// updateGroupProfile
+Route::post('mobile/musician/updateprofileband','MobileMusicianController@updateProfileBand');
 ##################################################################################################
 
 
@@ -308,4 +313,6 @@ Route::post('mobile/organizer/membergroup','MobileOrganizerController@memberGrou
 Route::post('mobile/organizer/sendreview','MobileOrganizerController@sendReview');
 // yourReview
 Route::post('mobile/organizer/yourreview','MobileOrganizerController@yourReview');
+// declineGigRequest
+Route::post('mobile/organizer/declinegigrequest','MobileOrganizerController@declineGigRequest');
 ##################################################################################################

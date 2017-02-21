@@ -68,7 +68,11 @@
                     <p>Tipe : {{$musisi->tipe}}</p>
                     <p>Basis : {{$musisi->basis}}</p>
                      <p>Kota : {{$musisi->kota}}</p>
-                    <p>Genre : Pop | Jazz</p>
+                    <p>Genre : 
+                        @foreach($musisi->genre as $genre)
+                            {{$genre->genre_name}} | 
+                        @endforeach
+                        </p>
                     <p>Deskripsi : {{$musisi->deskripsi}}</p>                    
                 </section>
             </div>            

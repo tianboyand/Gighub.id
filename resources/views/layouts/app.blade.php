@@ -59,11 +59,13 @@
                             <li role="presentation"><a href="{{ url('/list-band') }}">Band </a></li>
                             <li role="presentation"><a href="{{url('listsewa/musisi')}}">Booking Musisi</a></li>        
                             <li role="presentation"><a href="{{url('listsewa/band')}}">Booking Band</a></li>
+                            <li role="presentation"><a href="{{ url('/listoffer') }}">Penawaran </a></li>
                         @else
                             <li class="disabled"><a>Discover</a></li>
                             <li class="disabled"><a>Band</a></li>
                             <li class="disabled"><a>Booking Musisi</a></li>
                             <li class="disabled"><a>Booking Band</a></li>
+                            <li class="disabled"><a>Penawaran </a></li>
                         @endif       
                     @elseif(Auth::guard('user')->user())
                         <li><a href="{{ url('/discover-organizer') }}">Discover</a></li>

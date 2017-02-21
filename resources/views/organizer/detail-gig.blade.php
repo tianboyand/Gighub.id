@@ -54,7 +54,7 @@
 </div>
 
 
-<!-- MODAL Add ANGGOTA BAND -->
+<!-- MODAL BERIKAN TAWARAN -->
 @if(Auth::guard('musician')->user())
 	<div class="modal  fade" id="modalOffer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
 	  <div class="modal-dialog" role="document">
@@ -74,11 +74,11 @@
 				<div class="col-md-6">
 					<p>Offer sebagai Band</p>
 					{{ Form::open(['route'=>['add.offer',$gigs->id],'role'=> 'form', 'class' => 'ui reply form']) }}
-						<select class="form-control" name="band" id="band">
+						<select class="form-control" name="band" id="band" required="true">
 							<?php $bands = App\Grupband::where('admin_id', Auth::guard('musician')->user()->id)->get()?>
-							<option value="">- Pilih Band -</option>
+							<option required value="">- Pilih Band -</option>
 							@foreach($bands as $band)
-								<option value="{{$band->id}}">{{$band->nama_grupband}}</option>
+								<option required value="{{$band->id}}">{{$band->nama_grupband}}</option>
 							@endforeach
 						</select>
 						<button class="btn btn-block btn-black">Tawarkan Kami</button>

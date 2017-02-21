@@ -21,7 +21,15 @@
                     <div class="media-body">
                         <div class="media-right">
                         <div class="media-body">
-                                    {!! Embed::make($musisi->youtube_video)->parseUrl()->getIframe() !!}
+                            @if($musisi->youtube_video != null)
+                                    <?php $str = "$musisi->youtube_video";
+                                    $embed = str_replace("watch?v=","embed/",$str);?>                               
+                                        <iframe title="YouTube video player" class="youtube-player" type="text/html" 
+                                        width=450 height="315" src="{{$embed}}"
+                                        frameborder="0" allowFullScreen></iframe>
+                            @else
+                                <img src="{{ asset('/img/video.jpg') }}" alt="Video not Found" height="315" width="500">
+                            @endif                             
                         </div>
                     </div>                                      
                     </div>

@@ -132,16 +132,16 @@
                             </div>
                             <div class="form-group"></div>
                             <label>No.Telepon </label>
-                            <input class="form-control" type="text" name='no_telp' placeholder="No.Telepon" value="{{ Auth::guard('musician')->user()->no_telp }}" required>                            
+                            <input class="form-control" type="text" name='no_telp' required placeholder="No.Telepon" value="{{ Auth::guard('musician')->user()->no_telp }}">                            
                             <div class="form-group"></div>
                             <label>Deskripsi </label>
                             <textarea class="form-control" rows="5" name='deskripsi' placeholder="Jelaskan informasi tentang dirimu" required>{{ Auth::guard('musician')->user()->deskripsi }}</textarea>
                             <div class="form-group"></div>
                             <label>Harga Sewa / Jam</label>
-                            <input class="form-control" type="number" name="harga_sewa" value="{{ Auth::guard('musician')->user()->harga_sewa }}" required>
+                            <input class="form-control" type="number" id="myNumber" name="harga_sewa" value="{{ Auth::guard('musician')->user()->harga_sewa }}" required="true">
                             <div class="form-group"></div>
                             <label>Url Video </label>
-                            <input class="form-control" type="text" name="youtube_video" value="{{ Auth::guard('musician')->user()->youtube_video }}" placeholder="http://" required>
+                            <input class="form-control" type="text" name="youtube_video" value="{{ Auth::guard('musician')->user()->youtube_video }}" placeholder="http://">
 
                             <div class="form-group"></div>
                             <label>No.Rekening </label>
@@ -193,7 +193,7 @@
                                 </div>
                                 <div class="form-group">
                                     <?php
-                                        $kota = App\Grupband::groupBy('kota')->get(['kota']);
+                                        $kota = App\Musician::groupBy('kota')->get(['kota']);
                                     ?>
                                     <label class="control-label" for="email-input">Kota</label>
                                     <select class="form-control" name="kota">
@@ -261,7 +261,7 @@
                                 </div>
                                 <div class="form-group">
                                     <?php
-                                        $kota = App\Grupband::groupBy('kota')->get(['kota']);
+                                        $kota = App\Musician::groupBy('kota')->get(['kota']);
                                     ?>
                                     <label class="control-label" for="email-input">Kota</label>
                                     <select class="form-control" name="kota">

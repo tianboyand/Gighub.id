@@ -73,6 +73,8 @@
 									<iframe title="YouTube video player" class="youtube-player" type="text/html" 
 									width="430" height="280" src="{{$embed}}"
 									frameborder="0" allowFullScreen></iframe>
+							@else
+                                <img src="{{ asset('/img/video.jpg') }}" alt="Video not Found" height="280" width="430">
 							@endif
 							<div class="row">
 								<h3>Anggota Band ({{ $anggota->count()}})</h3>

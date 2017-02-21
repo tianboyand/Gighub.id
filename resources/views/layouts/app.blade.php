@@ -59,11 +59,13 @@
                             <li role="presentation"><a href="{{ url('/list-band') }}">Band </a></li>
                             <li role="presentation"><a href="{{url('listsewa/musisi')}}">Booking Musisi</a></li>        
                             <li role="presentation"><a href="{{url('listsewa/band')}}">Booking Band</a></li>
+                            <li role="presentation"><a href="{{ url('/listoffer') }}">Penawaran </a></li>
                         @else
                             <li class="disabled"><a>Discover</a></li>
                             <li class="disabled"><a>Band</a></li>
                             <li class="disabled"><a>Booking Musisi</a></li>
                             <li class="disabled"><a>Booking Band</a></li>
+                            <li class="disabled"><a>Penawaran </a></li>
                         @endif       
                     @elseif(Auth::guard('user')->user())
                         <li><a href="{{ url('/discover-organizer') }}">Discover</a></li>
@@ -222,12 +224,12 @@
                                                 @endif
 
                                             @elseif($notif->type_user == 'musisi')
-                                            <?php
+                                            <?php                                                
                                                 $org = App\User::where('id', $notif->subject_id)->first();
                                                 $gig = App\Gig::where('id', $notif->object_id)->first();
                                             ?>
                                                 @if($notif->type_notif == 'reqsewa')
-                                                    <li><a href={{url('notif/'.$notif->id)}}>{{$org->first()->first_name}} mengirimi Anda permintaan di Gig {{$gig->first()->nama_gig}}</a>
+                                                    <li><a href={{url('notif/'.$notif->id)}}>{{$org->first_name}} mengirimi Anda permintaan di Gig {{$gig->nama_gig}}</a>
                                                     </li>
                                                 @elseif($notif->type_notif == 'terimaoffer')
                                                     <li><a href={{url('notif/'.$notif->id)}}>{{$org->first_name}} menerima tawaran Anda di Gig {{$gig->nama_gig}}</a>
@@ -252,7 +254,7 @@
                             <button class="btn btn-danger navbar-btn navbar-left" type="button" data-toggle="modal" data-target="#addband">+ Add Band</button>
                         @else
                             <li class="dropdown" style="color: white;">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-bell"></i> 10</a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-bell"></i></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>test</li>
                                 </ul>
@@ -413,14 +415,20 @@
         //     $('#selesai').datetimepicker();
         // });
         $('#mulai').datetimepicker({
-            startDate: '+1d',
+            startDate: '+0d',
             format: 'yyyy-mm-dd hh:ii'
         });
         $('#selesai').datetimepicker({
-            startDate: '+1d',
+            startDate: '+0d',
             format: 'yyyy-mm-dd hh:ii'
         });
 
+    </script>
+
+    <script>
+    function myFunction() {
+        var x = document.getElementById("myNumber").required;
+    }
     </script>
 
 <script type="text/javascript">

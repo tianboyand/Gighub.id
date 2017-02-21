@@ -188,7 +188,8 @@ class OrganizerController extends Controller
     	// 	return view('/');
     	// else{
     		$bands = Grupband::where('aktif', 'Y')->get();
-    		return view('organizer.discover')->with('band', $bands);
+            $musisis = Musician::where('aktif', 'Y')->get();
+    		return view('organizer.discover')->with('musisi', $musisis)->with('band', $bands);
     	//}
     	//return view('musician.dashboard');
     }

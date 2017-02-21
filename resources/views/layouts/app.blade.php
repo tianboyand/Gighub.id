@@ -252,7 +252,7 @@
                             <button class="btn btn-danger navbar-btn navbar-left" type="button" data-toggle="modal" data-target="#addband">+ Add Band</button>
                         @else
                             <li class="dropdown" style="color: white;">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-bell"></i> 10</a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-bell"></i></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>test</li>
                                 </ul>

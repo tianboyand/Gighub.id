@@ -193,7 +193,7 @@
                                 </div>
                                 <div class="form-group">
                                     <?php
-                                        $kota = App\Grupband::groupBy('kota')->get(['kota']);
+                                        $kota = App\Musician::groupBy('kota')->get(['kota']);
                                     ?>
                                     <label class="control-label" for="email-input">Kota</label>
                                     <select class="form-control" name="kota">
@@ -261,7 +261,7 @@
                                 </div>
                                 <div class="form-group">
                                     <?php
-                                        $kota = App\Grupband::groupBy('kota')->get(['kota']);
+                                        $kota = App\Musician::groupBy('kota')->get(['kota']);
                                     ?>
                                     <label class="control-label" for="email-input">Kota</label>
                                     <select class="form-control" name="kota">

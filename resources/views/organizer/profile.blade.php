@@ -19,7 +19,7 @@
                 <div class="panel-body">
                 <img name="aboutme" class="img-circle" src={!! Cloudder::show($organizer->photo) !!}>
                     @if(!Auth::guard('user')->user())
-                       This is {{$organizer->first_name}} Profile page
+                       This is {{$organizer->first_name}} Profile pages
                     @else
                         @if(Auth::guard('user')->user()->id == $organizer->id)
                             Your Profile Organizer's Page

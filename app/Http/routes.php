@@ -289,6 +289,8 @@ Route::post('mobile/musician/declinebookrequest','MobileMusicianController@decli
 // 
 // updateGroupProfile
 Route::post('mobile/musician/updateprofileband','MobileMusicianController@updateProfileBand');
+// TotalGigs
+Route::post('mobile/musician/totalgigs','MobileOrganizerController@totalGigs');
 ##################################################################################################
 
 

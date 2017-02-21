@@ -816,4 +816,143 @@ class MobileOrganizerController extends Controller
             return response()->json(["message"=>"error","error"=>1,"yourReviews"=>$_result]);
         }
     }
+
+    public function totalGigs(Request $request){
+        $req = $request->all();
+
+       
+        if ($req['tipe_user']=="msc" && $req['tipe']=="Group") {
+            $band = DB::table('grupbands')
+                // ->join('grupband_musisi','musicians.id','=','grupband_musisi.musician_id')
+                // ->join('grupbands','grupband_musisi.grupband_id','=','grupbands.id')
+                // ->select('grupbands.*')->get();
+                ->where('id',$req['user_id'])->first();
+
+            $_result = DB::select("SELECT s.*,g.nama_gig,g.deskripsi,g.photo_gig,g.lokasi,g.detail_lokasi,g.lat,g.lng,g.tanggal_mulai,g.tanggal_selesai,g.type_gig,g.user_id,g.aktif,g.slug, gb.nama_grupband, gb.harga, gb.photo,u.first_name,u.last_name
+                FROM sewas as s
+                JOIN users as u ON s.object_id = u.id 
+                JOIN gigs as g ON s.gig_id = g.id
+                JOIN grupbands as gb ON s.subject_id = gb.id
+                WHERE (s.status='4' AND s.type_sewa='bandhire' AND s.subject_id=".$req['user_id'].")|| (s.status='4' AND s.type_sewa='hireband' AND s.object_id=".$req['user_id'].")");
+        }
+        else{
+            $user = Musician::find($req['user_id']);
+            // $band = DB::table('grupbands')->where('admin_id',$req['user_id'])->first();
+            $band = DB::table('musicians')
+                ->join('grupband_musisi','musicians.id','=','grupband_musisi.musician_id')
+                ->join('grupbands','grupband_musisi.grupband_id','=','grupbands.id')
+                ->select('grupbands.*')
+                ->where('musicians.id',$req['user_id'])->first();
+
+            // $_result = DB::select("SELECT s.*,g.nama_gig,g.deskripsi,g.photo_gig,g.lokasi,g.detail_lokasi,g.lat,g.lng,g.tanggal_mulai,g.tanggal_selesai,g.type_gig,g.user_id,g.aktif,g.slug
+            //     , m.name,m.harga_sewa,m.photo,u.first_name,u.last_name
+            //     FROM sewas as s
+            //     JOIN users as u ON s.object_id = u.id 
+            //     JOIN gigs as g ON s.gig_id = g.id
+            //     JOIN musicians as m ON s.subject_id = m.id
+            //     WHERE s.type_sewa = 'musisihire' AND s.subject_id = ".$user->id."
+            //     AND (s.status = '3' OR s.status = '4') AND s.status_request = '1'
+
+            //     UNION
+
+            //     SELECT s.*,g.nama_gig,g.deskripsi,g.photo_gig,g.lokasi,g.detail_lokasi,g.lat,g.lng,g.tanggal_mulai,g.tanggal_selesai,g.type_gig,g.user_id,g.aktif,g.slug
+            //     , m.name,m.harga_sewa,m.photo,u.first_name,u.last_name
+            //     FROM sewas as s
+            //     JOIN users as u ON s.subject_id = u.id
+            //     JOIN gigs as g ON s.gig_id = g.id
+            //     JOIN musicians as m ON s.object_id = m.id
+            //     WHERE s.type_sewa = 'hiremusisi' AND s.object_id = ".$user->id."
+            //     AND (s.status = '3' OR s.status = '4') AND s.status_request = '1'
+
+            //     UNION
+
+            //     SELECT s.*,g.nama_gig,g.deskripsi,g.photo_gig,g.lokasi,g.detail_lokasi,g.lat,g.lng,g.tanggal_mulai,g.tanggal_selesai,g.type_gig,g.user_id,g.aktif,g.slug, gb.nama_grupband, gb.harga, gb.photo,u.first_name,u.last_name
+            //     FROM sewas as s
+            //     JOIN users as u ON s.object_id = u.id
+            //     JOIN gigs as g ON s.gig_id = g.id
+            //     JOIN grupbands as gb ON s.subject_id = gb.id
+            //     WHERE s.type_sewa = 'bandhire' AND s.subject_id = ".$band->id."
+            //     AND (s.status = '3' OR s.status = '4') AND s.status_request = '1'
+
+            //     UNION
+
+            //     SELECT s.*,g.nama_gig,g.deskripsi,g.photo_gig,g.lokasi,g.detail_lokasi,g.lat,g.lng,g.tanggal_mulai,g.tanggal_selesai,g.type_gig,g.user_id,g.aktif,g.slug, gb.nama_grupband, gb.harga, gb.photo,u.first_name,u.last_name
+            //     FROM sewas as s
+            //     JOIN users as u ON s.subject_id = u.id
+            //     JOIN gigs as g ON s.gig_id = g.id
+            //     JOIN grupbands as gb ON s.object_id = gb.id
+            //     WHERE s.type_sewa = 'hireband' AND s.object_id = ".$band->id."
+            //     AND (s.status = '3' OR s.status = '4') AND s.status_request = '1'
+
+            //     ");
+
+            if($band!=null){    
+            $_result = DB::select("SELECT s.*,g.nama_gig,g.deskripsi,g.photo_gig,g.lokasi,g.detail_lokasi,g.lat,g.lng,g.tanggal_mulai,g.tanggal_selesai,g.type_gig,g.user_id,g.aktif,g.slug
+                , m.name,m.harga_sewa,m.photo,(m.id-m.id) AS grupband_id,(m.id-m.id) AS admin_id,u.first_name,u.last_name
+                FROM sewas as s
+                JOIN users as u ON s.object_id = u.id 
+                JOIN gigs as g ON s.gig_id = g.id
+                JOIN musicians as m ON s.subject_id = m.id
+                WHERE s.type_sewa = 'musisihire' AND s.subject_id = ".$user->id."
+                AND (s.status = '3' OR s.status = '4') AND s.status_request = '1'
+
+                UNION
+
+                SELECT s.*,g.nama_gig,g.deskripsi,g.photo_gig,g.lokasi,g.detail_lokasi,g.lat,g.lng,g.tanggal_mulai,g.tanggal_selesai,g.type_gig,g.user_id,g.aktif,g.slug
+                , m.name,m.harga_sewa,m.photo,(m.id-m.id) AS grupband_id,(m.id-m.id) AS admin_id,u.first_name,u.last_name
+                FROM sewas as s
+                JOIN users as u ON s.subject_id = u.id
+                JOIN gigs as g ON s.gig_id = g.id
+                JOIN musicians as m ON s.object_id = m.id
+                WHERE s.type_sewa = 'hiremusisi' AND s.object_id = ".$user->id."
+                AND (s.status = '3' OR s.status = '4') AND s.status_request = '1'
+
+                UNION
+
+                SELECT s.*,g.nama_gig,g.deskripsi,g.photo_gig,g.lokasi,g.detail_lokasi,g.lat,g.lng,g.tanggal_mulai,g.tanggal_selesai,g.type_gig,g.user_id,g.aktif,g.slug, gb.nama_grupband, gb.harga, gb.photo,gb.id,gb.admin_id,u.first_name,u.last_name
+                FROM sewas as s
+                JOIN users as u ON s.object_id = u.id
+                JOIN gigs as g ON s.gig_id = g.id
+                JOIN grupbands as gb ON s.subject_id = gb.id
+                WHERE s.type_sewa = 'bandhire' AND s.subject_id = ".$band->id."
+                AND (s.status = '3' OR s.status = '4') AND s.status_request = '1'
+
+                UNION
+
+                SELECT s.*,g.nama_gig,g.deskripsi,g.photo_gig,g.lokasi,g.detail_lokasi,g.lat,g.lng,g.tanggal_mulai,g.tanggal_selesai,g.type_gig,g.user_id,g.aktif,g.slug, gb.nama_grupband, gb.harga, gb.photo,gb.id,gb.admin_id,u.first_name,u.last_name
+                FROM sewas as s
+                JOIN users as u ON s.subject_id = u.id
+                JOIN gigs as g ON s.gig_id = g.id
+                JOIN grupbands as gb ON s.object_id = gb.id
+                WHERE s.type_sewa = 'hireband' AND s.object_id = ".$band->id."
+                AND (s.status = '3' OR s.status = '4') AND s.status_request = '1'");
+            }
+            else{
+                $_result = DB::select("SELECT s.*,g.nama_gig,g.deskripsi,g.photo_gig,g.lokasi,g.detail_lokasi,g.lat,g.lng,g.tanggal_mulai,g.tanggal_selesai,g.type_gig,g.user_id,g.aktif,g.slug
+                , m.name,m.harga_sewa,m.photo,(m.id-m.id) AS grupband_id,(m.id-m.id) AS admin_id,u.first_name,u.last_name
+                FROM sewas as s
+                JOIN users as u ON s.object_id = u.id 
+                JOIN gigs as g ON s.gig_id = g.id
+                JOIN musicians as m ON s.subject_id = m.id
+                WHERE s.type_sewa = 'musisihire' AND s.subject_id = ".$user->id."
+                AND (s.status = '3' OR s.status = '4') AND s.status_request = '1'
+
+                UNION
+
+                SELECT s.*,g.nama_gig,g.deskripsi,g.photo_gig,g.lokasi,g.detail_lokasi,g.lat,g.lng,g.tanggal_mulai,g.tanggal_selesai,g.type_gig,g.user_id,g.aktif,g.slug
+                , m.name,m.harga_sewa,m.photo,(m.id-m.id) AS grupband_id,(m.id-m.id) AS admin_id,u.first_name,u.last_name
+                FROM sewas as s
+                JOIN users as u ON s.subject_id = u.id
+                JOIN gigs as g ON s.gig_id = g.id
+                JOIN musicians as m ON s.object_id = m.id
+                WHERE s.type_sewa = 'hiremusisi' AND s.object_id = ".$user->id."
+                AND (s.status = '3' OR s.status = '4') AND s.status_request = '1'");
+            }
+
+        }
+        
+
+        return array("message"=>"OK","error"=>0,"penyewaanList"=>$_result);
+    
+    }
 }

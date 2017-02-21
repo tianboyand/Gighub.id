@@ -48,6 +48,9 @@ class MusicianController extends Controller
     	$musisi = Musician::whereSlug($slug)->firstOrFail()->id;
         $musisis = Musician::findOrFail($musisi);
 
+        $genremusisi = GenreMusisi::join('genres', 'genre_musisi.genre_id' ,'=', 'genres.id')->where('musician_id', $musisi)->get();
+        $musisis->genre = $genremusisi;
+
         $query = "SELECT sum(review.nilai) AS nilai, count(sewas.id) AS bagi FROM review INNER JOIN sewas ON review.sewa_id = sewas.id WHERE sewas.type_sewa = 'musisihire' AND sewas.subject_id = $musisis->id"; 
 
         $query2 = "SELECT sum(review.nilai) AS nilai, count(sewas.id) AS bagi FROM review INNER JOIN sewas ON review.sewa_id = sewas.id WHERE sewas.type_sewa = 'hiremusisi' AND sewas.object_id = $musisis->id"; 
@@ -297,6 +300,10 @@ class MusicianController extends Controller
     public function bandProfile($slug){
         $bands = Grupband::whereSlug($slug)->firstOrFail()->id;
         $band = Grupband::findOrFail($bands);
+        $genreband = GenreBand::join('genres', 'genre_bands.genre_id' ,'=', 'genres.id')->where('band_id', $bands)->get();
+        
+        $band->genre = $genreband;
+
         $anggotaband = GrupbandMusisi::join('musicians', 'grupband_musisi.musician_id', '=', 'musicians.id')
                                     ->join('positions', 'grupband_musisi.position_id', '=', 'positions.id')
                                     ->where('grupband_id', $band->id)->get(['musicians.id','musicians.name','musicians.photo','musicians.slug','positions.position_name']);

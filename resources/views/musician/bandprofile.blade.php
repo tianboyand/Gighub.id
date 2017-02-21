@@ -58,11 +58,12 @@
 								</p>
 								<p>Basis : {{$band->basis}}</p>
 								<p>Kota :{{$band->kota}}</p>
-								<p>Genre : Pop | Jazz</p>
+								<p>Genre : 
+		                        @foreach($band->genre as $genre)
+		                            {{$genre->genre_name}} | 
+		                        @endforeach
+		                        </p>
 								<p>Deskripsi :{{$band->deskripsi}}</p>
-
-
-											
 							</div>
 						</div>
 						<div class="col-md-6">

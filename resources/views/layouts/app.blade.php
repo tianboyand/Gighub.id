@@ -413,9 +413,11 @@
         //     $('#selesai').datetimepicker();
         // });
         $('#mulai').datetimepicker({
+            startDate: '+1d',
             format: 'yyyy-mm-dd hh:ii'
         });
         $('#selesai').datetimepicker({
+            startDate: '+1d',
             format: 'yyyy-mm-dd hh:ii'
         });
 

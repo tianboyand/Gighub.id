@@ -46,7 +46,7 @@
 								<div class="col-md-6"> 
 									<div class="form-group">
 										<label>Url Video</label>
-										<input class="form-control" type="text" name="youtube" id="text-input" placeholder="Link Youtube" value="{{$band->youtube_video}}" required>
+										<input class="form-control" type="text" name="youtube" id="text-input" placeholder="Link Youtube" value="{{$band->youtube_video}}">
 									</div>
 								</div>
 								<div class="col-md-6"> 

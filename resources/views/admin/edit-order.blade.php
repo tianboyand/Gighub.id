@@ -45,6 +45,7 @@
 
                     @if($orders->status == '6')
                         <h3>Penarikan </h3>
+                        <p>Nomor Rekening : {{$banks->no_rek}}</p>
                         <p>Nama Rekening : {{$banks->nama_rek}} </p>
                         <p>Nama Bank : {{$banks->nama_bank}} </p>
                         <p>Bank Tujuan : {{$bankadmin->nama_bank}} </p>
@@ -95,6 +96,7 @@
                             $bankadmin = App\Bankadmin::where('id', $banks->bank_admin_id)->first();
                         ?>
                             <h3>Konfirmasi Pembayaran</h3>
+                            <p>Nomor Rekening : {{$banks->no_rek}}</p>
                             <p>Nama Rekening : {{$banks->nama_rek}} </p>
                             <p>Nama Bank : {{$banks->nama_bank}} </p>
                             <p>Bank Tujuan : {{$bankadmin->nama_bank}} </p>

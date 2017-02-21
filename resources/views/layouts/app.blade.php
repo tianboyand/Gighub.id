@@ -423,6 +423,12 @@
 
     </script>
 
+    <script>
+    function myFunction() {
+        var x = document.getElementById("myNumber").required;
+    }
+    </script>
+
 <script type="text/javascript">
     $(document).ready(function() {
 

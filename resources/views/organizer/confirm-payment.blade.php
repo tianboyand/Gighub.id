@@ -24,6 +24,9 @@
                             <div class="form-group"></div>
                             <br/>
                             <p><b>Dari Bank: </b></p>
+                            <label>Nomor Rekening Pengirim</label>
+                                <input class="form-control" type="text" name="no_rek" id="no_rek" placeholder="Nomor rekening pengirim" required>
+                            <div class="form-group"></div>
                             <label>Nama Pengirim</label>
                                 <input class="form-control" type="text" name="nama_rek" id="nama_rek" placeholder="Nama rekening pengirim" required>
                             <div class="form-group"></div>
@@ -31,7 +34,7 @@
                                 <input class="form-control" type="text" name="nama_bank" id="nama_bank" placeholder="eg. BCA" required>
                             <div class="form-group"></div>
                             <label>Photo Bukti Pembayaran:</label>
-                                <input name="photo" id="photo" type="file" class="btn" required>
+                                <input name="photo" id="photo" type="file" class="btn">
                             <div class="form-group"></div>
                             <div class="form-group">
                                 <button class="btn btn-primary" type="submit">Konfirmasi</button>

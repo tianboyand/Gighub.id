@@ -43,7 +43,8 @@
 								<h3>Total Bayar : Rp. <b>{{$_sewamusisi->total_biaya}}</b></h3>
 								<b>
 								@if($_sewamusisi->status == 0)
-									<p><a href={{url('konfirmasi-pembayaran/'.$_sewamusisi->id)}}>Konfirmasi Pembayaran</a></p>
+									<p>Segara lakukan pembayaran, jika lewat 24 Jam penyewaan akan dibatalkan</p>
+									<p><a href={{url('konfirmasi-pembayaran/'.$_sewamusisi->id)}}>Konfirmasi Pembayaran</a></p>							
 								@elseif($_sewamusisi->status == 1)
 									<p>Menunggu Verifikasi Pembayaran</p>
 								@elseif($_sewamusisi->status == 2)

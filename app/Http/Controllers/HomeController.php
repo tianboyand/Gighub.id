@@ -68,6 +68,14 @@ class HomeController extends Controller
             $gig = Gig::where('id', $notif->object_id)->first();
             return redirect()->action('GigController@detailGig', [$gig->slug]);
         }
+        else if($notif->type_notif == 'terimaoffer'){
+            $gig = Gig::where('id', $notif->object_id)->first();
+            return redirect()->action('GigController@detailGig', [$gig->slug]);
+        }
+        else if($notif->type_notif == 'tolakoffer'){
+            $gig = Gig::where('id', $notif->object_id)->first();
+            return redirect()->action('GigController@detailGig', [$gig->slug]);
+        }
         else if($notif->type_notif == 'tambahsaldo'){
             return redirect()->action('MusicianController@saldo', [Auth::guard('musician')->user()->slug]);
         }

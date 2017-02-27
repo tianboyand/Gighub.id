@@ -14,32 +14,32 @@
 						<form class="bootstrap-form-with-validation" action="save/{{$band->slug}}" method="POST" enctype="multipart/form-data">
 							<div class="col-md-12">
 								<div class="col-md-6">  
-									<div class="form-group">
-										<label>Nama Band</label>
+									<div class="form-group required">
+										<label class="control-label">Nama Band</label>
 										<input class="form-control" type="text" name="name" id="text-input" placeholder="Nama Band" required value="{{$band->nama_grupband}}">
 									</div>
 								</div>
 								<div class="col-md-6">  
-									<div class="form-group">
-										<label>Basis Band</label>
+									<div class="form-group required">
+										<label class="control-label">Basis Band</label>
 										<input class="form-control" type="text" name="basis" id="text-input" placeholder="Nama Band" required value="{{$band->basis}}">
 									</div>
 								</div>
 								<div class="col-md-6">  
-									<div class="form-group"> 
-										<label>Deskripsi</label>
+									<div class="form-group required"> 
+										<label class="control-label">Deskripsi</label>
 										<input class="form-control" type="text" name="deskripsi" id="text-input" placeholder="Deskripsi Band" required value="{{$band->deskripsi}}">
 									</div>
 								</div>
 								<div class="col-md-6"> 
-									<div class="form-group">
-										<label>Kota</label>
+									<div class="form-group required">
+										<label class="control-label">Kota</label>
 										<input class="form-control" type="text" name="kota" id="text-input" placeholder="Kota" required value="{{$band->kota}}">
 									</div>
 								</div>
 								<div class="col-md-6"> 
-									<div class="form-group">
-										<label>Harga Sewa / Jam</label>
+									<div class="form-group required">
+										<label class="control-label">Harga Sewa / Jam</label>
 										<input class="form-control" type="text" name="harga" id="text-input" placeholder="Harga Sewa / Jam" required value="{{$band->harga}}">
 									</div>
 								</div>

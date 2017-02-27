@@ -17,7 +17,7 @@
                                 <div class="tab-pane" role="tabpanel" id="tab-1">
                                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/musician/register') }}">
                                     {{ csrf_field() }}                                        
-                                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}" id='register-name' >
+                                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }} required" id='register-name' >
                                          <br>
                                             <label class="col-md-4 control-label">Name</label>
 
@@ -31,7 +31,7 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }} required">
                                             <label class="col-md-4 control-label">E-Mail Address</label>
 
                                             <div class="col-md-6">
@@ -45,7 +45,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }} required">
                                             <label class="col-md-4 control-label">Password</label>
 
                                             <div class="col-md-6">
@@ -59,7 +59,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
+                                        <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }} required">
                                             <label class="col-md-4 control-label">Confirm Password</label>
 
                                             <div class="col-md-6">
@@ -95,7 +95,7 @@
                                 <div class="tab-pane  active" role="tabpanel" id="tab-2">
                                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
                                     {{ csrf_field() }}                                        
-                                        <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}" id='register-first-name'>
+                                        <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }} required" id='register-first-name'>
                                         <br>
                                             <label class="col-md-4 control-label">First Name</label>
 
@@ -109,7 +109,7 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="form-group{{ $errors->has('last_name') ? ' has-error' : '' }}" id='register-last-name'>
+                                        <div class="form-group{{ $errors->has('last_name') ? ' has-error' : '' }} required" id='register-last-name'>
                                             <label class="col-md-4 control-label">Last Name</label>
 
                                             <div class="col-md-6">
@@ -122,7 +122,7 @@
                                                 @endif
                                             </div>
                                         </div>
-                                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}" id='register-name' style="display:none">
+                                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }} required" id='register-name' style="display:none">
                                             <label class="col-md-4 control-label">Name</label>
 
                                             <div class="col-md-6">
@@ -135,7 +135,7 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }} required">
                                             <label class="col-md-4 control-label">E-Mail Address</label>
 
                                             <div class="col-md-6">
@@ -149,7 +149,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }} required">
                                             <label class="col-md-4 control-label">Password</label>
 
                                             <div class="col-md-6">
@@ -163,7 +163,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">                                        
+                                        <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }} required">                                        
                                             <label class="col-md-4 control-label">Confirm Password</label>
 
                                             <div class="col-md-6">

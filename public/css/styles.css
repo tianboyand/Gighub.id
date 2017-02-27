@@ -39,3 +39,8 @@ a.btn.btn-link.navbar-btn.navbar-right{
     background-color: #ffffff;
     border-color: #222; /*set the color you want here*/
 }
+
+.form-group.required .control-label:after {
+  content:"*";
+  color:red;
+}

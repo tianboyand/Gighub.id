@@ -90,12 +90,12 @@ class MobileMusicianController extends Controller
         return Firebase::sendPushNotification(
             array(
                     'object_id'=>$request['object_id'],
-                    'subject_id'=>$request['subject_id'],
-                    'user_id'=>$request['user_id'],
-                    'type_user'=>$request['type_user'],
-                    'type_notif'=>$request['type_notif'],
-                    'type_subject'=>$request['type_subject'],
-                    'baca'=>$request['baca']
+                    'subject_id'=>$request['pengirim_id'],
+                    'user_id'=>$request['penerima_id'],
+                    'type_user'=>$request['type_penerima'],
+                    'type_notif'=>'reqsewa',
+                    'type_subject'=>$request['type_pengirim'],
+                    'baca'=>'N'
                 ),
             array(
                     'title'=>'GigHub',
@@ -803,25 +803,62 @@ class MobileMusicianController extends Controller
     }
 
 
-    public function rejectBookRequest(Request $request){
+    public function declineBookRequest(Request $request){
         // $Book = sewa::find($request['sewa_id']);
 
-        DB::table('sewas')->where('id',$request['sewa_id'])
-            ->update(array(
-                'status_request' => '2',
-                ));
-        
-        return array("message"=>"reject success","error"=>0);
+        if($request['sewa_id']!=null || $request['sewa_id']!=""){
+            DB::table('sewas')->where('id',$request['sewa_id'])
+                ->update(array(
+                    'status_request' => '2',
+                    ));
+            
+            return array("message"=>"Decline success","error"=>0);
+        }
+        elseif ($request['sewa_id']==null || $request['sewa_id']=="") {
+            return array("message"=>"Failed to Decline","error"=>1);
+        }
+
 
     }
 
     public function musicianReviewer(Request $request){
         if($request!=null){
-            $_result = DB::select("SELECT r.*, u.first_name, u.last_name, u.email, u.photo,u.aktif, r.created_at FROM review as r JOIN sewas as s ON r.sewa_id = s.id JOIN musicians as m ON s.object_id = m.id JOIN users AS u ON r.user_id = u.id WHERE m.id = ".$request['musician_id']);
-            return response()->json(["message"=>"ok","error"=>0,"yourReviews"=>$_result],200);
+            if($request['tipe']=="Solo"){   
+                $_result = DB::select("SELECT r.*, u.first_name, u.last_name, u.email, u.photo,u.aktif, r.created_at FROM review as r JOIN sewas as s ON r.sewa_id = s.id JOIN musicians as m ON s.object_id = m.id JOIN users AS u ON r.user_id = u.id WHERE m.id = ".$request['musician_id']);
+                return response()->json(["message"=>"ok","error"=>0,"yourReviews"=>$_result],200);
+            }
+            else if($request['tipe']=="Group"){
+                $_result = DB::select("SELECT r.*, u.first_name, u.last_name, u.email, u.photo,u.aktif, r.created_at FROM review as r JOIN sewas as s ON r.sewa_id = s.id JOIN grupbands as gpb ON s.object_id = gpb.id JOIN users AS u ON r.user_id = u.id WHERE gpb.id = ".$request['musician_id']);
+                return response()->json(["message"=>"ok","error"=>0,"yourReviews"=>$_result],200);
+            }
         }
         else{
-            return response()->json(["message"=>"error","error"=>1,"member"=>$_result]);
+            return response()->json(["message"=>"error","error"=>1,"yourReviews"=>$_result]);
         }
+    }
+
+    public function updateProfileBand(Request $request){
+         $req = $request->all();
+        // $req['name'] = $request->name;
+        // $req['email'] = $request->email;
+        // $req['deskripsi'] = $request->deskripsi;
+
+            DB::table('grupbands')->where('id',$request['id'])
+            ->update(array(
+                'nama_grupband'=>$req['nama_grupband'],
+                'deskripsi'=>$req['deskripsi'],
+                'basis'=>$req['basis'],
+                'kota'=>$req['kota'],
+                'harga'=>$req['harga'],
+                // 'photo' => $req['photo'],
+                'youtube_video'=>$req['youtube_video'],
+                'url_website'=>$req['url_website'],
+                'username_soundcloud'=>$req['username_soundcloud'],
+                'username_reverbnation'=>$req['username_reverbnation']
+                ));
+            
+            $grupband = DB::table('grupbands')->where('id',$request['id'])->first();
+
+            return response()->json(["message"=>"Profile has been Updated","error"=>0,"groupBand"=>$grupband],200);
     }
 }

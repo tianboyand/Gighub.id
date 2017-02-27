@@ -76,13 +76,14 @@
                 <hr>
                 <div class="row">
                     <div class="col-lg-6 col-lg-offset-3 col-sm-12">
-                        <form class="bootstrap-form-with-validation" action="musician/profile/update" method="POST">
-                            <h2 class="text-center">Lengkapi Profil Musisi</h2>
-                            <label>Nama Musisi</label>
-                            <div class="form-group">
+                        <form class="bootstrap-form-with-validation " action="musician/profile/update" method="POST">
+                            <h2 class="text-center">Lengkapi Profil Musisi</h2>                        
+                            <div class="form-group required">
+                            <label class="control-label">Nama Musisi</label>
                                 <input class="form-control" type="text" name="name" id="text-input" value="{{ Auth::guard('musician')->user()->name }}" required>
                             </div>
-                            <label>Kota </label>
+                            <div class="form-group required">
+                            <label class="control-label">Kota </label>
                             <select class="form-control" name="kota" id="kota" required>
                                 <option value="" hidden>Pilih Kota</option>
                                 @if(Auth::guard('musician')->user()->kota == null)
@@ -96,9 +97,10 @@
                                 <option value="Surabaya">Surabaya</option>
                                 <option value="Semarang">Semarang</option>
                             </select>
+                            </div>
 
-                            <div class="form-group"></div>
-                            <label>Genre Musisi</label>
+                            <div class="form-group required">
+                            <label class="control-label">Genre Musisi</label>
                             <div class="row">
                                 <?php $genre = App\Genre::all(); $cek ='';?>
                                 @foreach($genre as $genres)
@@ -125,33 +127,41 @@
                                     
                                 @endforeach
                             </div>
-                            <div class="form-group"></div>
-                            <label>Basis</label>
+                            </div>
+                            <div class="form-group required">
+                            <label class="control-label">Basis</label>
                             <div class="form-group">
                                 <input class="form-control" type="text" name="basis" id="text-input" value="{{ Auth::guard('musician')->user()->basis }}" required placeholder="Ex : Vokalis">
                             </div>
-                            <div class="form-group"></div>
-                            <label>No.Telepon </label>
+                            </div>
+                            <div class="form-group required">
+                            <label class="control-label">No.Telepon </label>
                             <input class="form-control" type="text" name='no_telp' required placeholder="No.Telepon" value="{{ Auth::guard('musician')->user()->no_telp }}">                            
-                            <div class="form-group"></div>
-                            <label>Deskripsi </label>
+                            </div>
+                            <div class="form-group required">
+                            <label class="control-label">Deskripsi </label>
                             <textarea class="form-control" rows="5" name='deskripsi' placeholder="Jelaskan informasi tentang dirimu" required>{{ Auth::guard('musician')->user()->deskripsi }}</textarea>
-                            <div class="form-group"></div>
-                            <label>Harga Sewa / Jam</label>
-                            <input class="form-control" type="number" id="myNumber" name="harga_sewa" value="{{ Auth::guard('musician')->user()->harga_sewa }}" required="true">
+                            </div>
+                            <div class="form-group required">
+                            <label class="control-label">Harga Sewa / Jam</label>
+                            <input class="form-control" type="number" id="myNumber" name="harga_sewa" value="{{ Auth::guard('musician')->user()->harga_sewa }}" required>
+                            </div>
                             <div class="form-group"></div>
                             <label>Url Video </label>
                             <input class="form-control" type="text" name="youtube_video" value="{{ Auth::guard('musician')->user()->youtube_video }}" placeholder="http://">
 
-                            <div class="form-group"></div>
-                            <label>No.Rekening </label>
+                            <div class="form-group required">
+                            <label class="control-label">No.Rekening </label>
                             <input class="form-control" type="text" name='norek' placeholder="No.Rekening" @if($bankakun != null) value="{{ $bankakun->no_rek }}" @endif required>
-                            <div class="form-group"></div>
-                            <label>Nama Pemilik Rekening </label>
+                            </div>
+                            <div class="form-group required">
+                            <label class="control-label">Nama Pemilik Rekening </label>
                             <input class="form-control" type="text" name='namapemilik' placeholder="Nama yang tercantum di Rekening" @if($bankakun != null) value="{{ $bankakun->atas_nama }}" @endif required>
-                            <div class="form-group"></div>
-                            <label>Nama Bank </label>
+                            </div>
+                            <div class="form-group required">
+                            <label class="control-label">Nama Bank </label>
                             <input class="form-control" type="text" name='bank' placeholder="eg: BRI" @if($bankakun != null) value="{{ $bankakun->nama_bank }}" @endif required>
+                            </div>
                             
                          
                             <div class="form-group"></div>
@@ -188,8 +198,8 @@
                         <div class="col-md-4 col-md-offset-4">
                             <form class="bootstrap-form-with-validation" action="{{ url('/search')}}" method="POST">                                
                                 <div class="form-group">
-                                    <label class="control-label" for="text-input">Tanggal Main</label>
-                                    <input class="form-control" type="text" name="tanggal" placeholder="Tanggal Main" id="mulai">                            
+                                    <label class="control-label" for="text-input">Tanggal Pelaksanaan</label>
+                                    <input class="form-control" type="text" name="tanggal" placeholder="Tanggal Pelaksanaan" id="mulai">                            
                                 </div>
                                 <div class="form-group">
                                     <?php
@@ -256,8 +266,8 @@
                         <div class="col-md-4 col-md-offset-4">
                             <form class="bootstrap-form-with-validation" action="{{ url('/search')}}" method="POST">                                
                                 <div class="form-group">
-                                    <label class="control-label" for="text-input">Tanggal Main</label>
-                                    <input class="form-control" type="text" name="tanggal" placeholder="Tanggal Main" id="mulai">                            
+                                    <label class="control-label" for="text-input">Tanggal Pelaksanaan</label>
+                                    <input class="form-control" type="text" name="tanggal" placeholder="Tanggal Pelaksanaan" id="mulai">                            
                                 </div>
                                 <div class="form-group">
                                     <?php

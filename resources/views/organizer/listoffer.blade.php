@@ -38,7 +38,9 @@
 						<p>Status Permintaan: <b>{{$status}}</b></p>
 						@if($_sewa->status_request == '1')
 							@if($_sewa->status == 0)
+								<p>Segara lakukan pembayaran, jika lewat 24 Jam penyewaan akan dibatalkan</p>
 								<p><a href={{url('konfirmasi-pembayaran/'.$_sewa->id)}}>Konfirmasi Pembayaran</a></p>
+
 							@elseif($_sewa->status == 1)
 								<p>Menunggu Verifikasi Pembayaran</p>
 							@elseif($_sewa->status == 2)

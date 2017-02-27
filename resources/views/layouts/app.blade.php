@@ -58,8 +58,7 @@
                             <li role="presentation"><a href={{ url('/musician/'.Auth::guard('musician')->user()->slug) }}>Profil </a></li>
                             <li role="presentation"><a href="{{ url('/list-band') }}">Band </a></li>
                             <li role="presentation"><a href="{{url('listsewa/musisi')}}">Booking Musisi</a></li>        
-                            <li role="presentation"><a href="{{url('listsewa/band')}}">Booking Band</a></li>
-                            <li role="presentation"><a href="{{ url('/listoffer') }}">Penawaran </a></li>
+                            <li role="presentation"><a href="{{url('listsewa/band')}}">Booking Band</a></li>                            
                         @else
                             <li class="disabled"><a>Discover</a></li>
                             <li class="disabled"><a>Band</a></li>
@@ -315,22 +314,26 @@
            {{ Form::open(['route'=>['add.band'],'role'=> 'form', 'class' => 'ui reply form', 'enctype' => 'multipart/form-data']) }}
                 <div class="col-md-12">
                     <div class="col-md-8">  
-                        <div class="form-group"> 
+                        <div class="form-group required">
+                            <label class="control-label">Nama Band</label> 
                             <input class="form-control" type="text" name="name" id="text-input" placeholder="Nama Band" required>
                         </div>
                     </div>
                     <div class="col-md-8">  
-                        <div class="form-group"> 
+                        <div class="form-group required"> 
+                        <label class="control-label">Deskripsi Band</label>
                             <input class="form-control" type="text" name="deskripsi" id="text-input" placeholder="Deskripsi Band" required>
                         </div>
                     </div>
                     <div class="col-md-12"> 
-                        <div class="form-group"> 
+                        <div class="form-group required"> 
+                            <label class="control-label">Kota</label>
                             <input class="form-control" type="text" name="kota" id="text-input" placeholder="Kota" required>
                         </div>
                     </div>
                     <div class="col-md-12"> 
-                        <div class="form-group"> 
+                        <div class="form-group required">
+                        <label class="control-label">Harga Sewa</label> 
                             <input class="form-control" type="text" name="harga" id="text-input" placeholder="Harga Sewa / Jam" required>
                         </div>
                     </div>
@@ -356,7 +359,8 @@
                     </div>
 
                     <div class="col-md-12"> 
-                        <div class="form-group"> 
+                        <div class="form-group required"> 
+                            <label class="control-label">Pilih Posisi</label>
                             <select class="form-control" name="posisi" id="posisi" Required>
                                 <?php $posisi = App\Position::all()?>
                                 <option value="">- Pilih Posisi -</option>

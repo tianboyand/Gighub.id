@@ -295,45 +295,54 @@ class OrganizerController extends Controller
     public function inputSewaMusisi(Request $request, $slug){
     	$musisis = Musician::whereSlug($slug)->firstOrFail()->id;
         $musisi = Musician::findOrFail($musisis);
-
         $input = $request->all();
-        $input['nama_gig'] = $request->name;
+
+
         $input['tanggal_mulai'] = $request->mulai;
-        $input['tanggal_selesai'] = $request->selesai;
-        $input['user_id'] = Auth::guard('user')->user()->id;
-        if ($request->hasFile('photo'))
-        {
-            $file = array('photo' => $request->file('photo'));
-            Cloudder::upload($request->file('photo')->getPathName());
-            $input['photo_gig'] = Cloudder::getPublicId();
+        $input['tanggal_selesai'] = $request->selesai;        
+
+        if(strtotime($input['tanggal_selesai'])< strtotime($input['tanggal_mulai'])){
+            Session::flash('message','Tanggal Mulai dan Selesai tidak benar');
+            return redirect()->back();
         }
-        //dd($input);
-        $gig = Gig::create($input);
+        else{
+             $input['nama_gig'] = $request->name;
+             $input['user_id'] = Auth::guard('user')->user()->id;
+            if ($request->hasFile('photo'))
+            {
+                $file = array('photo' => $request->file('photo'));
+                Cloudder::upload($request->file('photo')->getPathName());
+                $input['photo_gig'] = Cloudder::getPublicId();
+            }
+            //dd($input);
+            $gig = Gig::create($input);
 
-        // $gig=Gig::where('user_id', Auth::guard('user')->user()->id)
-        // 			->where('status', 0)
-        // 			->orderBy('created_at', 'desc')->first();
+            // $gig=Gig::where('user_id', Auth::guard('user')->user()->id)
+            //          ->where('status', 0)
+            //          ->orderBy('created_at', 'desc')->first();
 
-        $interval = round((strtotime($gig->tanggal_selesai) - strtotime($gig->tanggal_mulai))/3600);
+            $interval = round((strtotime($gig->tanggal_selesai) - strtotime($gig->tanggal_mulai))/3600);
 
-       	$sewa = new Sewa;
-        $sewa->total_biaya = $interval * $musisi->harga_sewa;
-        $sewa->gig_id = $gig->id;
-        $sewa->object_id = $musisi->id;
-        $sewa->subject_id = Auth::guard('user')->user()->id;
-        $sewa->type_sewa = 'hiremusisi';
-        $sewa->save();
+           	$sewa = new Sewa;
+            $sewa->total_biaya = $interval * $musisi->harga_sewa;
+            $sewa->gig_id = $gig->id;
+            $sewa->object_id = $musisi->id;
+            $sewa->subject_id = Auth::guard('user')->user()->id;
+            $sewa->type_sewa = 'hiremusisi';
+            $sewa->save();
 
-        $notif = New Notif;
-        $notif->object_id = $gig->id;
-        $notif->subject_id = Auth::guard('user')->user()->id;
-        $notif->user_id = $musisi->id;
-        $notif->type_subject = 'organizer';
-        $notif->type_user = 'musisi';
-        $notif->type_notif = 'reqsewa';
-        $notif->save();
+            $notif = New Notif;
+            $notif->object_id = $gig->id;
+            $notif->subject_id = Auth::guard('user')->user()->id;
+            $notif->user_id = $musisi->id;
+            $notif->type_subject = 'organizer';
+            $notif->type_user = 'musisi';
+            $notif->type_notif = 'reqsewa';
+            $notif->save();
 
-        return redirect()->action('OrganizerController@listSewaMusisi');
+            return redirect()->action('OrganizerController@listSewaMusisi');
+        }
+
     }
 
 

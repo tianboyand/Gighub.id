@@ -21,20 +21,24 @@
                                 @endforeach
                             </select>
                             
-                            <div class="form-group"></div>
+                            <div class="form-group required">
                             <br/>
                             <p><b>Dari Bank: </b></p>
-                            <label>Nomor Rekening Pengirim</label>
+                            <label class="control-label">Nomor Rekening Pengirim</label>
                                 <input class="form-control" type="text" name="no_rek" id="no_rek" placeholder="Nomor rekening pengirim" required>
-                            <div class="form-group"></div>
-                            <label>Nama Pengirim</label>
+                                </div>
+                            <div class="form-group required">
+                            <label class="control-label">Nama Pengirim</label>
                                 <input class="form-control" type="text" name="nama_rek" id="nama_rek" placeholder="Nama rekening pengirim" required>
-                            <div class="form-group"></div>
-                            <label>Nama Bank Pengirim </label>
+                                </div>
+                            <div class="form-group required">
+                            <label class="control-label">Nama Bank Pengirim </label>
                                 <input class="form-control" type="text" name="nama_bank" id="nama_bank" placeholder="eg. BCA" required>
-                            <div class="form-group"></div>
-                            <label>Photo Bukti Pembayaran:</label>
+                                </div>
+                            <div class="form-group">
+                            <label class="control-label">Photo Bukti Pembayaran:</label>
                                 <input name="photo" id="photo" type="file" class="btn">
+                            </div>
                             <div class="form-group"></div>
                             <div class="form-group">
                                 <button class="btn btn-primary" type="submit">Konfirmasi</button>

@@ -207,13 +207,13 @@
                                     ?>
                                     <label class="control-label" for="email-input">Kota</label>
                                     <select class="form-control" name="kota">
-                                        <option value="">Pilih Kota (Opsional)</option>
+                                        <option value="">Pilih Kota</option>
                                     @foreach($kota as $_kota)
                                         <option value="{{$_kota->kota}}">{{$_kota->kota}}</option>
                                     @endforeach
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group required">
                                     <label class="control-label" for="email-input">Tipe Musisi</label>
                                     <select class="form-control" name="tipe" required>
                                         <option value="">Pilih Tipe</option>
@@ -275,13 +275,13 @@
                                     ?>
                                     <label class="control-label" for="email-input">Kota</label>
                                     <select class="form-control" name="kota">
-                                        <option value="">Pilih Kota (Opsional)</option>
+                                        <option value="">Pilih Kota</option>
                                     @foreach($kota as $_kota)
                                         <option value="{{$_kota->kota}}">{{$_kota->kota}}</option>
                                     @endforeach
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group required">
                                     <label class="control-label" for="email-input">Tipe Musisi</label>
                                     <select class="form-control" name="tipe" required>
                                         <option value="">Pilih Tipe</option>

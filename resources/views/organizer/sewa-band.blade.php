@@ -14,24 +14,29 @@
                     {{ Form::open(['route'=>['add.sewa',$bands->slug],'role'=> 'form', 'class' => 'ui reply form', 'enctype' => 'multipart/form-data']) }}
                             <div id="map"></div>
                             <h2 class="text-center"></h2>
-                            <div class="form-group"></div>
-                            <label>Nama Acara</label>
+                            <div class="form-group required">
+                            <label class="control-label">Nama Acara</label>
                                 <input class="form-control" type="text" name="name" id="text-input" required>
-                            <div class="form-group"></div>
-                            <label>Lokasi Acara </label>
+                                </div>
+                            <div class="form-group required">
+                            <label class="control-label">Lokasi Acara </label>
                                 <input class="form-control" type="text" name="lokasi" id="lokasi" required>
-                            <div class="form-group"></div>
-                            <label>Detail Lokasi</label>
+                               </div>
+                            <div class="form-group required">
+                            <label class="control-label">Detail Lokasi</label>
                                 <input class="form-control" type="text" name="detail_lokasi" id="text-input" required>
-                            <div class="form-group"></div>
-                            <label>Deskripsi Acara</label>
-                                <input class="form-control" type="text" name="deskripsi" id="text-input" required>                 
-                            <div class="form-group"></div>
-                            <label>Waktu Mulai </label>
+                                </div>
+                            <div class="form-group required">
+                            <label class="control-label">Deskripsi Acara</label>
+                                <input class="form-control" type="text" name="deskripsi" id="text-input" required>                 </div>
+                            <div class="form-group required">
+                            <label class="control-label">Waktu Mulai </label>
                                 <input class="form-control" type="text" name="mulai" id="mulai" required>
-                            <div class="form-group"></div>
-                            <label>Waktu Selesai </label>
+                                </div>
+                            <div class="form-group required">
+                            <label class="control-label">Waktu Selesai </label>
                                 <input class="form-control" type="text" name="selesai" id="selesai" required>
+                                </div>
                             <div class="form-group"></div>
                             <label>Add Photo :</label>
                                 <input name="photo" id="photo" type="file" class="btn">

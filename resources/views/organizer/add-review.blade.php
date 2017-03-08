@@ -20,7 +20,7 @@
                     <p>Dalam partisipasinya pada Gig : {{$sewas->gig->nama_gig}}</p>
                     <br/> 
                     {{ Form::open(['route'=>['review.new',$sewas->id],'role'=> 'form','class' => 'clearfix']) }}                           
-                    <div class="form-group">
+                    <div class="form-group required">
                         <label class="col-md-4 control-label">Pesan Review</label>                          
                         {!! Form::text('pesan',null,['required' => 'required','class' => 'form-control']) !!}
                     </div>
@@ -29,7 +29,7 @@
                         <label class="col-md-4 control-label">Nilai Review</label>
                         <br/>
                         <div id="rateYo"></div>
-                        <input type="hidden" name="rate" id="rate" class="form-control" required/>
+                        <input type="hidden" name="rate" id="rate" class="form-control">
                         
                     </div>
 
